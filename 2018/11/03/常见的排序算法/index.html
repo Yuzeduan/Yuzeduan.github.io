@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="​title: 常见的排序算法常见的排序算法排序的分类 内部排序：将待排序列完全存放到内存中所进行的排序过程 外部排序： 对大文件的排序，待排序文件的文件无法一次装入内存，在排序的过程中需要在内存和外部存储器之间进行多次数据交换。  （本文讨论的是内部排序）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Allen Home">
+<meta property="og:url" content="http://yoursite.com/2018/11/03/常见的排序算法/index.html">
+<meta property="og:site_name" content="Allen Home">
+<meta property="og:description" content="​title: 常见的排序算法常见的排序算法排序的分类 内部排序：将待排序列完全存放到内存中所进行的排序过程 外部排序： 对大文件的排序，待排序文件的文件无法一次装入内存，在排序的过程中需要在内存和外部存储器之间进行多次数据交换。  （本文讨论的是内部排序）">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://images0.cnblogs.com/blog2015/776259/201507/280754329387398.png">
+<meta property="og:image" content="https://images2015.cnblogs.com/blog/1024555/201612/1024555-20161217182750011-675658660.png">
+<meta property="og:image" content="http://images.cnblogs.com/cnblogs_com/zabery/201107/201107261321543165.png">
+<meta property="og:image" content="https://images2015.cnblogs.com/blog/1024555/201612/1024555-20161217194207620-1455153342.png">
+<meta property="og:image" content="https://images2015.cnblogs.com/blog/1024555/201612/1024555-20161218153110495-1280388728.png">
+<meta property="og:image" content="https://images2015.cnblogs.com/blog/1024555/201612/1024555-20161218152929339-1114983222.png">
+<meta property="og:image" content="https://images2015.cnblogs.com/blog/1024555/201612/1024555-20161218163120151-452283750.png">
+<meta property="og:image" content="https://images2015.cnblogs.com/blog/1024555/201612/1024555-20161218194508761-468169540.png">
+<meta property="og:image" content="https://images0.cnblogs.com/i/497634/201403/161837176365265.jpg">
+<meta property="og:updated_time" content="2018-11-03T05:44:36.970Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Allen Home">
+<meta name="twitter:description" content="​title: 常见的排序算法常见的排序算法排序的分类 内部排序：将待排序列完全存放到内存中所进行的排序过程 外部排序： 对大文件的排序，待排序文件的文件无法一次装入内存，在排序的过程中需要在内存和外部存储器之间进行多次数据交换。  （本文讨论的是内部排序）">
+<meta name="twitter:image" content="https://images0.cnblogs.com/blog2015/776259/201507/280754329387398.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/03/常见的排序算法/">
+
+
+
+
+
+  <title> | Allen Home</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Allen Home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/03/常见的排序算法/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="AllenYu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Allen Home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-03T13:37:43+08:00">
+                2018-11-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="​"><a href="#​" class="headerlink" title="​"></a>​</h2><h2 id="title-常见的排序算法"><a href="#title-常见的排序算法" class="headerlink" title="title: 常见的排序算法"></a>title: 常见的排序算法</h2><h1 id="常见的排序算法"><a href="#常见的排序算法" class="headerlink" title="常见的排序算法"></a>常见的排序算法</h1><h2 id="排序的分类"><a href="#排序的分类" class="headerlink" title="排序的分类"></a>排序的分类</h2><ul>
+<li>内部排序：将待排序列完全存放到内存中所进行的排序过程</li>
+<li>外部排序： 对大文件的排序，待排序文件的文件无法一次装入内存，在排序的过程中需要在内存和外部存储器之间进行多次数据交换。</li>
+</ul>
+<p>（本文讨论的是内部排序）</p>
+<a id="more"></a>
+<h2 id="内部排序的分类"><a href="#内部排序的分类" class="headerlink" title="内部排序的分类"></a>内部排序的分类</h2><ul>
+<li>交换排序：对无序区中的记录的关键字进行两两比较，若逆序则交换，直到排好顺序为止。例子：<strong>冒泡排序</strong>，<strong>快速排序</strong>。</li>
+<li>选择排序：在无序区中选出关键字最大的记录，置于有序区的最后（升序排序时），直到全部有序。例子：<strong>简单选择排序</strong>，<strong>堆排序</strong>。</li>
+<li>插入排序： 将无序区中的一个记录插入到有序区中，直到全部有序。例子：<strong>直接插入排序</strong>，<strong>希尔排序</strong></li>
+<li>归并排序：不断的将两个或两个以上的有序区合并成一个有序区，直到全部记录有序。</li>
+<li>基数排序：是一种非比较型整数排序算法，其原理是将整数按位数切割成不同的数字，然后按每个位数分别比较，由于整数也可以表达字符串（比如名字或日期）和特定格式的浮点数，所以基数排序也不是只能使用于整数。 </li>
+</ul>
+<p>（以升序为例讲述排序）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//自定义的结构体数据结构</span><br><span class="line">typedef int KeyType;  //关键字的类型为整型</span><br><span class="line"></span><br><span class="line">typedef struct&#123;</span><br><span class="line">    KeyType key; //关键字项</span><br><span class="line">    ... //其他数据项</span><br><span class="line">&#125;RecordType, RcdType;</span><br><span class="line"></span><br><span class="line">typedef struct&#123;</span><br><span class="line">    RcdType *rcd; //存储空间的基址</span><br><span class="line">    int length; //当前长度</span><br><span class="line">    int size;  //存储的容量</span><br><span class="line">&#125;RcdSqlist;    //记录的顺序表</span><br></pre></td></tr></table></figure>
+<h2 id="交换排序"><a href="#交换排序" class="headerlink" title="交换排序"></a>交换排序</h2><h3 id="1-冒泡排序"><a href="#1-冒泡排序" class="headerlink" title="1.冒泡排序"></a>1.冒泡排序</h3><p>传统冒泡排序省略，讲下冒泡排序的优化。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">int k =  arr.length-1， pos = 0；// 用于标志内层循环</span><br><span class="line">for (int i = 0; i &lt; arr.length - 1; i++) &#123;</span><br><span class="line">    boolean flag = true;//设定一个标记，若为true，则表示此次循环没有进行交换，也就是待排序列已经有序，排序已然完成。</span><br><span class="line">    for (int j = 0; j &lt; k； j++）&#123;</span><br><span class="line">       	if (arr[j] &gt; arr[j + 1]) &#123;</span><br><span class="line">           	swap(arr,j,j+1); // 进行交换</span><br><span class="line">            flag = false;</span><br><span class="line">            pos = j；</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line">    k = pos;</span><br><span class="line">    if (flag) &#123;</span><br><span class="line">     	break;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>单个for循环实现冒泡排序，并进行优化。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">//team为数组的长度</span><br><span class="line">boolean flag = true；</span><br><span class="line">int k = arr.length-1，pos = 0；</span><br><span class="line">for(int i= 0 ;i&lt;team;i++)&#123;</span><br><span class="line">    if(a[i]&gt;a[i+1])&#123;</span><br><span class="line">   		int tem =a[i];</span><br><span class="line">  		a[i]=a[i+1];</span><br><span class="line">  		a[i+1]=tem;</span><br><span class="line">  		flag = false；</span><br><span class="line">         pos = i;</span><br><span class="line"> 	&#125;</span><br><span class="line">    if(i==team-1 &amp;&amp; !flag)&#123;</span><br><span class="line">       	//当进入最后一个时候，改变i和team的值再进行排序</span><br><span class="line">      	i=-1;</span><br><span class="line">       	team = pos;</span><br><span class="line">    &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>其实冒泡排序的优化外层循环优化只是添加了一个标志位，如果在一次内循环的遍历中，如果未出现交换，说明已经有序，不需要在排序了.内层优化循环是记录下最后一个交换的位置，在其后面的位置已经是有序的了。</li>
+<li>时间复杂度：<ul>
+<li>最好情况：排序表本身是顺序的，根据优化后的代码，则只需要进行n-1次比较，故时间复杂度为O(n)。</li>
+<li>最差情况： 排序表本身是逆序的，则比较次数为 1+2+…+(n-1) = n*(n-1)/2 , 并作等数量级的移动操作； 平均情况： 时间复杂度为 O(n^2) 。</li>
+<li>平均情况： 时间复杂度为 O(n^2) </li>
+<li>如果是传统的冒泡排序，则时间复杂度为 1+2+…+(n-1) = n*(n-1)/2 ，它需要执行所有的遍历元素的循环。</li>
+</ul>
+</li>
+<li>空间复杂度：最好情况=最坏情况=平均情况=O(1) 。（对比传统的冒泡排序只是增加了一个标志位的内存）</li>
+</ul>
+<h3 id="2-快速排序"><a href="#2-快速排序" class="headerlink" title="2.快速排序"></a>2.快速排序</h3><p>快速排序是对冒泡排序的改进，运用了递归的思想，从待排的序列取出一个记录，定为枢轴，通过比较，将无序序列分为两个子序列，其中前面的子序列记录的关键字不大于枢轴，后面的记录的关键字不小于枢轴，再按同样的方法分别对子序列进行排序。 </p>
+<p><img src="https://images0.cnblogs.com/blog2015/776259/201507/280754329387398.png" alt="img"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">//对无序序列进行一次划分,并返回枢纽所处的位置</span><br><span class="line">//low，high，为无序序列的头尾</span><br><span class="line">int Partition(RedType rcd[], int low, int high)&#123;</span><br><span class="line"> 	   rad[0] = rcd[low]； //0号单元储存枢轴的值</span><br><span class="line"> 	   while（low&lt;high）&#123;</span><br><span class="line">           while（low&lt;high &amp;&amp; rcd[high].key &gt;= rcd[0].key)&#123;</span><br><span class="line">               --high;</span><br><span class="line">           &#125;</span><br><span class="line">           rcd[low] = rcd[high];</span><br><span class="line">           while(low&lt;high &amp;&amp; rcd[low].key &lt;= rcd[0].key)&#123;</span><br><span class="line">               ++low;</span><br><span class="line">           &#125;</span><br><span class="line">           rcd[high] = rcd[low];</span><br><span class="line"> 	   &#125;</span><br><span class="line"> 	   rcd[low] = rcd[0];</span><br><span class="line"> 	   return low;</span><br><span class="line">&#125; </span><br><span class="line">//递归调用</span><br><span class="line">QSort(RcdType rcd[], int s, int t)</span><br><span class="line">&#123;</span><br><span class="line"> 	int pivotloc;</span><br><span class="line">	if(s &lt; t)&#123; //长度要大于1,递归结束的条件</span><br><span class="line">    	pivotloc = Partiton(rcd, s, t);</span><br><span class="line">    	QSort(rcd, s, pivotloc-1); //对枢纽的前半段进行排序</span><br><span class="line">    	QSort(rcd, pivotloc+1, t); //对枢纽的后半段进行排序</span><br><span class="line">	&#125;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>快速排序的核心是在每一次划分的时候，返回枢纽所在的位置，且枢纽不会再改变位置（类似冒泡排序每次排序后，将最大元素交换到位后，后续排序不改变位置），返回枢纽的位置，将序列划分为左右序列，进行多次递归排序。</li>
+<li>时间复杂度：为O(nlogn)级别。</li>
+<li>快速排序是一种不稳定的排序算法。</li>
+</ul>
+<h3 id="快排的优化"><a href="#快排的优化" class="headerlink" title="快排的优化"></a>快排的优化</h3><h4 id="1-三数取中"><a href="#1-三数取中" class="headerlink" title="1.三数取中"></a>1.三数取中</h4><p>上面的快速排序可能出现枢轴关键字为最大最小的情况，会前驱和后驱分布不均匀的情况，导致算法效率变低，因此采用<strong>三者取中</strong>的方法，取左端、中间、右端三个数，然后进行排序，将中间数作为枢纽值。只需要在划分的时候进行三数的比较，选取合适的枢轴值便可以。</p>
+<h4 id="2-当待排序序列的长度分割到一定大小后，使用插入排序。"><a href="#2-当待排序序列的长度分割到一定大小后，使用插入排序。" class="headerlink" title="2.当待排序序列的长度分割到一定大小后，使用插入排序。"></a>2.当待排序序列的长度分割到一定大小后，使用插入排序。</h4><p>对于很小和部分有序的数组，快排不如插排好。当待排序序列的长度分割到一定大小后，继续分割的效率比插入排序要差，此时可以使用插排而不是快排。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//假设当待排序列为N的时候，执行插排</span><br><span class="line">Qsort的判断语句需要改为</span><br><span class="line">if（t - s + 1 &lt;= N)&#123;</span><br><span class="line">    //调用插排的接口</span><br><span class="line">&#125;else&#123;</span><br><span class="line">    //继续递归使用快排</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-在一次分割结束后，可以把与Key相等的元素聚在一起，继续下次分割时，不用再对与key相等元素分割"><a href="#3-在一次分割结束后，可以把与Key相等的元素聚在一起，继续下次分割时，不用再对与key相等元素分割" class="headerlink" title="3.在一次分割结束后，可以把与Key相等的元素聚在一起，继续下次分割时，不用再对与key相等元素分割"></a>3.在一次分割结束后，可以把与Key相等的元素聚在一起，继续下次分割时，不用再对与key相等元素分割</h4><p>待排序序列 1 4 6 7 6 6 7 6 8 6</p>
+<p>三数取中选取枢轴：下标为4的数6</p>
+<p>转换后，待分割序列：6 4 6 7 1 6 7 6 8 6</p>
+<pre><code>枢轴key：6
+</code></pre><p>本次划分后，未对与key元素相等处理的结果：1 4 6 6 7 6 7 6 8 6</p>
+<p>下次的两个子序列为：1 4 6 和 7 6 7 6 8 6</p>
+<p>本次划分后，对与key元素相等处理的结果：1 4 6 6 6 6 6 7 8 7</p>
+<p>下次的两个子序列为：1 4 和 7 8 7</p>
+<p>可以看出，在一次划分之后，将与key相等的元素聚集在一次，能减少子序列再进行划分的比较的次数。</p>
+<p>实现的过程：</p>
+<ul>
+<li>在划分的时候，将左边与key值相同的放在最左端，右边与key值相同的放在最右端。</li>
+<li>划分之后，把key相同的元素移动到枢轴周围，并返回下次进行划分的时候左边结束的位置和右边开始的位置（不同于之前的只返回一个枢轴值）。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">//修改Partition的代码，其中应返回的数据类型应是int[]数组</span><br><span class="line">int last = high;   //用来记录最右端的位置</span><br><span class="line">int right = high;  //用来指示现在最右端哪个位置可以插入</span><br><span class="line">int left = 1;      //用来指示现在最左端哪个位置可以插入</span><br><span class="line">int leftLen = 0;   //表示左端与key相同的记录个数</span><br><span class="line">int rightLen = 0;  //表示右端与key相同的记录个数</span><br><span class="line">//在两个if判断中分别添加代码</span><br><span class="line">if(rcd[high].key == rcd[0].key)&#123;</span><br><span class="line">    swap(rcd[high], rcd[right]); //将与key值相同的交换到最右端</span><br><span class="line">    right--;</span><br><span class="line">    rightLen++;</span><br><span class="line">&#125;</span><br><span class="line">if(rcd[low].key == rcd[0].key)&#123;</span><br><span class="line">    swap(rcd[low], rcd[left]);</span><br><span class="line">    left++;</span><br><span class="line">    leftLen++;</span><br><span class="line">&#125;</span><br><span class="line">//进行将有与key相同的key的rcd类型移动到枢轴附近</span><br><span class="line">int i = low - 1;</span><br><span class="line">int j = 1;</span><br><span class="line">while(j &lt; left &amp;&amp; arr[i] != key)</span><br><span class="line">&#123;</span><br><span class="line">	swap(rcd[i], rcd[j]);</span><br><span class="line">	i--;</span><br><span class="line">	j++;</span><br><span class="line">&#125;</span><br><span class="line">i = low + 1;</span><br><span class="line">j = last;</span><br><span class="line">while(j &gt; right &amp;&amp; arr[i] != key)</span><br><span class="line">&#123;</span><br><span class="line">	swap(rcd[i], rcd[j]);</span><br><span class="line">	i++;</span><br><span class="line">	j--;</span><br><span class="line">&#125;</span><br><span class="line">int result[] = &#123;low - leftLen, low + rightlen&#125;;</span><br><span class="line">return result;</span><br></pre></td></tr></table></figure>
+<p>可采用三数取中+插排+聚集相等元素进行快排的优化，可提高效率。</p>
+<h2 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h2><h3 id="1-堆的定义"><a href="#1-堆的定义" class="headerlink" title="1.堆的定义"></a>1.堆的定义</h3><ul>
+<li>完全二叉树：完全二叉树是效率很高的数据结构， 完全二叉树是由满二叉树而引出来的。对于深度为K的，有n个结点的二叉树，当且仅当其每一个结点都与深度为K的满二叉树中编号从1至n的结点一一对应时称之为完全二叉树。通俗的说就是：若设二叉树的深度为h，除第 h 层外，其它各层 (1～h-1) 的结点数都达到最大个数，第 h 层所有的结点都连续集中在最左边，这就是完全二叉树。 </li>
+<li>堆是一种完全二叉树，其所有非叶子节点<strong>均不大于（不小于）其左右孩子结点</strong>，因此可将堆分为两种，分别是大顶堆，小顶堆。每个结点的值都大于或等于其左右孩子结点的值，称为大顶堆；或者每个结点的值都小于或等于其左右孩子结点的值，称为小顶堆。如下图</li>
+</ul>
+<p><img src="https://images2015.cnblogs.com/blog/1024555/201612/1024555-20161217182750011-675658660.png" alt=""> </p>
+<h3 id="2-关于堆的一些基本操作"><a href="#2-关于堆的一些基本操作" class="headerlink" title="2.关于堆的一些基本操作"></a>2.关于堆的一些基本操作</h3><ul>
+<li>堆的定义结构</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">typedef struct&#123;</span><br><span class="line">    RcdType *rcd; //堆基址, 0号单元闲置(RcdTypo是定义的记录的结构体类型)</span><br><span class="line">    int n; //堆长度 </span><br><span class="line">    int size; //堆容量</span><br><span class="line">    int tag; //小顶堆和大顶堆的标志，0为小顶堆，1为大顶堆</span><br><span class="line">    int （*prior）（KeyType， KeyType) //函数变量，用于关键字的优先级比较</span><br><span class="line">&#125;Heap</span><br><span class="line">int greatPrior(int x, int y)&#123;return x &gt;= y;&#125; //大顶堆优先函数</span><br><span class="line">int lessPrior（int x, int y)&#123;return x &lt; y;&#125; //小顶堆优先函数</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>堆的筛选操作</p>
+<ul>
+<li>堆的筛选操作就是将堆中指定的以pos为节点为根的子树调整为子堆。</li>
+<li>过程就是将pos节点与左右孩子较优先的者比较，若pos结点优先则结束，否则pos结点和左右孩子中较优先者交换位置，pos位标下移，重复上述步骤，直到pos指示到叶子结点为止。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">void ShiftDown(Heap &amp;H, int pos)&#123;</span><br><span class="line">    //对堆H中位置为pos的结点做筛选，将以pos为根的子树调整为子堆</span><br><span class="line">    int c, rc;</span><br><span class="line">    while(pos &lt;= H.n/2)&#123;</span><br><span class="line">        //若pos结点为叶子结点，循环结束</span><br><span class="line">        c = pos*2;</span><br><span class="line">        rc = pos*2+1;</span><br><span class="line">        if(rc &lt;= H.n &amp;&amp; H.prior(H.prior(H.rcd[rc].key, H.rcd[c].key))&#123;</span><br><span class="line">            c = rc; //将c赋值为pos结点的左后孩子中较优先者的位置</span><br><span class="line">        &#125;</span><br><span class="line">        if(H.prior(H.rcd[pos].key, H.rcd[c].key))&#123;</span><br><span class="line">            return; //若pos结点较优先,则筛选结束</span><br><span class="line">        &#125;</span><br><span class="line">        //调用交换位置的函数</span><br><span class="line">        swapHeapElem(H, pos, c);</span><br><span class="line">        pos = c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>时间复杂度：对深度为k的完全二叉树，做一次筛选最多需要进行2（k-1）次比较，n个结点的完全二叉树的深度是（log2 n）+ 1，因此筛选算法的时间复杂度是O（log n）。</li>
+<li>根据筛选算法的基础可以看出，它只能将以pos为根的一边的子树进行调整为子堆，以此类推下去。而且当判断pos结点的值满足调整条件的时候，会停止调整，因此可基于从下往上的非叶子结点一层一层的筛选，用筛选法创建堆。</li>
+</ul>
+</li>
+<li><p>筛选法建堆</p>
+<ul>
+<li>首先将N个数据元素存入一个一维数组，并把这个数组视作一棵完全二叉树。</li>
+<li>从二叉树的最后一个非叶结点开始用从上向下过滤的方法调整以该非叶结点为根节点的二叉树为最大堆。</li>
+<li>对前面的结点依次执行2的操作直到根结点执行完成为止。此时这棵二叉树就调整为了一个最大堆。</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://images.cnblogs.com/cnblogs_com/zabery/201107/201107261321543165.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">void MakeHeap(Heap &amp;H, RcdType *E, int n, int size, int tag, int (*prior)(KeyType, KeyType))&#123;</span><br><span class="line">    int i;</span><br><span class="line">    H.rcd = E;</span><br><span class="line">    H.n = n;</span><br><span class="line">    H.size = size;</span><br><span class="line">    H.tag = tag;</span><br><span class="line">    H.prior = prior;</span><br><span class="line">    for(i = n/2; i &gt; 0; i--)&#123;</span><br><span class="line">        ShiftDown(H, i); //对以i结点为根的子树进行筛选</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>根据筛选算法的原理即可知道从最下面的非叶子结点进行一层一层的筛选，最终可以获得一个堆结构。</li>
+<li>时间复杂度：筛选法建堆的时间复杂度是线性级别的，假设有一深度为h的堆，其第i层的结点数最多为2^（i-1），以他们为根的二叉树的深度为h-i+1，筛选算法中进行关键字次数的比较为次数为2（h-i），经过计算，其总共进行的比较次数不会超过4n，因此其时间复杂度为O（n）级别。</li>
+</ul>
+<h2 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h2><p>简单选择排序不再讲述。</p>
+<p>###　堆排序</p>
+<p>堆排序的基本思想是：将待排序序列构造成一个大顶堆(一般升序采用大顶堆，降序采用小顶堆 )，此时，整个序列的最大值就是堆顶的根节点。将其与末尾元素进行交换，此时末尾就为最大值。然后将剩余n-1个元素重新构造成一个堆，这样会得到n个元素的次小值。如此反复执行，便能得到一个有序序列了。</p>
+<h3 id="步骤一：构造初始堆。将给定无序序列构造成一个大顶堆（一般升序采用大顶堆，降序采用小顶堆-。"><a href="#步骤一：构造初始堆。将给定无序序列构造成一个大顶堆（一般升序采用大顶堆，降序采用小顶堆-。" class="headerlink" title="步骤一：构造初始堆。将给定无序序列构造成一个大顶堆（一般升序采用大顶堆，降序采用小顶堆)。"></a>步骤一：构造初始堆。将给定无序序列构造成一个大顶堆（一般升序采用大顶堆，降序采用小顶堆)。</h3><ul>
+<li>采用上述讲述的筛选法建堆，建造一个大顶堆</li>
+</ul>
+<h3 id="步骤二：-将堆顶元素与末尾元素进行交换，使末尾元素最大。然后继续调整堆，再将堆顶元素与末尾元素交-换，得到第二大元素。如此反复进行交换、重建、交换。"><a href="#步骤二：-将堆顶元素与末尾元素进行交换，使末尾元素最大。然后继续调整堆，再将堆顶元素与末尾元素交-换，得到第二大元素。如此反复进行交换、重建、交换。" class="headerlink" title="步骤二： 将堆顶元素与末尾元素进行交换，使末尾元素最大。然后继续调整堆，再将堆顶元素与末尾元素交   换，得到第二大元素。如此反复进行交换、重建、交换。"></a>步骤二： 将堆顶元素与末尾元素进行交换，使末尾元素最大。然后继续调整堆，再将堆顶元素与末尾元素交   换，得到第二大元素。如此反复进行交换、重建、交换。</h3><ul>
+<li>将堆顶的元素和末尾的元素进行交换，把堆的长度减1</li>
+</ul>
+<p><img src="https://images2015.cnblogs.com/blog/1024555/201612/1024555-20161217194207620-1455153342.png" alt=""></p>
+<ul>
+<li>重新调整结构，使其继续满足堆定义</li>
+</ul>
+<p><img src="https://images2015.cnblogs.com/blog/1024555/201612/1024555-20161218153110495-1280388728.png" alt=""></p>
+<ul>
+<li>再将堆顶元素和末尾元素进行交换</li>
+</ul>
+<p><img src="https://images2015.cnblogs.com/blog/1024555/201612/1024555-20161218152929339-1114983222.png" alt=""></p>
+<ul>
+<li>重复以上操作，直到整个序列有序。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">void HeapSort(RcdSqList &amp;L)&#123;</span><br><span class="line">    Heap H;</span><br><span class="line">    int i;</span><br><span class="line">    MakeHeap(H, L.rcd, L.length, L.size, 1, greatPrior);</span><br><span class="line">    for(i = L.length; i &gt; 1; i--)&#123;</span><br><span class="line">       swap(H.rcd[i], H.rcd[1]); //堆尾和堆顶的结点进行交换.</span><br><span class="line">       H.n = i - 1; //将堆的长度减1</span><br><span class="line">       ShiftDown(H, 1); //筛选出新的堆顶结点</span><br><span class="line">    &#125;</span><br><span class="line">    H.n = L.length;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>堆排序的算法，其运行时间主要集中在建立初始堆和交换数据的元素后的反复筛选上，建堆的时间复杂度是O（n）。</li>
+<li>堆排序最坏情况下的时间复杂度是O（nlogn）。</li>
+<li>堆排序是一种不稳定的排序。</li>
+</ul>
+<h2 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h2><h3 id="1-直接插入排序"><a href="#1-直接插入排序" class="headerlink" title="1.直接插入排序"></a>1.直接插入排序</h3><p>直接插入排序的算法思想是每次将无序区的第一个记录按关键字插入到有序区的合适位置，并将有序区的长度加一。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">void InsetSort(RcdSqList &amp;L)&#123;</span><br><span class="line">    int i, j;</span><br><span class="line">    for(i = 1; i &lt; L.length; i++)&#123;</span><br><span class="line">        if(L.rcd[i+1].key &lt; L.rcd[i].key&#123;</span><br><span class="line">        	//需将L.rcd[i+1]插入有序序列</span><br><span class="line">            L.rcd[0] = L.rcd[i+1]; //将需要插入的记录保存在空闲的0号单元</span><br><span class="line">            j = i + 1;</span><br><span class="line">            do&#123;</span><br><span class="line">                j--;</span><br><span class="line">                L.rcd[j+1] = L.rcd[j]; //记录后移,以便待插入的记录可以插入</span><br><span class="line">            &#125;while(L.rcd[0].key &lt; L.rcd[j-1].key);//判断是否需要继续移动</span><br><span class="line">        &#125;</span><br><span class="line">        L.rcd[j] = L.rcd[0];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>直接插入排序过程理解起来比较简单，就是在遍历中查询需要插入的记录，然后存储在0号空闲单元（记录后移的时候原先的值会被覆盖，因此需要暂时保存起来），查询到之后，进行记录的后移，将待插入的记录插入到正确的位置。</li>
+<li>时间复杂度：<ul>
+<li>最好的情况：待排的记录全部有序，只需要进行关键字的比较，比较次数为（n-1），移动次数为0。</li>
+<li>最坏的情况 ：待排记录是逆序的，时间复杂度是O（n^2)。</li>
+</ul>
+</li>
+<li>空间复杂度：只需要一个记录的辅助空间，为O（1）。</li>
+<li>插入排序是稳定的排序方法。</li>
+</ul>
+<h3 id="2-希尔排序"><a href="#2-希尔排序" class="headerlink" title="2.希尔排序"></a>2.希尔排序</h3><p>希尔排序是对直接插入排序的改进。</p>
+<ul>
+<li>原理：按照增量d划分为d个子序列，并分别对这些子序列进行直接插入排序，<strong>不断减小增量d</strong>，直到d减小为1，对整个序列进行一次的直接插入排序。</li>
+<li>与直接插入排序不同的是，直接插入排序是每次进行相邻记录的比较，而希尔排序是对相隔较远距离的记录进行比较，之所以会达到算法的优化，是因为经过子序列的排序之后，最后一次全部序列的直接插入排序的时候已经<strong>基本有序</strong>，因此希尔排序的最后一趟就相当于<strong>接近最好情况的直接插入排序</strong>，通过前面的预处理，会比一次直接插入排序效率显著提高。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">//一趟的希尔排序</span><br><span class="line">void ShellInset(RcdSqList &amp;L, int dk)&#123;</span><br><span class="line">    //dk表示增量</span><br><span class="line">    int i, j;</span><br><span class="line">    for(i = 1; i &lt;= L.length-dk; i++)&#123;</span><br><span class="line">        if(L.rcd[i+dk].key &lt; L.rcd[i].key)&#123;</span><br><span class="line">            //需将L.rcd[i+dk]插入到有序序列</span><br><span class="line">            L.rcd[0] = L.rcd[i+dk];</span><br><span class="line">            j = i + dk;</span><br><span class="line">            do&#123;</span><br><span class="line">                j-=dk;</span><br><span class="line">                L.rcd[j+dk] = L.rcd[j];</span><br><span class="line">            &#125;whlie(j-dk&gt;0 &amp;&amp; L.rcd[0].key &lt; L.rcd[j-dk].key);</span><br><span class="line">        &#125;</span><br><span class="line">        L.rcd[j] = L.rcd[0]; //插入</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//外界调用的接口</span><br><span class="line">void ShellSort(RcdSqList &amp;L, int d[], int t)&#123;</span><br><span class="line">	//d[]为增量序列</span><br><span class="line">    int k;</span><br><span class="line">    for(k = 0; k&lt;t; k++)&#123;</span><br><span class="line">        ShellInset(L, d[k])</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>希尔排序的时间复杂度是所取增量的函数，现在难以准确的分析。</li>
+<li>希尔排序是一种<strong>不稳定的排序方法</strong>，其可能出现两个相同的数在排序前和排序后的相对位置发生改变。</li>
+</ul>
+<h2 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h2><p>归并排序是指把无序的待排序序列递归分解成若干个长度大致相等的有序子序列，并把有序子序列合并为整体有序的过程。 </p>
+<p><img src="https://images2015.cnblogs.com/blog/1024555/201612/1024555-20161218163120151-452283750.png" alt=""></p>
+<ul>
+<li>分的阶段就是递归拆分子序列的过程。</li>
+<li>治的阶段就是将两个有序的子序列合并为一个有序序列。 </li>
+</ul>
+<p><img src="https://images2015.cnblogs.com/blog/1024555/201612/1024555-20161218194508761-468169540.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">//用于实现&quot;治&quot;的算法</span><br><span class="line">void merge (RcdType SR[], RcdType TR[], int left, int mid, int right)&#123;</span><br><span class="line">    //将相邻的有序区间SR[left, mid]和SR[mid+1, right]归并为有序的TR[i, n]</span><br><span class="line">    int k, j，i;</span><br><span class="line">    for(j = mid+1, k = 0， i = left; i &lt;= mid &amp;&amp; j &lt;= right; ++k)&#123;</span><br><span class="line">        if(SR[i].key &lt;= SR[j].key)&#123; </span><br><span class="line">        	//此刻若没有&quot;=&quot;, 则将导致归并排序不稳定</span><br><span class="line">        	TR[k] = SR[i++];</span><br><span class="line">  		&#125;else&#123;</span><br><span class="line">            TR[k] = SR[j++];</span><br><span class="line">  		&#125;</span><br><span class="line">  		while(i &lt;= mid)&#123;</span><br><span class="line">            TR[k++] = SR[i++];</span><br><span class="line">  		&#125; //将剩余的SR[i, m]复制到TR</span><br><span class="line">  		while(j &lt;= right)&#123;</span><br><span class="line">            TR[k++] = SR[j++];</span><br><span class="line">  		&#125; //将剩余的SR[j, n]复制到TR</span><br><span class="line">  		k = 0;</span><br><span class="line">  		while(left &lt;= right)&#123;</span><br><span class="line">  		    //将中间数组的值全部存回原数组</span><br><span class="line">            SR[left++] = TR[k++];</span><br><span class="line">  		&#125;</span><br><span class="line">  	&#125;</span><br><span class="line">&#125;</span><br><span class="line">//用于实现&quot;分&quot;的算法</span><br><span class="line">    void MSort(RcdType R1[], RcdType R2[], int left, int right)&#123;</span><br><span class="line">        if(left &lt; right)&#123;</span><br><span class="line">        int mid = (left + right)/2;</span><br><span class="line">        MSort(SR, TR, left, mid);</span><br><span class="line">        MSort(SR, TR, mid+1, right);</span><br><span class="line">        merge(SR, TR, left, mid, right);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//调用的接口</span><br><span class="line">void MergeSort(RcdSqList &amp;L)&#123;</span><br><span class="line">    //2-路归并排序</span><br><span class="line">    RcdType *R;</span><br><span class="line">    R = (RcdType)malloc((L.length+1)*sizeof(RcdType));</span><br><span class="line">    MSort(L.rcd, R, 1, L.length);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>本例采用的是2-路归并排序，即每次递归将原序列拆分为两个子序列。</li>
+<li>时间复杂度：整个归并过程需要进行[logn]层的递归分解和归并，因此归并排序的时间复杂度是O(nlogn)。</li>
+<li>归并排序是一种稳定的排序。</li>
+</ul>
+<h3 id="归并排序的优化"><a href="#归并排序的优化" class="headerlink" title="归并排序的优化"></a>归并排序的优化</h3><h4 id="1-插排代替归并排序"><a href="#1-插排代替归并排序" class="headerlink" title="1.插排代替归并排序"></a>1.插排代替归并排序</h4><p>类似于快排，当数组长度小到一定规模的时候，插入排序可能会比归并排序的更快，所以我们可以给予一个阙值，当数组长度小到阙值时，就是用插入排序来解决小规模子数组的排序问题 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//在MSort方法中加入以下代码</span><br><span class="line">int N = 7; //用来标志长度为多少时候，不执行归并排序，更换为插排，此处假设为7</span><br><span class="line">if(right &lt;= left + N - 1)&#123;</span><br><span class="line">    //调用插排接口</span><br><span class="line">    return;</span><br><span class="line">&#125; else&#123;</span><br><span class="line">    //递归调用归并排序</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-判断数组是否有序"><a href="#2-判断数组是否有序" class="headerlink" title="2.判断数组是否有序"></a>2.判断数组是否有序</h4><p>如果SR[mid].key小于或等于SR[mid+1].key，则说明此时该数组是有序的了，因为前者是左边的最大值，后者是右边的最小值，此时可以跳过merge方法，不用去执行“治”过程，这个改动不会影响排序的递归调用，此时任意有序的子数组的排序就变成了线性了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//在MSort方法修改代码</span><br><span class="line">//在调用Merge方法前面添加此判断</span><br><span class="line">if(SR[mid].key &lt;= SR[mid+1].key)&#123;</span><br><span class="line">    return; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="基数排序"><a href="#基数排序" class="headerlink" title="基数排序"></a>基数排序</h2><ul>
+<li>基数排序 (Radix Sort) 是一种非比较型整数排序算法，其原理是将整数按位数切割成不同的数字，然后按每个位数分别比较。 </li>
+<li>排序过程: 将所有待比较数值（<strong>正整数</strong>）统一为同样的数位长度，数位较短的数前面补零。然后，从最低位开始，依次进行一次排序。这样从最低位排序一直到最高位排序完成以后, 数列就变成一个有序序列。 </li>
+</ul>
+<p><img src="https://images0.cnblogs.com/i/497634/201403/161837176365265.jpg" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">//定义的结构体</span><br><span class="line">typedef struct&#123;</span><br><span class="line">    KeysType *keys;  //关键字,有多位数</span><br><span class="line">    ...其他数据项</span><br><span class="line">&#125;KeysRcdType;</span><br><span class="line">typedef struct &#123;</span><br><span class="line">    KeysRcdType *rcd; //0号位置做哨兵</span><br><span class="line">    int length;   //顺序表的长度</span><br><span class="line">    int size;     //顺序表的容量</span><br><span class="line">    int digitNum; //关键字的位数</span><br><span class="line">    int radix;  //关键字的基数</span><br><span class="line">&#125;KeysSqList;  //顺序表类型</span><br><span class="line">//对顺序表进行基数排序</span><br><span class="line">status RadixSort(KeySqList &amp;L)&#123;</span><br><span class="line">    KeysRcdType *rcd1; //开设同等大小的辅助空间用于复制数据</span><br><span class="line">    int i = 0, j;</span><br><span class="line">    int *count, *pos;</span><br><span class="line">    count = (int *)malloc(L.radix * sizeof(int));</span><br><span class="line">    pos = (int *)malloc(L.radix * sizeof(int));</span><br><span class="line">    rcd1 = (KeysRcdType*)malloc((L.length + 1)) * sizeof(KeysRcdType);</span><br><span class="line">    if(NULL == count || NULL == pos || NULL == rcd1)&#123;</span><br><span class="line">        return OVERFLOW;</span><br><span class="line">    &#125;</span><br><span class="line">    while(i &lt; L.digitum)&#123;</span><br><span class="line">        for(j = 0; j &lt; L.radix; j++)&#123;</span><br><span class="line">            count[j] = 0; //初始化</span><br><span class="line">        &#125;</span><br><span class="line">        if(0 == i%2)&#123;</span><br><span class="line">            RadixPase(L.rcd, rcd1, L.length, i++, count, pos, L.radix);</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">        	RadixPase(rcd1, L.rcd, L.length, i++, count, pos, L.radix);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if(1 == digitum % 2)&#123;</span><br><span class="line">    	//排序后的结果存储在rcd1中,因此需要复制到rcd1</span><br><span class="line">        for(j = 1; j &lt;= L.length; j++)&#123;</span><br><span class="line">        	L.rcd[j] = rcd[j];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    free(count);</span><br><span class="line">    free(pos);</span><br><span class="line">    free(rcd1);</span><br><span class="line">    return OK;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//进行一趟的计数排序</span><br><span class="line">void RadixPass(KeyRcdType rcd[], KeysRcdType rcd1[], int n, int i, int count[], int pos[], int radix)&#123;</span><br><span class="line">	//对数组rcd中记录关键字的第i位计数,计算得到初始位置数组pos[]</span><br><span class="line">	//并按照pos数组将数组rcd中记录复制到数组rcd1中</span><br><span class="line">	int k, j;</span><br><span class="line">	for(k = 1; k &lt;= n; k++)&#123;</span><br><span class="line">        count[rcd[k].keys[i]++; //对rcd数组中关键字的第i位的各种取值进行计数</span><br><span class="line">	&#125;</span><br><span class="line">	pos[0] = 1;</span><br><span class="line">	for(j = 1; j &lt; radix; j++)&#123;</span><br><span class="line">        pos[j] = count[j-1] + pos[j-1];</span><br><span class="line">	&#125;</span><br><span class="line">	for(k = 1; k &lt;= n; k++)&#123;</span><br><span class="line">        j = rcd[k].keys[i];</span><br><span class="line">        rcd1[pos[j]++] = rcd[k];</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>基数排序算法是无需比较关键字的，主要的操作是分配和收集。</li>
+<li>采用count数组和pos数组分别存放每个位数各种出现的次数，从而计算出它的位置存储在pos数组中，再根据pos数组中的值，将对应的关键字收集到对应的辅助数组的合适位置（根据排序的次数，进行辅助数组的交换）。</li>
+<li>时间复杂度：进行一趟的分配和收集的时间复杂度是O（n），如果是m位数，则需要进行m趟的分配和收集，因此时间复杂度是O（mn）。</li>
+<li>空间复杂度：需要采用辅助数组，因此空间复杂度是O（n）。</li>
+<li>基数排序是稳定的排序方法。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/02/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">AllenYu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#​"><span class="nav-number">1.</span> <span class="nav-text">​</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#title-常见的排序算法"><span class="nav-number">2.</span> <span class="nav-text">title: 常见的排序算法</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#常见的排序算法"><span class="nav-number"></span> <span class="nav-text">常见的排序算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#排序的分类"><span class="nav-number">1.</span> <span class="nav-text">排序的分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内部排序的分类"><span class="nav-number">2.</span> <span class="nav-text">内部排序的分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#交换排序"><span class="nav-number">3.</span> <span class="nav-text">交换排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-冒泡排序"><span class="nav-number">3.1.</span> <span class="nav-text">1.冒泡排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-快速排序"><span class="nav-number">3.2.</span> <span class="nav-text">2.快速排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#快排的优化"><span class="nav-number">3.3.</span> <span class="nav-text">快排的优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-三数取中"><span class="nav-number">3.3.1.</span> <span class="nav-text">1.三数取中</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-当待排序序列的长度分割到一定大小后，使用插入排序。"><span class="nav-number">3.3.2.</span> <span class="nav-text">2.当待排序序列的长度分割到一定大小后，使用插入排序。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-在一次分割结束后，可以把与Key相等的元素聚在一起，继续下次分割时，不用再对与key相等元素分割"><span class="nav-number">3.3.3.</span> <span class="nav-text">3.在一次分割结束后，可以把与Key相等的元素聚在一起，继续下次分割时，不用再对与key相等元素分割</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#堆"><span class="nav-number">4.</span> <span class="nav-text">堆</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-堆的定义"><span class="nav-number">4.1.</span> <span class="nav-text">1.堆的定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-关于堆的一些基本操作"><span class="nav-number">4.2.</span> <span class="nav-text">2.关于堆的一些基本操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择排序"><span class="nav-number">5.</span> <span class="nav-text">选择排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#步骤一：构造初始堆。将给定无序序列构造成一个大顶堆（一般升序采用大顶堆，降序采用小顶堆-。"><span class="nav-number">5.1.</span> <span class="nav-text">步骤一：构造初始堆。将给定无序序列构造成一个大顶堆（一般升序采用大顶堆，降序采用小顶堆)。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#步骤二：-将堆顶元素与末尾元素进行交换，使末尾元素最大。然后继续调整堆，再将堆顶元素与末尾元素交-换，得到第二大元素。如此反复进行交换、重建、交换。"><span class="nav-number">5.2.</span> <span class="nav-text">步骤二： 将堆顶元素与末尾元素进行交换，使末尾元素最大。然后继续调整堆，再将堆顶元素与末尾元素交   换，得到第二大元素。如此反复进行交换、重建、交换。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插入排序"><span class="nav-number">6.</span> <span class="nav-text">插入排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-直接插入排序"><span class="nav-number">6.1.</span> <span class="nav-text">1.直接插入排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-希尔排序"><span class="nav-number">6.2.</span> <span class="nav-text">2.希尔排序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#归并排序"><span class="nav-number">7.</span> <span class="nav-text">归并排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#归并排序的优化"><span class="nav-number">7.1.</span> <span class="nav-text">归并排序的优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-插排代替归并排序"><span class="nav-number">7.1.1.</span> <span class="nav-text">1.插排代替归并排序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-判断数组是否有序"><span class="nav-number">7.1.2.</span> <span class="nav-text">2.判断数组是否有序</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基数排序"><span class="nav-number">8.</span> <span class="nav-text">基数排序</span></a></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AllenYu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
