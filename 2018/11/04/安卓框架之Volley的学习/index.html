@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android框架学习,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="网络框架之Volley1.简介Volley它非常适合去进行数据量不大，但通信频繁的网络操作，而对于大数据量的网络操作，比如说 下载文件 等，Volley的表现就会非常糟糕.原因如下">
+<meta name="keywords" content="Android框架学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安卓框架之Volley的学习">
+<meta property="og:url" content="http://yuzeduan.github.io/2018/11/04/安卓框架之Volley的学习/index.html">
+<meta property="og:site_name" content="Allen Home">
+<meta property="og:description" content="网络框架之Volley1.简介Volley它非常适合去进行数据量不大，但通信频繁的网络操作，而对于大数据量的网络操作，比如说 下载文件 等，Volley的表现就会非常糟糕.原因如下">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-04T11:27:15.900Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="安卓框架之Volley的学习">
+<meta name="twitter:description" content="网络框架之Volley1.简介Volley它非常适合去进行数据量不大，但通信频繁的网络操作，而对于大数据量的网络操作，比如说 下载文件 等，Volley的表现就会非常糟糕.原因如下">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yuzeduan.github.io/2018/11/04/安卓框架之Volley的学习/">
+
+
+
+
+
+  <title>安卓框架之Volley的学习 | Allen Home</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/Yuzeduan"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Allen Home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yuzeduan.github.io/2018/11/04/安卓框架之Volley的学习/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="AllenYu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Allen Home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">安卓框架之Volley的学习</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-04T17:12:39+08:00">
+                2018-11-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.8k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="网络框架之Volley"><a href="#网络框架之Volley" class="headerlink" title="网络框架之Volley"></a>网络框架之Volley</h1><h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1.简介"></a>1.简介</h2><p>Volley它非常适合去进行数据量不大，但通信频繁的网络操作，而对于大数据量的网络操作，比如说 下载文件 等，Volley的表现就会非常糟糕.原因如下</p>
+<a id="more"></a>
+<ul>
+<li>Volley的<strong>网络请求线程池默认为4</strong>。因此只能并发进行4个请求（多了排队），容易被4个较大文件的下载任务阻塞其余请求。</li>
+<li>Request的parseNetWorkResponse()方法返回byte[]类型，需要把传输到的数据读到内存中。如果文件过大，容易引发OOM。</li>
+</ul>
+<h2 id="2-基本使用"><a href="#2-基本使用" class="headerlink" title="2.基本使用"></a>2.基本使用</h2><h3 id="初始化请求对象–RequestQueue"><a href="#初始化请求对象–RequestQueue" class="headerlink" title="初始化请求对象–RequestQueue"></a>初始化请求对象–RequestQueue</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class MyApplication extends Application &#123;</span><br><span class="line">  public static RequestQueue requestQueue;</span><br><span class="line">  @Override</span><br><span class="line">  public void onCreate() &#123;</span><br><span class="line">    super.onCreate();</span><br><span class="line">    // 不必为每一次HTTP请求都创建一个RequestQueue对象，推荐在application中初始化</span><br><span class="line">    requestQueue = Volley.newRequestQueue(this);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>RequestQueue是一个请求队列对象,它可以缓存所有的HTTP请求,并按照一定的算法并发的发出这些请求.</li>
+<li>RequestQueue内部的设计是非常适合高并发的,我们不必每一次发送请求都创建一个RequestQueue对象,可以采用单例模式在application中定义.</li>
+</ol>
+<h3 id="使用StringRequest接收String类型的响应"><a href="#使用StringRequest接收String类型的响应" class="headerlink" title="使用StringRequest接收String类型的响应"></a>使用StringRequest接收String类型的响应</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public StringRequest(String url, Listener&lt;String&gt; listener, ErrorListener errorListener) &#123;</span><br><span class="line">     this(Method.GET, url, listener, errorListener);</span><br><span class="line">&#125;</span><br><span class="line">public StringRequest(int method, String url, Listener&lt;String&gt; listener, ErrorListener errorListener)</span><br></pre></td></tr></table></figure>
+<h4 id="1-GET请求"><a href="#1-GET请求" class="headerlink" title="1.GET请求"></a>1.GET请求</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">StringRequest mStrReq = new StringRequest( Request.Method.POST,&quot;https://www.baidu.com&quot;,</span><br><span class="line">       new Response.Listener&lt;String&gt;() &#123;</span><br><span class="line">           @Override</span><br><span class="line">           public void onResponse(String response) &#123;</span><br><span class="line">               // 这个方法运行在主线程中，可以直接更新ui</span><br><span class="line">               // 通过参数返回请求到的数据</span><br><span class="line">               mTv_result.setText(response);</span><br><span class="line">               Toast.makeText(StrReqActivity.this, &quot;下载成功&quot;, Toast.LENGTH_SHORT).show();</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;, new Response.ErrorListener() &#123;</span><br><span class="line">           @Override</span><br><span class="line">           public void onErrorResponse(VolleyError error) &#123;</span><br><span class="line">               // 这个方法运行在主线程中，可以直接更新ui</span><br><span class="line">               // 失败在这里处理</span><br><span class="line">               Toast.makeText(StrReqActivity.this, &quot;下载失败&quot;, Toast.LENGTH_SHORT).show();</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;);</span><br><span class="line">       //设置Tag值</span><br><span class="line">       mStrReq.setTag(&quot;100&quot;);</span><br><span class="line">       btn_req.setOnClickListener(new View.OnClickListener() &#123;</span><br><span class="line">           @Override</span><br><span class="line">           public void onClick(View view) &#123;</span><br><span class="line">               //3.把请求对象添加到请求队列中,会自动发出请求</span><br><span class="line">               mRequestQueue.add(mStrReq);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>参数:  url：请求的地址, listener：响应成功的监听器, errorListener：出错时的监听器 <strong>默认不传入method参数,则执行GET请求.</strong></li>
+</ul>
+<h4 id="2-POST请求"><a href="#2-POST请求" class="headerlink" title="2.POST请求"></a>2.POST请求</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;//构造函数中method参数需要传入Request.Method.POST</span><br><span class="line">//这里需要重写getParams方法 </span><br><span class="line">       @Override</span><br><span class="line">       protected Map&lt;String, String&gt; getParams() throws AuthFailureError &#123;</span><br><span class="line">           //把post的请求参数，放入请求体中</span><br><span class="line">           //请求条件：platform=2&amp;gifttype=1&amp;compare=60841c5b7c69a1bbb3f06536ed685a48</span><br><span class="line">           Map&lt;String, String&gt; params = new HashMap&lt;&gt;();</span><br><span class="line">           params.put(&quot;platform&quot;, &quot;2&quot;);</span><br><span class="line">           params.put(&quot;gifttype&quot;, &quot;1&quot;);</span><br><span class="line">           params.put(&quot;compare&quot;, &quot;60841c5b7c69a1bbb3f06536ed685a48&quot;);</span><br><span class="line">           return params;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>GET和POST请求方法基本一致,唯一不同是需要重写StringRequest中的getParams()方法,传入参数.</li>
+</ul>
+<h4 id="3-手动取消请求"><a href="#3-手动取消请求" class="headerlink" title="3.手动取消请求"></a>3.手动取消请求</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">protected void onDestroy() &#123;</span><br><span class="line">    super.onDestroy();</span><br><span class="line">    //取消请求:有三种方式</span><br><span class="line">    //1. 取消对应的请求对象</span><br><span class="line">    mStrReq.cancel();</span><br><span class="line">    //2. 取消请求队列中对应tag的请求</span><br><span class="line">    //mRequestQueue.cancelAll(&quot;100&quot;);</span><br><span class="line">    //3. 取消请求队列中所有的请求</span><br><span class="line">    //mRequestQueue.cancelAll(this);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在活动销毁的时候取消网络请求.</li>
+</ul>
+<h3 id="JSON数据的请求"><a href="#JSON数据的请求" class="headerlink" title="JSON数据的请求"></a>JSON数据的请求</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url,  </span><br><span class="line">        new Response.Listener&lt;JSONObject&gt;() &#123;  </span><br><span class="line">            @Override  </span><br><span class="line">            public void onResponse(JSONObject response) &#123;  </span><br><span class="line">                Log.d(&quot;TAG&quot;, response.toString());  </span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;, new Response.ErrorListener() &#123;  </span><br><span class="line">            @Override </span><br><span class="line">            public void onErrorResponse(VolleyError error) &#123;  </span><br><span class="line">                Log.e(&quot;TAG&quot;, error.getMessage(), error);  </span><br><span class="line">            &#125;  </span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>和StringRequest一样，JsonRequest也是继承自Request类的， JsonRequest是一个抽象类，有两个子类JsonObjectRequest和JsonArrayRequest，前者用于请求一段JSON数据的，后者用于请求一段JSON数组。</li>
+<li>默认执行GET请求</li>
+</ul>
+<h3 id="IamgeRequest图片请求"><a href="#IamgeRequest图片请求" class="headerlink" title="IamgeRequest图片请求"></a>IamgeRequest图片请求</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">//1.首先有请求队列</span><br><span class="line">RequestQueue requestQueue = Volley.newRequestQueue(this);</span><br><span class="line">//2.请求对象</span><br><span class="line">//1) 图片下载的url</span><br><span class="line">//2) 下载成功后，返回一个bitmap对象</span><br><span class="line">//3)4) 最大宽度和最大高度，如果超过最大宽度和高度，会进行压缩到你设置的宽度和高度，0不限制</span><br><span class="line">//5) 图片加载的形式</span><br><span class="line">//6)图片显示的质量：RGB_565： 每个像素2字节   ARGB_8888:每个像素占4个字节</span><br><span class="line">//7)下载图片失败后，在这里边处理</span><br><span class="line">ImageRequest imgRequest = new ImageRequest(url_img, new Response.Listener&lt;Bitmap&gt;() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void onResponse(Bitmap response) &#123;</span><br><span class="line">                //显示成功的图片</span><br><span class="line">                iv_show.setImageBitmap(response);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, 0, 0, ImageView.ScaleType.FIT_XY, Bitmap.Config.RGB_565, new Response.ErrorListener() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void onErrorResponse(VolleyError error) &#123;</span><br><span class="line">                //设置失败的图片</span><br><span class="line">                iv_show.setBackgroundResource(R.mipmap.ic_launcher);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>注意:</strong> 第三/四个参数用于指定允许图片最大的宽/高，若网络图片的实际宽高大于该设定值，则会对图片进行压缩，指定成0的话就表示不进行压缩。第五个参数用于指定图片的颜色属性，Bitmap.Config下的几个常量都可以在这里使用，其中ARGB_8888可以展示最好的颜色属性，每个图片像素占据4个字节的大小，而RGB_565则表示每个图片像素占据2个字节大小。不过这种加载图片的方式并不被推荐.</li>
+</ul>
+<h3 id="imageLoader"><a href="#imageLoader" class="headerlink" title="imageLoader"></a>imageLoader</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">//1、首先有请求队列</span><br><span class="line">RequestQueue requestQueue = Volley.newRequestQueue(this);</span><br><span class="line">//2、创建出ImageLoader对象</span><br><span class="line">ImageLoader loader = new ImageLoader(requestQueue, new BitmapCache());</span><br><span class="line">//3、调用ImageLoader的get方法设置图片</span><br><span class="line">//getImageListener中的三个参数：1，下载好的图片设置给哪个控件 2，默认图片 3.下载失败的图片</span><br><span class="line">loader.get(url_img, ImageLoader.getImageListener(iv_show, R.mipmap.ic_default, R.mipmap.ic_error));</span><br><span class="line">// get()的重载方法</span><br><span class="line">public ImageContainer get(String requestUrl, final ImageListener listener) &#123;</span><br><span class="line">    return get(requestUrl, listener, 0, 0);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public ImageContainer get(String requestUrl, ImageListener imageListener,</span><br><span class="line">            int maxWidth, int maxHeight) &#123;</span><br><span class="line">    return get(requestUrl, imageListener, maxWidth, maxHeight, ScaleType.CENTER_INSIDE);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public ImageContainer get(String requestUrl, ImageListener imageListener,</span><br><span class="line">            int maxWidth, int maxHeight, ScaleType scaleType) &#123;</span><br><span class="line"></span><br><span class="line">    ~~~</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> *缓存bitmap的类</span><br><span class="line"> */</span><br><span class="line">public class BitmapCache implements ImageLoader.ImageCache &#123;</span><br><span class="line">    /**</span><br><span class="line">     * LruCache最近最少使用的算法 ：内存缓存。。。</span><br><span class="line">     * 当内存不充足时，会清除最近最少使用的一些图片。</span><br><span class="line">     */</span><br><span class="line">    private LruCache&lt;String, Bitmap&gt; mCache;</span><br><span class="line"></span><br><span class="line">    public BitmapCache() &#123;</span><br><span class="line">        //获得到当前应用分配的最大内存</span><br><span class="line">        // 一般分1/8内存给图片做缓存用</span><br><span class="line">        int maxSize = (int) (Runtime.getRuntime().maxMemory() / 8);</span><br><span class="line">        mCache = new LruCache&lt;String, Bitmap&gt;(maxSize) &#123;</span><br><span class="line">            @Override</span><br><span class="line">            protected int sizeOf(String key, Bitmap value) &#123;</span><br><span class="line">                return value.getByteCount(); //返回当前要缓存图片的大小</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public Bitmap getBitmap(String url) &#123;</span><br><span class="line">        return mCache.get(url);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void putBitmap(String url, Bitmap bitmap) &#123;</span><br><span class="line">        if (getBitmap(url) == null)&#123;  //如果当前缓存中没有url对应的图片，我们再存到内存缓存</span><br><span class="line">            mCache.put(url, bitmap);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ImageLoader.getImageListener源码一览<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public static ImageListener getImageListener(final ImageView view,</span><br><span class="line">            final int defaultImageResId, final int errorImageResId) &#123;</span><br><span class="line">        return new ImageListener() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void onErrorResponse(VolleyError error) &#123;</span><br><span class="line">                if (errorImageResId != 0) &#123;</span><br><span class="line">                    view.setImageResource(errorImageResId);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void onResponse(ImageContainer response, boolean isImmediate) &#123;</span><br><span class="line">                if (response.getBitmap() != null) &#123;</span><br><span class="line">                    view.setImageBitmap(response.getBitmap());</span><br><span class="line">                &#125; else if (defaultImageResId != 0) &#123;</span><br><span class="line">                    view.setImageResource(defaultImageResId);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个方法返回一个默认的监听器，来给ImageView设置不同状态下显示的图片。参数defaultImageResId，errorImageResId，可设置0，表示没有默认的图片id和加载错误的图片id。 </p>
+<h3 id="NetworkImageView带下载功能的ImageView"><a href="#NetworkImageView带下载功能的ImageView" class="headerlink" title="NetworkImageView带下载功能的ImageView"></a>NetworkImageView带下载功能的ImageView</h3><p>NetworkImageView拓展了ImageView實現了下載的功能，（相对于使用普通的ImageView，避免由于控件重用带来的图片錯位的问题）。使用方法：</p>
+<ol>
+<li>把使用到ImageView的地方替換成NetworkImageView</li>
+<li>初始化ImageLoader</li>
+<li>通过NetWorkImageView对象设置下载图片的配置信息（如最大宽高等）</li>
+<li>通过NetWorkImageView对象调用setImageUrl方法进行图片的下载<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//事先初始化好的RequestQueue和ImageLoader</span><br><span class="line">RequestQueue requestQueue = Volley.newRequestQueue(this);</span><br><span class="line">ImageLoader imageLoader = new ImageLoader(requestQueue, new BitmapCache());</span><br><span class="line"></span><br><span class="line">//NetWorkImageView</span><br><span class="line">netiv.setDefaultImageResId(R.mipmap.ic_default); //设置默认的图片的id</span><br><span class="line">netiv.setErrorImageResId(R.mipmap.ic_error); //设置下载失败后的图片的id</span><br><span class="line">netiv.setImageUrl(url_img, imageLoader); //下载图片</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+      
+    </div>
+
+    <div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2018/11/04/安卓框架之Volley的学习/">安卓框架之Volley的学习</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 AllenYu 的个人博客">AllenYu</a></p>
+  <p><span>发布时间:</span>2018年11月04日 - 17:11</p>
+  <p><span>最后更新:</span>2018年11月04日 - 19:11</p>
+  <p><span>原始链接:</span><a href="/2018/11/04/安卓框架之Volley的学习/" title="安卓框架之Volley的学习">http://yuzeduan.github.io/2018/11/04/安卓框架之Volley的学习/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yuzeduan.github.io/2018/11/04/安卓框架之Volley的学习/" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+	  $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android框架学习/" rel="tag"><i class="fa fa-tag"></i> Android框架学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/04/安卓之ContentProvider详解/" rel="next" title="安卓之ContentProvider详解">
+                <i class="fa fa-chevron-left"></i> 安卓之ContentProvider详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/04/安卓之多进程IPC的学习/" rel="prev" title="安卓之多进程IPC的学习">
+                安卓之多进程IPC的学习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg" alt="AllenYu">
+            
+              <p class="site-author-name" itemprop="name">AllenYu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yuzeduan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.csdn.net/" target="_blank" title="csdn">
+                      
+                        <i class="fa fa-fw fa-globe"></i>csdn</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-globe"></i>YouTube</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-globe"></i>StackOverflow</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+          <br>
+
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=518894283&auto=1&height=66"></iframe>
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#网络框架之Volley"><span class="nav-number">1.</span> <span class="nav-text">网络框架之Volley</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-简介"><span class="nav-number">1.1.</span> <span class="nav-text">1.简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-基本使用"><span class="nav-number">1.2.</span> <span class="nav-text">2.基本使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化请求对象–RequestQueue"><span class="nav-number">1.2.1.</span> <span class="nav-text">初始化请求对象–RequestQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用StringRequest接收String类型的响应"><span class="nav-number">1.2.2.</span> <span class="nav-text">使用StringRequest接收String类型的响应</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-GET请求"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">1.GET请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-POST请求"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">2.POST请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-手动取消请求"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">3.手动取消请求</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSON数据的请求"><span class="nav-number">1.2.3.</span> <span class="nav-text">JSON数据的请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IamgeRequest图片请求"><span class="nav-number">1.2.4.</span> <span class="nav-text">IamgeRequest图片请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#imageLoader"><span class="nav-number">1.2.5.</span> <span class="nav-text">imageLoader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NetworkImageView带下载功能的ImageView"><span class="nav-number">1.2.6.</span> <span class="nav-text">NetworkImageView带下载功能的ImageView</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AllenYu</span>
+
+  
+</div>
+
+<!-- 
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+-->
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

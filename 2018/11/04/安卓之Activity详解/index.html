@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android之四大组件,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="四大组件之Activity活动的生命周期">
+<meta name="keywords" content="Android之四大组件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安卓之Activity详解">
+<meta property="og:url" content="http://yuzeduan.github.io/2018/11/04/安卓之Activity详解/index.html">
+<meta property="og:site_name" content="Allen Home">
+<meta property="og:description" content="四大组件之Activity活动的生命周期">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-04T11:04:36.376Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="安卓之Activity详解">
+<meta name="twitter:description" content="四大组件之Activity活动的生命周期">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yuzeduan.github.io/2018/11/04/安卓之Activity详解/">
+
+
+
+
+
+  <title>安卓之Activity详解 | Allen Home</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/Yuzeduan"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Allen Home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yuzeduan.github.io/2018/11/04/安卓之Activity详解/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="AllenYu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Allen Home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">安卓之Activity详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-04T17:10:04+08:00">
+                2018-11-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.9k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="四大组件之Activity"><a href="#四大组件之Activity" class="headerlink" title="四大组件之Activity"></a>四大组件之Activity</h1><h2 id="活动的生命周期"><a href="#活动的生命周期" class="headerlink" title="活动的生命周期"></a>活动的生命周期</h2> <a id="more"></a>
+<ul>
+<li><p>Activity类的在生命周期中回调方法</p>
+<ul>
+<li>onCreate() 每个活动第一次被创建的时候调用,应该在这个方法中完成对活动的初始化动作,例如加载布局,和绑定事件等.</li>
+<li>onStart() 这个方法是活动由不可见变为可见的时候调用的.</li>
+<li>onResume() 这个方法在活动准备用户进行交互的时候调用的,此时的活动是位于返回栈栈顶的.</li>
+<li>onPause() 这个方法在系统准备去启动或者恢复另一个活动的时候调用,通常会在这个方法中将一些消耗cpu资源的东西释放掉,以及保存一些关键的数据,这个方法执行的速度一定要快,不然会影响新的栈顶活动的使用.</li>
+<li>onStop() 这个方法在活动<strong>完全不可见</strong><br>的时候调用,区别于onPause()方法的是如果启动的活动是一个对话框的活动,那么onPause()会被调用,而onStop()不会调用.</li>
+<li>onDestroy() 这个方法在活动被销毁之前会调用,在该方法中完成释放内存的操作.</li>
+<li>onRestart() 这个方法在活动由停止状态变为运行状态之前调用,就是活动被重新启动了.</li>
+</ul>
+</li>
+<li><p>完整的生存期:活动在onCreate()到onDestroy()方法所经历的就是一个活动完整的生存期.</p>
+</li>
+<li>可见生存期:活动在onStart()到onStop()方法所经历的过程,在可见生存期内,活动对于用户是可见的,但不一定是可以交互的.可以在onStart()方法中对资源进行加载,而在onStop()方法中对资源进行释放,从而保证处于停止状态的活动不会占用过多内存.</li>
+<li>前台生存期:活动在onResume()方法到onPause()方法之间经历的就是前台生存期,在这个生存期里,活动总是处于运行状态,此时的活动和用户是可以进行交互的.</li>
+<li>多个Activity切换的时候生命周期方法的执行顺序<ul>
+<li>两个普通活动的切换<ul>
+<li>启动活动1,依次调用活动1的onCreate(),onStart(),onResume().  </li>
+<li>从活动1到活动2切换的过程中,首先调用的是活动1的onPause()然后依次调用活动2的onCreate(),onStart(),onResume(),再调用活动1的onStop()方法.</li>
+<li>当按下back键finsh活动2,从活动2返回活动1的时候,此时先执行活动2的onPause(),再依次执行活动2的onRestart(),onStart(),onResume(),再依次执行活动2的onStop(),onDestory().<strong>注意:此时候若是由于内存不足,处于停止状态的活动1被系统回收了,按下back键返回的时候,活动A是要再创建一次,不会执行活动1的onRestart()而是执行onCreate()方法.</strong></li>
+<li>再按下back键finish活动1,此时依次执行活动1的onPause(),onStop(),onDestory().</li>
+</ul>
+</li>
+<li>普通活动和对话框式活动的切换<br><br><strong>注意:对话框式的活动指定活动的theme为对话框,此时如果该活动是继承AppCompatActivity的,theme要指定为@android:style/Theme.AppCompat.Dialog,若是继承Activity,则直接指定theme为Dialog</strong><ul>
+<li>活动1切换到活动2的时候,调用活动1的onPause(),再依次调用活动2的onCreate(),onStart(),onResume()方法.</li>
+<li>活动2finish后返回活动,首先调用活动1的onResume(),再依次调用活动2的onStop和onDestroy()方法.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>若是按下home键的情况,依次执行该活动的onPause(),onStop(),再显示活动的时候,依次执行活动的onRestart(),onStart(),onResume().</li>
+<li>活动中若只是跳出对话框,此时不执行任何回调函数.</li>
+<li>屏幕旋转的时候,会依次执行该可见活动的onPause(),onStop(),onDestroy().再执行onCreate(),onStart(),onResume().</li>
+<li>处于停止状态的活动,当系统内存不足的时候会被回收,当活动被重新创建的时候,一些数据会消失,此时需要使用Activity类中的onSaveInstanceState()去保存数据.<br>onSaveInstanceState()携带一个Bundle参数,使用其提供的putString等方法,利用键值对的方式储存数据,该方法在活动被回收之前一定调用.<br>onCreate()方法也带有Bundle参数,在该方法内判断Bundle对象的引用是否为null,就可通过Bundle提供的getString等方法通过键取值的方法获得数据了.</li>
+</ul>
+<hr>
+<h2 id="活动的四种启动模式"><a href="#活动的四种启动模式" class="headerlink" title="活动的四种启动模式"></a>活动的四种启动模式</h2><blockquote>
+<p>安卓是根据返回栈来管理活动的.<br>通过指定android:launchMode的属性来选择启动模式,默认是standard模式.<br>当按下back键退出应用程序的时候,需要一个一个销毁返回栈中所有的活动实例才能退出应用程序,若是有多个返回栈,则一个返回栈空之后,会到另一个返回栈,直到所有的返回栈都空了,才退出应用程序.</p>
+</blockquote>
+<ul>
+<li>standard:每启动一个新的活动,它就会在返回栈入栈,并处于栈顶的位置,对于使用该模式的活动,系统不会在乎这个活动是否已经在返回栈中存在,每次启动都会创建该活动的一个新的实例.</li>
+<li>singleTop:在启动活动的时候,如果这个活动是处于返回栈栈顶的话,就直接使用它.如果没有处于栈顶,系统还是会再创建一个该活动的实例.</li>
+<li>singleTask:启动活动的时候,会再返回栈中检查是否存在该活动的实例,假如存在该活动的实例则直接使用该实例,并把在这个活动之上的所有活动都统统出栈,如果没有发现就会创建一个新的活动实例.</li>
+<li>singleInstance:使用该模式启动的活动,会有一个单独的返回栈来管理这个活动,可解决多个应用程序共享同一个活动的实例,因为一个活动在不同的返回栈入栈必然是创建了新的实例.</li>
+</ul>
+<hr>
+<h2 id="Activity之间的数据传递"><a href="#Activity之间的数据传递" class="headerlink" title="Activity之间的数据传递"></a>Activity之间的数据传递</h2><ul>
+<li>向下一个活动传递数据<ul>
+<li>单独使用Intent传递数据,使用intent的putExtra()方法,传入键值对,启动下一个活动.<br>在下一个活动中使用getIntent()方法取得Intent对象,再调用该对象的getStringExtra()等方法,传入相应键取得上一个活动传递的值.</li>
+<li>Intent结合Bundle进行传递数据.新建一个Bundle对象,使用putString()等方法,传入键值对,再新建Intent对象,调用其putExtras()方法,传入Bundle对象,启动下一个活动.<br>在下一个活动中,先获得Intent对象,再使用getExtras()方法获得Bundle对象,再采用Bundle的getString()等方法传入键获取对应的数据.</li>
+</ul>
+</li>
+<li>返回数据给上一个活动<ol>
+<li>使用startActivityForResult()方法启动下一个活动,在该方法中传入请求码,区别是哪个活动传回来的数据.</li>
+<li>在下一个活动中结束活动的逻辑中,新建一个用于传递数据的Intent对象,将数据存放在Intent之后,调用setResult()方法,该方法第一个参数用于向上一个活动返回处理结果,一般只使用RESULT_OK或者RESULT_CANCEL两个值,第二个参数则把带有数据的Intent对象返回去.</li>
+<li>重写上一个活动的onActivityResult()方法,判断请求码确定是哪个活动返回的,再判断处理结果参数,获取数据.</li>
+</ol>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+      
+    </div>
+
+    <div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2018/11/04/安卓之Activity详解/">安卓之Activity详解</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 AllenYu 的个人博客">AllenYu</a></p>
+  <p><span>发布时间:</span>2018年11月04日 - 17:11</p>
+  <p><span>最后更新:</span>2018年11月04日 - 19:11</p>
+  <p><span>原始链接:</span><a href="/2018/11/04/安卓之Activity详解/" title="安卓之Activity详解">http://yuzeduan.github.io/2018/11/04/安卓之Activity详解/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yuzeduan.github.io/2018/11/04/安卓之Activity详解/" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+	  $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android之四大组件/" rel="tag"><i class="fa fa-tag"></i> Android之四大组件</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/04/安卓之Handler详解/" rel="next" title="安卓之Handler详解">
+                <i class="fa fa-chevron-left"></i> 安卓之Handler详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/04/安卓之Service详解/" rel="prev" title="安卓之Service详解">
+                安卓之Service详解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg" alt="AllenYu">
+            
+              <p class="site-author-name" itemprop="name">AllenYu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yuzeduan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.csdn.net/" target="_blank" title="csdn">
+                      
+                        <i class="fa fa-fw fa-globe"></i>csdn</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-globe"></i>YouTube</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-globe"></i>StackOverflow</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+          <br>
+
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=518894283&auto=1&height=66"></iframe>
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#四大组件之Activity"><span class="nav-number">1.</span> <span class="nav-text">四大组件之Activity</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#活动的生命周期"><span class="nav-number">1.1.</span> <span class="nav-text">活动的生命周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#活动的四种启动模式"><span class="nav-number">1.2.</span> <span class="nav-text">活动的四种启动模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Activity之间的数据传递"><span class="nav-number">1.3.</span> <span class="nav-text">Activity之间的数据传递</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AllenYu</span>
+
+  
+</div>
+
+<!-- 
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+-->
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

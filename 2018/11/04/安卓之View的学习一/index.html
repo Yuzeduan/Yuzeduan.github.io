@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android之进阶学习,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.view的基础知识1.1 View的定义View是Android中所有控件,布局的基类,其中Viewgroup是控件组,即一组View,ViewGroup也是继承自View.">
+<meta name="keywords" content="Android之进阶学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安卓之View的学习一">
+<meta property="og:url" content="http://yuzeduan.github.io/2018/11/04/安卓之View的学习一/index.html">
+<meta property="og:site_name" content="Allen Home">
+<meta property="og:description" content="1.view的基础知识1.1 View的定义View是Android中所有控件,布局的基类,其中Viewgroup是控件组,即一组View,ViewGroup也是继承自View.">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.imgur.com/UPqSKZG.png">
+<meta property="og:updated_time" content="2018-11-04T12:14:49.272Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="安卓之View的学习一">
+<meta name="twitter:description" content="1.view的基础知识1.1 View的定义View是Android中所有控件,布局的基类,其中Viewgroup是控件组,即一组View,ViewGroup也是继承自View.">
+<meta name="twitter:image" content="https://i.imgur.com/UPqSKZG.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yuzeduan.github.io/2018/11/04/安卓之View的学习一/">
+
+
+
+
+
+  <title>安卓之View的学习一 | Allen Home</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/Yuzeduan"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Allen Home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yuzeduan.github.io/2018/11/04/安卓之View的学习一/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="AllenYu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Allen Home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">安卓之View的学习一</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-04T20:05:30+08:00">
+                2018-11-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-view的基础知识"><a href="#1-view的基础知识" class="headerlink" title="1.view的基础知识"></a>1.view的基础知识</h1><h2 id="1-1-View的定义"><a href="#1-1-View的定义" class="headerlink" title="1.1 View的定义"></a>1.1 View的定义</h2><p>View是Android中所有控件,布局的基类,其中Viewgroup是控件组,即一组View,ViewGroup也是继承自View.<br><a id="more"></a></p>
+<h2 id="1-2-Veiw的位置参数"><a href="#1-2-Veiw的位置参数" class="headerlink" title="1.2 Veiw的位置参数"></a>1.2 Veiw的位置参数</h2><ul>
+<li>View的位置是由他的四个顶点来确定的,其中top是指左上角的纵坐标,left是左上角的横坐标,right是右下角的横坐标,bottom是右下角的纵坐标.<strong>这些坐标都是相对于View的父容器来说的,是相对坐标</strong>,x轴和y轴正方向是为右和下.</li>
+<li><p>View的宽高和坐标的关系</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">width = right-left;</span><br><span class="line">height = bottom - top;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取四个参数(提供get/set方法)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Left = getLeft()</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>View在3.0后加入了额外的几个参数,其中x和y是View左上角的坐标,translationX和translationY是View左上角相对于父容器的偏移量,这些参数也是相对于父容器的坐标,其中偏移量默认值为0,View同样给这几个参数提供get/set方法.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = left + translationX</span><br><span class="line">y = top + translationY</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>注意</strong> View在平移的过程中,top和left是原始的值,不会改变.</p>
+<h2 id="1-3-MotionEvent和TouchSlop"><a href="#1-3-MotionEvent和TouchSlop" class="headerlink" title="1.3 MotionEvent和TouchSlop"></a>1.3 MotionEvent和TouchSlop</h2><h3 id="1-3-1-MotionEvent"><a href="#1-3-1-MotionEvent" class="headerlink" title="1.3.1 MotionEvent"></a>1.3.1 MotionEvent</h3><ul>
+<li>典型的触发事件类型<ul>
+<li>ACTION_DOWN : 手指刚触碰屏幕</li>
+<li>ACTION_MOVE : 手指在屏幕上移动</li>
+<li>ACTION_UP :手指从屏幕上松开的一瞬间</li>
+</ul>
+</li>
+<li>通过MotionEvent对象获取点击事件发生的x和y坐标<ul>
+<li>getX/getY : 返回的是相对View相对于当前View左上角的x和y坐标</li>
+<li>getRawX/getRawY :返回的是相对于手机屏幕左上角的ｘ和y坐标.</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-3-2-TouchSlop"><a href="#1-3-2-TouchSlop" class="headerlink" title="1.3.2 TouchSlop"></a>1.3.2 TouchSlop</h3><p>它是系统所能识别出的被认为是滑动的最小距离,它是个常量,在不同的设备这个值可能不同,可通过ViewConfiguration.get(getContext()).getScaledTouchSlop().</p>
+<h2 id="1-4-VelocityTracker-GestureDetector和Scoller"><a href="#1-4-VelocityTracker-GestureDetector和Scoller" class="headerlink" title="1.4 VelocityTracker,GestureDetector和Scoller"></a>1.4 VelocityTracker,GestureDetector和Scoller</h2><h3 id="1-4-1-VelocityTracker"><a href="#1-4-1-VelocityTracker" class="headerlink" title="1.4.1 VelocityTracker"></a>1.4.1 VelocityTracker</h3><p>速度追踪,用于追踪手指在滑动过程中的速度,包括水平和竖直方向的速度,首先在View的onTouchEvent方法中追踪当前单击事件的速度<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">VeloctityTracker velocityTracker = VelocityTracker.obtain();</span><br><span class="line">velocityTracker.addMovement(event);</span><br></pre></td></tr></table></figure></p>
+<p>获取当前速度<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 传入的参数指定为时间段</span><br><span class="line">veloctyTracker.computerCurrentVelocity(1000);</span><br><span class="line">int xVelocity = (int)velocityTracker.getXVelocity();</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>在传入的时间段中所滑动的的像素数就是速度,手指如果逆坐标系正方向滑动的话,所产生的速度就是个负值.<br>不需要使用它的时候<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">velocityTracker.clear();</span><br><span class="line">velocityTracker.recycle();</span><br></pre></td></tr></table></figure></p>
+<h3 id="1-4-2-GestreDetector"><a href="#1-4-2-GestreDetector" class="headerlink" title="1.4.2 GestreDetector"></a>1.4.2 GestreDetector</h3><p>手势检测,用于辅助检测用户的单击,滑动,长按,双击等行为.</p>
+<ul>
+<li>内部的回调接口<br><img src="https://i.imgur.com/UPqSKZG.png" alt=""></li>
+</ul>
+<ol>
+<li>OnGestureListener，这个Listener监听一些手势，如单击、滑动、长按等操作： 2. OnDoubleTapListener，这个Listener监听双击和单击事件。</li>
+<li>ContextClickListener，ContextClick就是鼠标右键</li>
+<li>SimpleOnGestureListener，实现了上面三个接口的类，拥有上面三个的所有回调方法,<strong>一般选择这个,不用重写所有的方法</strong></li>
+</ol>
+<ul>
+<li>Android中手势交互的执行顺序<ol>
+<li>手指触碰屏幕时，触发MotionEvent事件！</li>
+<li>该事件被OnTouchListener监听，可在它的onTouch()方法中获得该MotionEvent对象！</li>
+<li>通过GestureDetector转发MotionEvent对象给OnGestureListener</li>
+<li>我们可以通过OnGestureListener获得该对象，然后获取相关信息，以及做相关处理！</li>
+</ol>
+</li>
+<li>实现手势检测的步骤<ol>
+<li>创建GestureDetector对象，创建时需实现GestureListener传入</li>
+<li>将Activity或者特定组件上的TouchEvent的事件交给GestureDetector处理即可<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//实例化GestureListener与GestureDetector对象</span><br><span class="line">mgListener = new MyGestureListener();</span><br><span class="line">mDetector = new GestureDetector(this, mgListener);</span><br><span class="line"></span><br><span class="line">@Override</span><br><span class="line">public boolean onTouchEvent(MotionEvent event) &#123;</span><br><span class="line">    return mDetector.onTouchEvent(event);</span><br><span class="line">&#125;</span><br><span class="line">/自定义一个GestureListener,这个是View类下的.</span><br><span class="line">private class MyGestureListener implements GestureDetector.OnGestureListener &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public boolean onDown(MotionEvent motionEvent) &#123;</span><br><span class="line">        Log.d(TAG, &quot;onDown:按下&quot;);</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ul>
+<p>实现OnGestureListener需要实现所有的手势，可能我针对的仅仅是滑动，但是你还是要去重载,官方另外给我们提供了一个<strong>SimpleOnGestureListener类</strong> 只需把上述的OnGestureListener替换成SimpleOnGestureListener即可.<br><strong>所有的回调方法的返回值都是boolean类型，和View的事件传递机制一样，返回true表示消耗了事件，flase表示没有消耗。</strong></p>
+<h3 id="1-4-3-Scoller"><a href="#1-4-3-Scoller" class="headerlink" title="1.4.3 Scoller"></a>1.4.3 Scoller</h3><p>弹性滑动对象,用于实现View的弹性滑动.</p>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+      
+    </div>
+
+    <div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2018/11/04/安卓之View的学习一/">安卓之View的学习一</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 AllenYu 的个人博客">AllenYu</a></p>
+  <p><span>发布时间:</span>2018年11月04日 - 20:11</p>
+  <p><span>最后更新:</span>2018年11月04日 - 20:11</p>
+  <p><span>原始链接:</span><a href="/2018/11/04/安卓之View的学习一/" title="安卓之View的学习一">http://yuzeduan.github.io/2018/11/04/安卓之View的学习一/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yuzeduan.github.io/2018/11/04/安卓之View的学习一/" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+	  $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android之进阶学习/" rel="tag"><i class="fa fa-tag"></i> Android之进阶学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/04/安卓之Bitmap的学习/" rel="next" title="安卓之Bitmap的学习">
+                <i class="fa fa-chevron-left"></i> 安卓之Bitmap的学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/04/安卓之View的学习二/" rel="prev" title="安卓之View的学习二">
+                安卓之View的学习二 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg" alt="AllenYu">
+            
+              <p class="site-author-name" itemprop="name">AllenYu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yuzeduan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.csdn.net/" target="_blank" title="csdn">
+                      
+                        <i class="fa fa-fw fa-globe"></i>csdn</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-globe"></i>YouTube</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-globe"></i>StackOverflow</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+          <br>
+
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=518894283&auto=1&height=66"></iframe>
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-view的基础知识"><span class="nav-number">1.</span> <span class="nav-text">1.view的基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-View的定义"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 View的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Veiw的位置参数"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 Veiw的位置参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-MotionEvent和TouchSlop"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 MotionEvent和TouchSlop</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-1-MotionEvent"><span class="nav-number">1.3.1.</span> <span class="nav-text">1.3.1 MotionEvent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-2-TouchSlop"><span class="nav-number">1.3.2.</span> <span class="nav-text">1.3.2 TouchSlop</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-VelocityTracker-GestureDetector和Scoller"><span class="nav-number">1.4.</span> <span class="nav-text">1.4 VelocityTracker,GestureDetector和Scoller</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-1-VelocityTracker"><span class="nav-number">1.4.1.</span> <span class="nav-text">1.4.1 VelocityTracker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-2-GestreDetector"><span class="nav-number">1.4.2.</span> <span class="nav-text">1.4.2 GestreDetector</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-3-Scoller"><span class="nav-number">1.4.3.</span> <span class="nav-text">1.4.3 Scoller</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AllenYu</span>
+
+  
+</div>
+
+<!-- 
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+-->
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

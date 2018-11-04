@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android之进阶学习,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="View事件的分发机制参考文章:https://blog.csdn.net/carson_ho/article/details/54136311 1.定义当用户触摸屏幕时(View和ViewGroup),将会产生点击事件,点击事件的事件分发就是对MotionEvent事件的分发过程,将这个事件传递到一个具体的View">
+<meta name="keywords" content="Android之进阶学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安卓之View的学习二">
+<meta property="og:url" content="http://yuzeduan.github.io/2018/11/04/安卓之View的学习二/index.html">
+<meta property="og:site_name" content="Allen Home">
+<meta property="og:description" content="View事件的分发机制参考文章:https://blog.csdn.net/carson_ho/article/details/54136311 1.定义当用户触摸屏幕时(View和ViewGroup),将会产生点击事件,点击事件的事件分发就是对MotionEvent事件的分发过程,将这个事件传递到一个具体的View">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/944365-63b84cd5c4d9dee9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/944365-6ec2e864af7ffd37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/944365-76ce9e8299386729.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://i.loli.net/2018/11/04/5bdee3a6ac7b9.png">
+<meta property="og:updated_time" content="2018-11-04T12:19:16.878Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="安卓之View的学习二">
+<meta name="twitter:description" content="View事件的分发机制参考文章:https://blog.csdn.net/carson_ho/article/details/54136311 1.定义当用户触摸屏幕时(View和ViewGroup),将会产生点击事件,点击事件的事件分发就是对MotionEvent事件的分发过程,将这个事件传递到一个具体的View">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/944365-63b84cd5c4d9dee9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yuzeduan.github.io/2018/11/04/安卓之View的学习二/">
+
+
+
+
+
+  <title>安卓之View的学习二 | Allen Home</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/Yuzeduan"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Allen Home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yuzeduan.github.io/2018/11/04/安卓之View的学习二/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="AllenYu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Allen Home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">安卓之View的学习二</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-04T20:06:07+08:00">
+                2018-11-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.4k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="View事件的分发机制"><a href="#View事件的分发机制" class="headerlink" title="View事件的分发机制"></a>View事件的分发机制</h1><p>参考文章:<a href="https://blog.csdn.net/carson_ho/article/details/54136311" target="_blank" rel="noopener">https://blog.csdn.net/carson_ho/article/details/54136311</a></p>
+<h2 id="1-定义"><a href="#1-定义" class="headerlink" title="1.定义"></a>1.定义</h2><p>当用户触摸屏幕时(View和ViewGroup),将会产生点击事件,点击事件的事件分发就是对MotionEvent事件的分发过程,将这个事件传递到一个具体的View<br><a id="more"></a></p>
+<h2 id="2-事件传递的对象"><a href="#2-事件传递的对象" class="headerlink" title="2.事件传递的对象"></a>2.事件传递的对象</h2><p>事件是从Activity-&gt;Window-&gt;View传递.</p>
+<h2 id="3-事件分发过程中的重要方法"><a href="#3-事件分发过程中的重要方法" class="headerlink" title="3.事件分发过程中的重要方法"></a>3.事件分发过程中的重要方法</h2><h4 id="3-1-dispatchTouchEvent"><a href="#3-1-dispatchTouchEvent" class="headerlink" title="3.1 dispatchTouchEvent()"></a>3.1 dispatchTouchEvent()</h4><p>用来进行事件的分发,如果事件能够传递给当前view,此方法一定会被调用,返回值受当前View的onTouchEvent和下级View的dispatchTouchEvent影响,表示是否消耗当前事件.</p>
+<h4 id="3-2-onInterceptTouchEvent"><a href="#3-2-onInterceptTouchEvent" class="headerlink" title="3.2 onInterceptTouchEvent()"></a>3.2 onInterceptTouchEvent()</h4><p>在ViewGroup的dispatchTouchEvent()内部调用,判断是否拦截某个事件,<strong>只存在于Viewgroup,普通的View没有该方法,如果View拦截了某个事件,那么在同一个事件序列的当中,此方法不会被再次调用</strong>,返回结果表示是否拦截当前事件.</p>
+<h4 id="3-3-onTouchEvent"><a href="#3-3-onTouchEvent" class="headerlink" title="3.3 onTouchEvent()"></a>3.3 onTouchEvent()</h4><p>在dispatchTouchEvent中调用,用来处理点击事件,返回结果表示是否消耗当前事件,<strong>如果不消耗,则在同一个事件序列中,当前View无法再次接收到事件</strong><br></p>
+<blockquote>
+<p>事件序列:从手指接触屏幕到手指离开屏幕,这个过程产生的一系列事件.</p>
+</blockquote>
+<h2 id="4-事件分发过程"><a href="#4-事件分发过程" class="headerlink" title="4.事件分发过程"></a>4.事件分发过程</h2><h4 id="4-1-Activity对点击事件的分发过程"><a href="#4-1-Activity对点击事件的分发过程" class="headerlink" title="4.1 Activity对点击事件的分发过程"></a>4.1 Activity对点击事件的分发过程</h4><p>当一个点击事件操作发生的时候,事件最先传递给当前的Activity,由Activity的dispatchTouchEvent进行事件分发.<br><img src="http://upload-images.jianshu.io/upload_images/944365-63b84cd5c4d9dee9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">public boolean dispatchTouchEvent(MotionEvent ev) &#123;</span><br><span class="line"></span><br><span class="line">    // 一般事件列开始都是DOWN事件 = 按下事件，故此处基本是true</span><br><span class="line">    if (ev.getAction() == MotionEvent.ACTION_DOWN) &#123;</span><br><span class="line"></span><br><span class="line">        onUserInteraction();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    if (getWindow().superDispatchTouchEvent(ev)) &#123;</span><br><span class="line"></span><br><span class="line">        return true;</span><br><span class="line">        // 若getWindow().superDispatchTouchEvent(ev)的返回true</span><br><span class="line">        // 则Activity.dispatchTouchEvent（）就返回true，则方法结束。即 ：该点击事件停止往下传递 &amp; 事件传递过程结束</span><br><span class="line">        // 否则：继续往下调用Activity.onTouchEvent</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    return onTouchEvent(ev);</span><br><span class="line">&#125;</span><br><span class="line">/**</span><br><span class="line"> * 分析2：getWindow().superDispatchTouchEvent(ev)</span><br><span class="line"> * 说明：</span><br><span class="line"> *     a. getWindow() = 获取Window类的对象</span><br><span class="line"> *     b. Window类是抽象类，其唯一实现类 =          PhoneWindow类；即此处的Window类对象 = PhoneWindow类对象</span><br><span class="line"> *     c. Window类的superDispatchTouchEvent() = 1个抽象方法，由子类PhoneWindow类实现</span><br><span class="line"> */</span><br><span class="line"> @Override</span><br><span class="line"> public boolean superDispatchTouchEvent(MotionEvent event) &#123;</span><br><span class="line"></span><br><span class="line">    return mDecor.superDispatchTouchEvent(event);</span><br><span class="line">    // mDecor = 顶层View（DecorView）的实例对象</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line">/**</span><br><span class="line">* mDecor.superDispatchTouchEvent(event)</span><br><span class="line">* 定义：属于顶层View（DecorView）</span><br><span class="line">* 说明：</span><br><span class="line">*     a. DecorView类是PhoneWindow类的一个内部类</span><br><span class="line">*     b. DecorView继承自FrameLayout，是所有界面的父类</span><br><span class="line">*     c. FrameLayout是ViewGroup的子类，故DecorView的间接父类 = ViewGroup</span><br><span class="line">*/</span><br><span class="line">public boolean superDispatchTouchEvent(MotionEvent event) &#123;</span><br><span class="line"></span><br><span class="line">    return super.dispatchTouchEvent(event);</span><br><span class="line">// 调用父类的方法 = ViewGroup的dispatchTouchEvent()</span><br><span class="line">// 即 将事件传递到ViewGroup去处理(即Activity中通过setContentView所设置的View)，详细请看ViewGroup的事件分发机制</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="4-2-Viewgroup对点击事件的分发过程"><a href="#4-2-Viewgroup对点击事件的分发过程" class="headerlink" title="4.2 Viewgroup对点击事件的分发过程"></a>4.2 Viewgroup对点击事件的分发过程</h4><p><img src="http://upload-images.jianshu.io/upload_images/944365-6ec2e864af7ffd37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h4 id="4-3-View对点击事件的分发过程"><a href="#4-3-View对点击事件的分发过程" class="headerlink" title="4.3 View对点击事件的分发过程"></a>4.3 View对点击事件的分发过程</h4><p><img src="http://upload-images.jianshu.io/upload_images/944365-76ce9e8299386729.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h1 id="View绘制机制"><a href="#View绘制机制" class="headerlink" title="View绘制机制"></a>View绘制机制</h1><h2 id="1-View和DecorView"><a href="#1-View和DecorView" class="headerlink" title="1.View和DecorView"></a>1.View和DecorView</h2><ul>
+<li>ViewRoot对应于ViewRootImpl类,是连接WindowManager和DecorView的纽带,View的三大流程都是通过ViewRoot来完成的.</li>
+<li>View绘制流程是从ViewRoot的performTraversals方法开始的,performTraversals会依次调用performMeasure,performLayout,performDraw完成顶级view的绘制流程,在performMeasure方法中会调用measure方法,在这个方法中又会调用<strong>onMeasure</strong>方法,在这个方法中就会对所有的<strong>子元素</strong>进行measure过程.如此反复就可完成整个View树的遍历.同理其余两个方法也是这么实现.</li>
+<li>DecorView是顶级View,一般内部会包含一个竖直方向的LinearLayout,上面是标题栏,下面是内容栏,因此我们setContentView的时候是将布局加到内容栏里的.(其本质是一个FrameLayout).</li>
+</ul>
+<h2 id="2-MeasureSpec"><a href="#2-MeasureSpec" class="headerlink" title="2.MeasureSpec"></a>2.MeasureSpec</h2><h4 id="2-1-定义"><a href="#2-1-定义" class="headerlink" title="2.1 定义"></a>2.1 定义</h4><ul>
+<li>MeasureSpec代表一个32位的int值,高两位代表SpecMode,低30位代表SpecSize,SpecMode指测量模式,SpecSize是指在某种测量模式下的规格大小.</li>
+</ul>
+<h4 id="2-2-SpecMode的类型"><a href="#2-2-SpecMode的类型" class="headerlink" title="2.2 SpecMode的类型"></a>2.2 SpecMode的类型</h4><ul>
+<li>UNSPECIFIED<br>父容器不对View有任何限制,要多大给多大,一般用于系统内部.</li>
+<li>EXACTLY<br>父容器已经检测出View所需要的精确大小,这个时候View的大小就是SpecSize的值,对应LayoutParams中的match_parent和具体数值两种模式.</li>
+<li>AT_MOST<br>父容器指定了一个可用大小SpecSize,View的大小不能超过这个值,对应wrap_content.<h4 id="2-3-View的MeasureSpec的创建规则"><a href="#2-3-View的MeasureSpec的创建规则" class="headerlink" title="2.3 View的MeasureSpec的创建规则"></a>2.3 View的MeasureSpec的创建规则</h4><img src="https://i.loli.net/2018/11/04/5bdee3a6ac7b9.png" alt=""></li>
+</ul>
+<p>普通view的MeasureSpec由父容器的MeasureSpec和自身的LayoutParams共同决定.</p>
+<ul>
+<li>当View给出固定的宽高的时候,不管父容器的MeasureSpec是什么,View的MeasureSpec都是精确模式,并且大小遵循Layoutparams中的大小</li>
+<li>当View的宽高是match_parent时,如果父容器是精准模式,那么View也是精确模式并且大小是父容器的剩余空间,如果父容器是最大模式,那么View也是最大模式并且大小不会超过父容器的剩余空间.</li>
+<li>如果View的宽高是wrap_content时,View的模式总是最大化,并且大小不能超过父容器的剩余空间.</li>
+</ul>
+<h2 id="3-View的工作流程"><a href="#3-View的工作流程" class="headerlink" title="3.View的工作流程"></a>3.View的工作流程</h2><h4 id="3-1-measure过程"><a href="#3-1-measure过程" class="headerlink" title="3.1 measure过程"></a>3.1 measure过程</h4><h5 id="3-1-1-View的measure过程"><a href="#3-1-1-View的measure过程" class="headerlink" title="3.1.1 View的measure过程"></a>3.1.1 View的measure过程</h5><p>在View中的measure方法中调用的onMeasure进行完成.大小是View测量后的大小.</p>
+<h5 id="3-1-2-ViewGroup的measure过程"><a href="#3-1-2-ViewGroup的measure过程" class="headerlink" title="3.1.2 ViewGroup的measure过程"></a>3.1.2 ViewGroup的measure过程</h5><p>除了完成自己的measure过程以外,还需要去遍历所有子元素的measure方法,各个子元素再递归去执行这个过程.它是一个抽象类,因此没有重写View的onMeasure方法,提供了一个measureChildren的方法.</p>
+<h4 id="3-2-layout过程"><a href="#3-2-layout过程" class="headerlink" title="3.2 layout过程"></a>3.2 layout过程</h4><p>Layout的作用是ViewGroup用来确定子元素的位置,当ViewGroup的位置被确定后,他在onLayout中会遍历所有的子元素并调用其layout方法,在layout方法中onLayout方法又会被调用,<strong>layout方法确定View本身的位置,而onLayout方法则会确定所有子元素的位置</strong></p>
+<h4 id="3-3-draw过程"><a href="#3-3-draw过程" class="headerlink" title="3.3 draw过程"></a>3.3 draw过程</h4><p>作用是将view绘制到屏幕上面</p>
+<ol>
+<li>绘制背景background.draw(canvas)</li>
+<li>绘制自己(onDraw)</li>
+<li>绘制Children(dispatchDraw)</li>
+<li>绘制装饰(onDrawScollBars)</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+      
+    </div>
+
+    <div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2018/11/04/安卓之View的学习二/">安卓之View的学习二</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 AllenYu 的个人博客">AllenYu</a></p>
+  <p><span>发布时间:</span>2018年11月04日 - 20:11</p>
+  <p><span>最后更新:</span>2018年11月04日 - 20:11</p>
+  <p><span>原始链接:</span><a href="/2018/11/04/安卓之View的学习二/" title="安卓之View的学习二">http://yuzeduan.github.io/2018/11/04/安卓之View的学习二/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yuzeduan.github.io/2018/11/04/安卓之View的学习二/" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+	  $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android之进阶学习/" rel="tag"><i class="fa fa-tag"></i> Android之进阶学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/04/安卓之View的学习一/" rel="next" title="安卓之View的学习一">
+                <i class="fa fa-chevron-left"></i> 安卓之View的学习一
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/04/安卓之View的学习三/" rel="prev" title="安卓之View的学习三">
+                安卓之View的学习三 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg" alt="AllenYu">
+            
+              <p class="site-author-name" itemprop="name">AllenYu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yuzeduan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.csdn.net/" target="_blank" title="csdn">
+                      
+                        <i class="fa fa-fw fa-globe"></i>csdn</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-globe"></i>YouTube</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-globe"></i>StackOverflow</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+          <br>
+
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=518894283&auto=1&height=66"></iframe>
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#View事件的分发机制"><span class="nav-number">1.</span> <span class="nav-text">View事件的分发机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-定义"><span class="nav-number">1.1.</span> <span class="nav-text">1.定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-事件传递的对象"><span class="nav-number">1.2.</span> <span class="nav-text">2.事件传递的对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-事件分发过程中的重要方法"><span class="nav-number">1.3.</span> <span class="nav-text">3.事件分发过程中的重要方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-dispatchTouchEvent"><span class="nav-number">1.3.0.1.</span> <span class="nav-text">3.1 dispatchTouchEvent()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-onInterceptTouchEvent"><span class="nav-number">1.3.0.2.</span> <span class="nav-text">3.2 onInterceptTouchEvent()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-onTouchEvent"><span class="nav-number">1.3.0.3.</span> <span class="nav-text">3.3 onTouchEvent()</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-事件分发过程"><span class="nav-number">1.4.</span> <span class="nav-text">4.事件分发过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-Activity对点击事件的分发过程"><span class="nav-number">1.4.0.1.</span> <span class="nav-text">4.1 Activity对点击事件的分发过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-Viewgroup对点击事件的分发过程"><span class="nav-number">1.4.0.2.</span> <span class="nav-text">4.2 Viewgroup对点击事件的分发过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3-View对点击事件的分发过程"><span class="nav-number">1.4.0.3.</span> <span class="nav-text">4.3 View对点击事件的分发过程</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#View绘制机制"><span class="nav-number">2.</span> <span class="nav-text">View绘制机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-View和DecorView"><span class="nav-number">2.1.</span> <span class="nav-text">1.View和DecorView</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-MeasureSpec"><span class="nav-number">2.2.</span> <span class="nav-text">2.MeasureSpec</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-定义"><span class="nav-number">2.2.0.1.</span> <span class="nav-text">2.1 定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-SpecMode的类型"><span class="nav-number">2.2.0.2.</span> <span class="nav-text">2.2 SpecMode的类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-View的MeasureSpec的创建规则"><span class="nav-number">2.2.0.3.</span> <span class="nav-text">2.3 View的MeasureSpec的创建规则</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-View的工作流程"><span class="nav-number">2.3.</span> <span class="nav-text">3.View的工作流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-measure过程"><span class="nav-number">2.3.0.1.</span> <span class="nav-text">3.1 measure过程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#3-1-1-View的measure过程"><span class="nav-number">2.3.0.1.1.</span> <span class="nav-text">3.1.1 View的measure过程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-1-2-ViewGroup的measure过程"><span class="nav-number">2.3.0.1.2.</span> <span class="nav-text">3.1.2 ViewGroup的measure过程</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-layout过程"><span class="nav-number">2.3.0.2.</span> <span class="nav-text">3.2 layout过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-draw过程"><span class="nav-number">2.3.0.3.</span> <span class="nav-text">3.3 draw过程</span></a></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AllenYu</span>
+
+  
+</div>
+
+<!-- 
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+-->
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

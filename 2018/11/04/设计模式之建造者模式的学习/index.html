@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="设计模式的学习,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="建造者模式1.介绍1.1定义建造模式是对象的创建模式。建造模式可以将一个产品的内部表象（internal representation）与产品的生产过程分割开来，从而可以使一个建造过程生成具有不同的内部表象的产品对象。">
+<meta name="keywords" content="设计模式的学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式之建造者模式的学习">
+<meta property="og:url" content="http://yuzeduan.github.io/2018/11/04/设计模式之建造者模式的学习/index.html">
+<meta property="og:site_name" content="Allen Home">
+<meta property="og:description" content="建造者模式1.介绍1.1定义建造模式是对象的创建模式。建造模式可以将一个产品的内部表象（internal representation）与产品的生产过程分割开来，从而可以使一个建造过程生成具有不同的内部表象的产品对象。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/944365-e4842ec60f89315e.png?imageMogr2/">
+<meta property="og:updated_time" content="2018-11-04T12:41:28.471Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式之建造者模式的学习">
+<meta name="twitter:description" content="建造者模式1.介绍1.1定义建造模式是对象的创建模式。建造模式可以将一个产品的内部表象（internal representation）与产品的生产过程分割开来，从而可以使一个建造过程生成具有不同的内部表象的产品对象。">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/944365-e4842ec60f89315e.png?imageMogr2/">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yuzeduan.github.io/2018/11/04/设计模式之建造者模式的学习/">
+
+
+
+
+
+  <title>设计模式之建造者模式的学习 | Allen Home</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/Yuzeduan"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Allen Home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yuzeduan.github.io/2018/11/04/设计模式之建造者模式的学习/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="AllenYu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Allen Home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">设计模式之建造者模式的学习</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-04T20:32:39+08:00">
+                2018-11-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.3k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h1><h2 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1.介绍"></a>1.介绍</h2><h4 id="1-1定义"><a href="#1-1定义" class="headerlink" title="1.1定义"></a>1.1定义</h4><p>建造模式是对象的创建模式。建造模式可以将一个产品的内部表象（internal representation）与产品的生产过程分割开来，从而可以使一个建造过程生成具有不同的内部表象的产品对象。<br><a id="more"></a></p>
+<h4 id="1-2主要作用"><a href="#1-2主要作用" class="headerlink" title="1.2主要作用"></a>1.2主要作用</h4><p>在用户不知道对象的建造过程和细节的情况下就可以直接创建复杂的对象。</p>
+<h4 id="1-3解决的问题"><a href="#1-3解决的问题" class="headerlink" title="1.3解决的问题"></a>1.3解决的问题</h4><ul>
+<li>方便用户创建复杂的对象（不需要知道实现过程）</li>
+<li>代码复用性 &amp; 封装性（将对象构建过程和细节进行封装 &amp; 复用）</li>
+</ul>
+<h2 id="2-模式结构"><a href="#2-模式结构" class="headerlink" title="2.模式结构"></a>2.模式结构</h2><p><img src="http://upload-images.jianshu.io/upload_images/944365-e4842ec60f89315e.png?imageMogr2/" alt=""></p>
+<ol>
+<li><strong>抽象建造者（Builder）角色</strong>：给 出一个抽象接口，以规范产品对象的各个组成成分的建造。一般而言，此接口独立于应用程序的商业逻辑。模式中直接创建产品对象的是具体建造者 (ConcreteBuilder)角色。一般来说，产品所包含的零件数目与建造方法的数目相符。换言之，有多少 零件，就有多少相应的建造方法。还需要有一个返回结构的方法.</li>
+<li><strong>导演者（Director）角色</strong>：担任这个角色的类调用具体建造者角色以创建产品对象。应当指出的是，导演者角色并没有产品类的具体知识，真正拥有产品类的具体知识的是具体建造者角色。</li>
+<li><strong>产品（Product）角色</strong>：产品便是建造中的复杂对象。一般来说，一个系统中会有多于一个的产品类，而且这些产品类并不一定有共同的接口，而完全可以是不相关联的。</li>
+<li><strong>具体建造者(ConcreateBuilder)</strong>:实现了Bulider接口,继承抽象方法,实现具体构建产品的逻辑.</li>
+<li><strong>注意</strong>:一般来说，每有一个产品类，就有一个相应的具体建造者类。这些产品应当有一样数目的零件，而每有一个零件就相应地在所有的建造者角色里有一个建造方法。</li>
+</ol>
+<h2 id="3-代码实例"><a href="#3-代码实例" class="headerlink" title="3.代码实例"></a>3.代码实例</h2><h4 id="Product"><a href="#Product" class="headerlink" title="Product"></a>Product</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 产品角色</span><br><span class="line"> * 　产品类Product</span><br><span class="line"> * @author Administrator</span><br><span class="line"> *</span><br><span class="line"> */</span><br><span class="line">public class Product &#123;</span><br><span class="line">    //定义一些产品的部件</span><br><span class="line">    private String part1;</span><br><span class="line">    private String part2;</span><br><span class="line"> </span><br><span class="line">    public String getPart1() &#123;</span><br><span class="line">        return part1;</span><br><span class="line">    &#125;</span><br><span class="line">    public void setPart1(String part1) &#123;</span><br><span class="line">        this.part1 = part1;</span><br><span class="line">    &#125;</span><br><span class="line">    public String getPart2() &#123;</span><br><span class="line">        return part2;</span><br><span class="line">    &#125;</span><br><span class="line">    public void setPart2(String part2) &#123;</span><br><span class="line">        this.part2 = part2;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Builder"><a href="#Builder" class="headerlink" title="Builder"></a>Builder</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 抽象建造者角色</span><br><span class="line"> *      抽象建造者类Builder</span><br><span class="line"> * @author Administrator</span><br><span class="line"> *</span><br><span class="line"> */</span><br><span class="line">public interface Builder &#123;</span><br><span class="line">    //产品零件一建造方法</span><br><span class="line">    public void buildPart1();</span><br><span class="line">    //产品零件二建造方法</span><br><span class="line">    public void buildPart2();</span><br><span class="line">    //返回产品的方法</span><br><span class="line">    public Product retrieveResult();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="ConcreateBuilder"><a href="#ConcreateBuilder" class="headerlink" title="ConcreateBuilder"></a>ConcreateBuilder</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 具体建造者角色</span><br><span class="line"> *      具体建造者类ConcreteBuilder</span><br><span class="line"> * @author Administrator</span><br><span class="line"> *</span><br><span class="line"> */</span><br><span class="line">public class ConcreteBuilder implements Builder &#123;</span><br><span class="line">    private Product product = new Product();</span><br><span class="line">    @Override</span><br><span class="line">    public void buildPart1() &#123;</span><br><span class="line">        //构建产品的第一个零件</span><br><span class="line">        product.setPart1(&quot;编号：007&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    @Override</span><br><span class="line">    public void buildPart2() &#123;</span><br><span class="line">        //构建产品的第二个零件</span><br><span class="line">        product.setPart2(&quot;名称：暗黑者&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    @Override</span><br><span class="line">    public Product retrieveResult() &#123;</span><br><span class="line">        //返回产品</span><br><span class="line">        return product;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Director"><a href="#Director" class="headerlink" title="Director"></a>Director</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 导演者角色</span><br><span class="line"> *      导演者类Director</span><br><span class="line"> * @author Administrator</span><br><span class="line"> *</span><br><span class="line"> */</span><br><span class="line">public class Director &#123;</span><br><span class="line">    /**</span><br><span class="line">     * 持有当前需要使用的建造器对象</span><br><span class="line">     */</span><br><span class="line">    private Builder builder;</span><br><span class="line">    /**</span><br><span class="line">     * 构造方法，传入建造器对象</span><br><span class="line">     * @param builder 建造器对象</span><br><span class="line">     */</span><br><span class="line">    public Director(Builder builder)&#123;</span><br><span class="line">        this.builder = builder;</span><br><span class="line">    &#125;</span><br><span class="line">    /**</span><br><span class="line">     * 产品构造方法，负责调用各个零件建造方法,比如产品的生产顺序等</span><br><span class="line">     */</span><br><span class="line">    public void construct()&#123;</span><br><span class="line">        builder.buildPart1();</span><br><span class="line">        builder.buildPart2();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//客户端</span><br><span class="line">public class Client &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Builder builder = new ConcreteBuilder();</span><br><span class="line">        Director director = new Director(builder);</span><br><span class="line">        director.construct();</span><br><span class="line">        Product product = builder.retrieveResult();</span><br><span class="line">        System.out.println(product.getPart1());</span><br><span class="line">        System.out.println(product.getPart2());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h4><p>客户端负责创建导演者和具体建造者对象。然后，客户端把具体建造者对象交给导演者，导演者操作具体建造者，开始创建产品。当产品完成后，建造者把产品返还给客户端。<br>把创建具体建造者对象的任务交给客户端而不是导演者对象，是为了将导演者对象与具体建造者对象的耦合变成动态的，从而使导演者对象可以操纵数个具体建造者对象中的任何一个。</p>
+<h2 id="4-建造模式的两个很重要组成部分"><a href="#4-建造模式的两个很重要组成部分" class="headerlink" title="4.建造模式的两个很重要组成部分"></a>4.建造模式的两个很重要组成部分</h2><ol>
+<li>一个部分是Builder接口，这里是定义了如何构建各个部件，也就是知道每个部件功能如何实现 </li>
+<li>另外一个部分是Director，Director是知道如何组合来构建产品，也就是说Director负责整体的构建算法，而且通常是分步骤地来执行,也就是说如何组装这些部件。</li>
+</ol>
+<p>不管如何变化，建造模式都存在这么两个部分，一个部分是部件构造。另一个部分是整体构建的算法。<br>再直白点说，<strong>建造模式的重心在于分离构建算法和具体的构造实现，从而使得构建算法可以重用。具体的构造实现可以很方便地扩展和切换，从而可以灵活地组合来构造出不同的产品对象。</strong></p>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+      
+    </div>
+
+    <div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2018/11/04/设计模式之建造者模式的学习/">设计模式之建造者模式的学习</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 AllenYu 的个人博客">AllenYu</a></p>
+  <p><span>发布时间:</span>2018年11月04日 - 20:11</p>
+  <p><span>最后更新:</span>2018年11月04日 - 20:11</p>
+  <p><span>原始链接:</span><a href="/2018/11/04/设计模式之建造者模式的学习/" title="设计模式之建造者模式的学习">http://yuzeduan.github.io/2018/11/04/设计模式之建造者模式的学习/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yuzeduan.github.io/2018/11/04/设计模式之建造者模式的学习/" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+	  $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/设计模式的学习/" rel="tag"><i class="fa fa-tag"></i> 设计模式的学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/04/设计模式之工厂模式的学习/" rel="next" title="设计模式之工厂模式的学习">
+                <i class="fa fa-chevron-left"></i> 设计模式之工厂模式的学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/04/设计模式之Adapter模式的学习/" rel="prev" title="设计模式之Adapter模式的学习">
+                设计模式之Adapter模式的学习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg" alt="AllenYu">
+            
+              <p class="site-author-name" itemprop="name">AllenYu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yuzeduan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.csdn.net/" target="_blank" title="csdn">
+                      
+                        <i class="fa fa-fw fa-globe"></i>csdn</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-globe"></i>YouTube</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-globe"></i>StackOverflow</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+          <br>
+
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=518894283&auto=1&height=66"></iframe>
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#建造者模式"><span class="nav-number">1.</span> <span class="nav-text">建造者模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-介绍"><span class="nav-number">1.1.</span> <span class="nav-text">1.介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1定义"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">1.1定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2主要作用"><span class="nav-number">1.1.0.2.</span> <span class="nav-text">1.2主要作用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3解决的问题"><span class="nav-number">1.1.0.3.</span> <span class="nav-text">1.3解决的问题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-模式结构"><span class="nav-number">1.2.</span> <span class="nav-text">2.模式结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-代码实例"><span class="nav-number">1.3.</span> <span class="nav-text">3.代码实例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Product"><span class="nav-number">1.3.0.1.</span> <span class="nav-text">Product</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Builder"><span class="nav-number">1.3.0.2.</span> <span class="nav-text">Builder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ConcreateBuilder"><span class="nav-number">1.3.0.3.</span> <span class="nav-text">ConcreateBuilder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Director"><span class="nav-number">1.3.0.4.</span> <span class="nav-text">Director</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端"><span class="nav-number">1.3.0.5.</span> <span class="nav-text">客户端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#过程"><span class="nav-number">1.3.0.6.</span> <span class="nav-text">过程</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#4-建造模式的两个很重要组成部分"><span class="nav-number">1.4.</span> <span class="nav-text">4.建造模式的两个很重要组成部分</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AllenYu</span>
+
+  
+</div>
+
+<!-- 
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+-->
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

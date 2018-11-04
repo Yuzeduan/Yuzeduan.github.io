@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android之进阶学习,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.简介1.1 定义IPC是Inter-Process-Communication的缩写，意思是进程间通信或者跨进程通信.">
+<meta name="keywords" content="Android之进阶学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安卓之多进程IPC的学习">
+<meta property="og:url" content="http://yuzeduan.github.io/2018/11/04/安卓之多进程IPC的学习/index.html">
+<meta property="og:site_name" content="Allen Home">
+<meta property="og:description" content="1.简介1.1 定义IPC是Inter-Process-Communication的缩写，意思是进程间通信或者跨进程通信.">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-04T11:46:42.907Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="安卓之多进程IPC的学习">
+<meta name="twitter:description" content="1.简介1.1 定义IPC是Inter-Process-Communication的缩写，意思是进程间通信或者跨进程通信.">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yuzeduan.github.io/2018/11/04/安卓之多进程IPC的学习/">
+
+
+
+
+
+  <title>安卓之多进程IPC的学习 | Allen Home</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/Yuzeduan"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Allen Home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yuzeduan.github.io/2018/11/04/安卓之多进程IPC的学习/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="AllenYu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Allen Home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">安卓之多进程IPC的学习</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-04T19:33:36+08:00">
+                2018-11-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3.8k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  15
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1.简介"></a>1.简介</h1><h2 id="1-1-定义"><a href="#1-1-定义" class="headerlink" title="1.1 定义"></a>1.1 定义</h2><p>IPC是Inter-Process-Communication的缩写，意思是进程间通信或者跨进程通信.<br><a id="more"></a></p>
+<h2 id="1-2-使用原因"><a href="#1-2-使用原因" class="headerlink" title="1.2 使用原因"></a>1.2 使用原因</h2><ol>
+<li>静态成员和单例模式完全失效</li>
+<li>线程同步机制完全失效</li>
+<li>SharedPreferences的可靠性下降</li>
+<li>Application多次创建</li>
+</ol>
+<h1 id="2-android的IPC方式"><a href="#2-android的IPC方式" class="headerlink" title="2.android的IPC方式"></a>2.android的IPC方式</h1><h2 id="2-1-Bundle"><a href="#2-1-Bundle" class="headerlink" title="2.1 Bundle"></a>2.1 Bundle</h2><p>四大组件中的三大组件(Activity,Service,Receiver)都是支持在Intent中传递Bundle数据的,由于Bundle实现了Parcelable接口,所以他可以方便在不同进程间传输,<strong>注意</strong>:我们在Bundle中的数据必须可以被序列化,比如基本数据类型,实现了Parcelable接口的对象,实现了Serializable接口的对象.</p>
+<h2 id="2-2-使用文件共享"><a href="#2-2-使用文件共享" class="headerlink" title="2.2 使用文件共享"></a>2.2 使用文件共享</h2><h3 id="1-使用机理"><a href="#1-使用机理" class="headerlink" title="1.使用机理"></a>1.使用机理</h3><p>两个进程通过<strong>读/写同一个文件</strong>来交换数据.交换信息除了文本信息外,还可以序列化对象到文件在从另一个进程中读取这个对象,但是有一点需要注意,Android基于Linux,<strong>并发读/写文件没有限制</strong>,当两个线程同时写文件的时候可能会出现问题.</p>
+<h3 id="2-使用举例"><a href="#2-使用举例" class="headerlink" title="2.使用举例"></a>2.使用举例</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">// MainActivity</span><br><span class="line">public void serialize(View v) &#123;</span><br><span class="line">        User user = new User(&quot;zhuliyuan&quot;, 22);</span><br><span class="line">        try &#123;</span><br><span class="line"></span><br><span class="line">            File file = new File(getCacheDir(), &quot;user.txt&quot;);</span><br><span class="line">            FileOutputStream fos = new FileOutputStream(file);</span><br><span class="line">            ObjectOutputStream oos = new ObjectOutputStream(fos);</span><br><span class="line">            oos.writeObject(user);</span><br><span class="line"></span><br><span class="line">            fos.close();</span><br><span class="line">            oos.close();</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">//SecondActivity</span><br><span class="line">public void deserialize(View v) &#123;</span><br><span class="line">        File file = new File(getCacheDir(), &quot;user.txt&quot;);</span><br><span class="line">        if (file.exists()) &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                FileInputStream fis = new FileInputStream(file);</span><br><span class="line">                ObjectInputStream ois = new ObjectInputStream(fis);</span><br><span class="line">                User user = (User) ois.readObject();</span><br><span class="line"></span><br><span class="line">                fis.close();</span><br><span class="line">                ois.close();</span><br><span class="line"></span><br><span class="line">                Log.i(&quot;yyjun&quot;, user.toString());</span><br><span class="line"></span><br><span class="line">            &#125; catch (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-使用局限性"><a href="#3-使用局限性" class="headerlink" title="3.使用局限性"></a>3.使用局限性</h3><p>当出现并发读写时候,读取的文件可能不是最新的.尽量避免这种情况或者<strong>使用线程同步</strong>来限制并发.<strong>SharedPreferences是个特例</strong>,它通过键值对方式存储数据,在底层上采用xml文件来存储键值对,本质上来说<strong>SharedPreferences也是属于文件的一种</strong>,但是由于系统对它的读写有一定的缓存策略,所以内存中会有一份SharedPreferences缓存,而在多进程模式下,系统对他读写变得不可靠,因此,<strong>在多进程通讯的时候最好不要使用SharedPreferences.</strong><br><strong>因此文件共享方式适合在对数据同步要求不高的进程间进行通信,并且需要妥善处理并发问题.</strong></p>
+<h2 id="2-3-使用Messenger"><a href="#2-3-使用Messenger" class="headerlink" title="2.3 使用Messenger"></a>2.3 使用Messenger</h2><h3 id="1-使用机理-1"><a href="#1-使用机理-1" class="headerlink" title="1.使用机理"></a>1.使用机理</h3><p>通过它可以在不同进程中传递<strong>Message对象</strong>,在Message中放 入我们想传递的数据,就可以实现数据的进程间传递了.<strong>Messenger底层实现是AIDL</strong>.由于它一次只能处理一个请求,因此在服务端不存在并发的问题.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//两个构造方法</span><br><span class="line">public Messenger(Handler target) &#123;</span><br><span class="line">    mTarget = target.getIMessenger();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public Messenger(IBinder target) &#123;</span><br><span class="line">    mTarget = IMessenger.Stub.asInterface(target);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-具体使用"><a href="#2-具体使用" class="headerlink" title="2.具体使用"></a>2.具体使用</h3><ul>
+<li>服务端进程<br>首先在服务端创建一个Service来处理客户端的连接请求,同时创建一个Handle并通过它来创建一个Messenger对象,然后在Service中的<strong>onBind中返回这个Messenger对象底层的Binder</strong>.</li>
+<li>客户端进程<br>首先需要绑定服务端service,绑定成功后用<strong>服务端返回的IBinder对象创建一个Messenger</strong>,通过这个Messenger向服务端发送消息,发送的消息类型为Message对象,如果需要服务端能够回应客户端,就必须和服务端一样,<strong>创建一个Handle并创建一个新的Messenger,并把这个Messenger对象通过Message的replyTo参数传递给服务端</strong>,服务端就可以通过replyTo参数回应客户端.</li>
+</ul>
+<h4 id="2-1-客户端只向服务端发送消息"><a href="#2-1-客户端只向服务端发送消息" class="headerlink" title="2.1 客户端只向服务端发送消息"></a>2.1 客户端只向服务端发送消息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">//部分重要代码</span><br><span class="line">//新建的继承Service的类</span><br><span class="line">public class MessengerService extends Service &#123;</span><br><span class="line">    private static final String TAG = &quot;MessengerService&quot;;</span><br><span class="line">    private static class MessengerHandler extends Handler &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void handleMessage(Message msg) &#123;</span><br><span class="line">            switch (msg.what) &#123;</span><br><span class="line">                case Constants.TYPE_MSG_FROM_CLIENT:</span><br><span class="line">                    Log.i(TAG, &quot;receiver client msg &quot; + msg.getData().getString(&quot;msg&quot;));</span><br><span class="line">                    break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    private Messenger mMessenger = new Messenger(new MessengerHandler());</span><br><span class="line">    </span><br><span class="line">    @Nullable</span><br><span class="line">    @Override</span><br><span class="line">    public IBinder onBind(Intent intent) &#123;</span><br><span class="line">        return mMessenger.getBinder();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//客户端进程</span><br><span class="line"> private ServiceConnection mConnection = new ServiceConnection() &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void onServiceConnected(ComponentName name, IBinder service) &#123;</span><br><span class="line">        mMessenger = new Messenger(service);</span><br><span class="line">        Message msg = Message.obtain(null, Constants.TYPE_MSG_FROM_CLIENT);</span><br><span class="line">        Bundle bundle = new Bundle();</span><br><span class="line">        bundle.putString(&quot;msg&quot;, &quot;this is client msg&quot;);</span><br><span class="line">        msg.setData(bundle);</span><br><span class="line">        try &#123;</span><br><span class="line">        mMessenger.send(msg);</span><br><span class="line">        &#125; catch (RemoteException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Messenger中进行数据传输<strong>必须将数据放入Message中</strong>,而Messenger和Message都实现了Parcelable接口,因此可以跨进程传输.Message中能作为载体传送数据的只有what,arg1,arg2,obj,replyTo,而obj在同一进程中是很实用的,但是进程间通讯的时候,在Android2.2以前obj不支持跨进程传递,2.2以后仅仅支持系统实现的Parcelable接口的对象才能通过它来传递,<strong>也就等于我们自定义的类即使实现了parcelable也无法通过obj传递</strong>.</p>
+<ul>
+<li>服务端可回应客户端消息<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">//客户端的修改 </span><br><span class="line">//为了接受服务端发送消息,客户端也需要一个接受消息的Messenger和Handler</span><br><span class="line">private Messenger clientMessenger = new Messenger(new ClientHandler());</span><br><span class="line"></span><br><span class="line">private static class ClientHandler extends Handler &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void handleMessage(Message msg) &#123;</span><br><span class="line">        switch (msg.what) &#123;</span><br><span class="line">            case Constants.TYPE_MSG_FROM_SERVICE:</span><br><span class="line">                Log.i(TAG, msg.getData().getString(&quot;reply&quot;));</span><br><span class="line">                break;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//需要将客户端的Messenger发送给服务端</span><br><span class="line">msg.replyTo = clientMessenger;</span><br><span class="line"></span><br><span class="line">//服务端的修改</span><br><span class="line">//在服务端的handleMessage中获取客户端的Messenger,并发送信息反馈给客户端</span><br><span class="line">Message serviceMsg = Message.obtain(null, Constants.TYPE_MSG_FROM_SERVICE);</span><br><span class="line">Bundle bundle = new Bundle();</span><br><span class="line">bundle.putString(&quot;reply&quot;, &quot;收到了&quot;);</span><br><span class="line">serviceMsg.setData(bundle);</span><br><span class="line">try &#123;</span><br><span class="line">    msg.replyTo.send(serviceMsg);</span><br><span class="line">&#125; catch (RemoteException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="3-局限性"><a href="#3-局限性" class="headerlink" title="3.局限性"></a>3.局限性</h3><ol>
+<li>Messenger是用<strong>串行的方式</strong>处理客户端发来的信息,因此,不能适用于有大量的并发请求发送到服务端的情况.</li>
+<li>Messenger的作用主要是为了传递信息,如果客户端需要调用服务端的方法的话,就不适用了.</li>
+</ol>
+<h2 id="2-4-使用AIDL"><a href="#2-4-使用AIDL" class="headerlink" title="2.4 使用AIDL"></a>2.4 使用AIDL</h2><h3 id="1-具体使用"><a href="#1-具体使用" class="headerlink" title="1. 具体使用"></a>1. 具体使用</h3><h4 id="1-1-服务端"><a href="#1-1-服务端" class="headerlink" title="1.1 服务端"></a>1.1 服务端</h4><p>首先创建一个Service来监听客户端的连接请求,然后创建一个AIDL文件,将要给客户端的接口在AIDL文件中声明,然后在Service实现AIDL文件生成的类.最后在onBind方法返回实现的类.</p>
+<h4 id="1-2-客户端"><a href="#1-2-客户端" class="headerlink" title="1.2 客户端"></a>1.2 客户端</h4><p>首先绑定服务端的Service,将连接成功后返回的Binder对象转换成AIDL接口所属类,接着就可以调用AIDL中的方法了</p>
+<h4 id="1-3-AIDL接口的创建"><a href="#1-3-AIDL接口的创建" class="headerlink" title="1.3 AIDL接口的创建"></a>1.3 AIDL接口的创建</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// 创建一个后缀为aidl的文件,并声明一个接口和两个方法</span><br><span class="line">// IBookManager.aidl</span><br><span class="line">package com.zly.www.ipc2;</span><br><span class="line"></span><br><span class="line">// Declare any non-default types here with import statements</span><br><span class="line">import com.zly.www.ipc2.Book;</span><br><span class="line"></span><br><span class="line">interface IBookManager &#123;</span><br><span class="line">    List&lt;Book&gt; getBookList();</span><br><span class="line">    void addBook(in Book book);</span><br><span class="line">&#125;</span><br><span class="line">// 新建的自定义类同名aidl文件</span><br><span class="line">package com.zly.www.ipc2;</span><br><span class="line">parcelable Book;</span><br></pre></td></tr></table></figure>
+<h4 id="1-4-AIDL中可以使用的类型"><a href="#1-4-AIDL中可以使用的类型" class="headerlink" title="1.4 AIDL中可以使用的类型"></a>1.4 AIDL中可以使用的类型</h4><ul>
+<li>基本数据类型(int,long,char,boolean,double等)</li>
+<li>String 和 CharSequence;</li>
+<li><ul>
+<li>List 中的所有元素都必须是以上列表中支持的数据类型、其他 AIDL 生成的接口或您声明的可打包类型。 可使用List泛型（例如，List&lt; String &gt;）。另一端实际接收的具体类始终是 ArrayList，生成的方法中支持的类型是 List 接口。</li>
+</ul>
+</li>
+<li>Map 中的所有元素都必须是以上列表中支持的数据类型、其他 AIDL 生成的接口或您声明的可打包类型。 不支持Map泛型（如 Map&lt; String,Integer &gt; 形式的 Map）。 另一端实际接收的具体类始终是 HashMap，生成的方法中支持的类型是 Map 接口</li>
+<li>Parcelable: 所有实现了Parcelable接口的对象</li>
+<li>AIDL: 所有的AIDL接口本身也是可以在AIDL文件中使用的<br><blockquote>
+<p><strong>注意</strong>:<br>1.自定义的Parcelable对象和AIDL对象必须要显示的import进来,不管他们是否和当前AIDL文件位于同一包内.<br>2. ,如果AIDL文件中使用了自定义的类,那么它必须继承Parcelable,因为Android系统可通过它将对象分解成可编组到各进程的原语.并且必须新建一个和它同名的AIDL文件,并在其中声明它为Parcelable类型.</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="1-5-远程服务端的实现"><a href="#1-5-远程服务端的实现" class="headerlink" title="1.5 远程服务端的实现"></a>1.5 远程服务端的实现</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">public class BookManagerService extends Service &#123;</span><br><span class="line"></span><br><span class="line">    private static final String TAG = &quot;BookManagerService&quot;;</span><br><span class="line"></span><br><span class="line">    private CopyOnWriteArrayList&lt;Book&gt; mBookList = new CopyOnWriteArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    private Binder mBinder = new IBookManager.Stub() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public List&lt;Book&gt; getBookList() throws RemoteException &#123;</span><br><span class="line">            return mBookList;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void addBook(Book book) throws RemoteException &#123;</span><br><span class="line">            mBookList.add(book);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onCreate() &#123;</span><br><span class="line">        super.onCreate();</span><br><span class="line">        mBookList.add(new Book(1, &quot;Android&quot;));</span><br><span class="line">        mBookList.add(new Book(2, &quot;Ios&quot;));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Nullable</span><br><span class="line">    @Override</span><br><span class="line">    public IBinder onBind(Intent intent) &#123;</span><br><span class="line">        return mBinder;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建一个Binder对象并在onBind中返回它,这个对象继承自IBookManager.Stub并实现了它内部的AIDL方法.</li>
+<li>采用了CopyOnWriteArrayList,这个CopyOnWriteArrayList支持并发读/写.AIDL方法是在服务的Binder线程池中执行的,因此在多个客户端同时连接的时候,会存在多个线程同时访问的情况,所以我们要在AIDL中处理线程同步,而我们这里直接使用CopyOnWriteArrayList来进行自动的线程同步.</li>
+<li><strong>AIDL中所支持的是抽象的List接口</strong>,因此虽然服务端返回的是CopyOnWriteArrayList,但在Binder中会按照List的规范去访问数据并最终形成一个<strong>新的ArrayList</strong>传递给客户端.</li>
+</ul>
+<h4 id="1-6-客户端的实现"><a href="#1-6-客户端的实现" class="headerlink" title="1.6 客户端的实现"></a>1.6 客户端的实现</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"> private ServiceConnection mConnection = new ServiceConnection() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void onServiceConnected(ComponentName name, IBinder service) &#123;</span><br><span class="line">            IBookManager bookManager = IBookManager.Stub.asInterface(service);</span><br><span class="line"></span><br><span class="line">            try &#123;</span><br><span class="line">                List&lt;Book&gt; list = bookManager.getBookList();</span><br><span class="line">                Log.i(TAG, &quot;query book list, list type:&quot; + list.getClass().getCanonicalName());</span><br><span class="line">                Log.i(TAG, &quot;query book list:&quot; + list.toString());</span><br><span class="line">            &#125; catch (RemoteException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onServiceDisconnected(ComponentName name) &#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">// 在onCreate方法中绑定服务</span><br><span class="line">bindService(new Intent(this, BookManagerService.class), mConnection, BIND_AUTO_CREATE);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在客户端中绑定服务,绑定成功后将服务端返回的Binder对象转换成AIDL接口,然后就可以通过这个接口调用服务端的远程方法了.</li>
+</ul>
+<h3 id="2-结合观察者模式的使用"><a href="#2-结合观察者模式的使用" class="headerlink" title="2.结合观察者模式的使用"></a>2.结合观察者模式的使用</h3><h4 id="2-1-使用场景"><a href="#2-1-使用场景" class="headerlink" title="2.1 使用场景"></a>2.1 使用场景</h4><p>用户不想时不时的查询图书列表了,于是,他去问图书馆能不能有新书直接告诉我.这个时候应该能马上想到,这是一种典型的观察者模式,每个感兴趣的用户都观察新书,当新书到的时候,图书馆就通知每个对这本书感兴趣的用户.</p>
+<h4 id="2-2-使用方法"><a href="#2-2-使用方法" class="headerlink" title="2.2 使用方法"></a>2.2 使用方法</h4><ul>
+<li><p>定义一个AIDL接口,因为AIDL无法使用普通接口,因此新建的是AIDL接口,该接口的作用是当服务端需要通知客户端的时候,可以调用该接口的方法,并把新书的对象传递给客户端.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">package com.zly.www.ipc2;</span><br><span class="line"></span><br><span class="line">// Declare any non-default types here with import statements</span><br><span class="line">import com.zly.www.ipc2.Book;</span><br><span class="line">interface IOnNewBookArrivedListener &#123;</span><br><span class="line">    void onNewBookArrived(in Book newbook);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在之前的接口中添加两个方法,用来添加和删除监听者</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">void registerListener(IOnNewBookArrivedListener listener);</span><br><span class="line">void unregisterListener(IOnNewBookArrivedListener listener);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在服务端中定义一个存放监听器的容器,在添加和删除两个方法中添加和删除监听者.</p>
+</li>
+<li><p>在服务端中定义一个添加书籍的方法,在该方法中添加书籍,并通知监听者</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">private void onNewBookArrived(Book book)&#123;</span><br><span class="line">    mBookList.add(book);</span><br><span class="line">    for(int i=0; i&lt;mListenerList.size();i++)</span><br><span class="line">    &#123;</span><br><span class="line">        IOnNewBoolArrivedListener listener = mListenerList.get(i);</span><br><span class="line">        listener.onNewookArrived(book);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在onCreate方法中开启线程,在线程中调用上面的onNewBookArrived方法.</p>
+</li>
+<li>在客户端需要注册OnNewBookArrivedListener到远程服务端,同时要在Acyivity退出时解除注册,回调的onNewBookArrrived方法是在<strong>客户端的Binder线程池</strong>执行的,因此需要Handler切换到客户端的主线程中去执行.<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">private IOnBookArrivedListener mListener = new IOnNewBoolArrivedListener.Stub()&#123;</span><br><span class="line">    // 重写onNewBookArrived方法</span><br><span class="line">&#125;</span><br><span class="line">// 在onServiceConnected方法中注册监听者</span><br><span class="line">bookManager.registerListener(mListener);</span><br><span class="line">// 在活动销毁的时候取消注册</span><br><span class="line">mRemoteBookManager.unregisterListener(mListenr);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="2-3-解除注册"><a href="#2-3-解除注册" class="headerlink" title="2.3 解除注册"></a>2.3 解除注册</h4><h5 id="2-3-1-问题"><a href="#2-3-1-问题" class="headerlink" title="2.3.1 问题"></a>2.3.1 问题</h5><p>当活动销毁的时候,我们解除注册到服务端的listener,发现解除注册的时候<strong>出现找不到我们之前注册的那个listener.</strong></p>
+<h5 id="2-3-2-原因"><a href="#2-3-2-原因" class="headerlink" title="2.3.2 原因"></a>2.3.2 原因</h5><p>Binder会把客户端传递过来的对象重新转化并生成一个新的对象,对象是不能跨进程直接传输的,对象的跨进程传输的本质上是反序列的过程.</p>
+<h5 id="2-3-3-解决方式"><a href="#2-3-3-解决方式" class="headerlink" title="2.3.3 解决方式"></a>2.3.3 解决方式</h5><p>使用RemoteCallbackList是系统专门提供的用于删除跨进程listener的接口.它是一个泛型,支持管理任意AIDL接口.</p>
+<h5 id="2-3-4-RemoteCallbackList"><a href="#2-3-4-RemoteCallbackList" class="headerlink" title="2.3.4 RemoteCallbackList"></a>2.3.4 RemoteCallbackList</h5><ul>
+<li>其内部有一个Map结构专门用来保存所有的AIDL回调,这个Map的key是IBinder类型,value是Callback类型.其中**Callback中封装了真正的远程listener.</li>
+<li>跨进程传输的对象底层的Binder对象是不变的,当客户解除注册的时候,可以遍历服务端所有的listener,找出和解注册listener具有相同Binder对象的服务端listener,并把它删掉.这是RemoteCallbackList的原理</li>
+<li>当客户端进程终止的时候,他能自动移除客户端所注册的listener</li>
+<li>内部自动实现线程同步的功能.</li>
+<li>使用时候(它并不是个list)</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 添加元素</span><br><span class="line">mList.register(listener);</span><br><span class="line">// 移除</span><br><span class="line">mList.unregister(listener);</span><br><span class="line">// 获取元素</span><br><span class="line">final int N = mList.beginBroadcast();</span><br><span class="line">listener l = mList.getBroadcastItem(i);</span><br><span class="line">// beginBroadcast和finishBroadcast要配对使用</span><br><span class="line">mList.finishBroadcast();</span><br></pre></td></tr></table></figure>
+<h3 id="3-AIDL中的定向Tag"><a href="#3-AIDL中的定向Tag" class="headerlink" title="3.AIDL中的定向Tag"></a>3.AIDL中的定向Tag</h3><ul>
+<li>In类型的表现形式是：数据只能由客户端传向服务端，服务端对数据的修改不会影响到客户端</li>
+<li>Out类型的表现形式是：数据只能有服务端传向客户端，即使客户端向方法接口传入了一个对象，该对象中的属性也是为空的，即不包含任何数据，服务端获取该对象后，对该对象的任何操作，就会同步到客户端这边，所以服务端在获取到客户端以Out方式传来的数据时会为空。</li>
+<li>InOut类型，服务器对数据的改变也同步到客户端，因此可以说两者之间是双向流动的。<h3 id="4-AIDL中注意点"><a href="#4-AIDL中注意点" class="headerlink" title="4.AIDL中注意点"></a>4.AIDL中注意点</h3></li>
+<li>客户端调用远程服务的方法,被调用的方法运行在服务端的BInder线程池,此时客户端的线程会挂起.此时客户端线程是UI线程,且服务端的方法比较耗时的时候,就会出现ANR.</li>
+<li>客户端的onServiceConnected和onServiceDisconnected方法运行在UI线程,因此不能调用非常耗时的服务端方法.</li>
+<li>服务端的方法本身就运行在服务端的BInder线程池中,因此服务端方法本身就可以执行大量的耗时操作,不要在服务端中开线程去进行异步任务.</li>
+<li>当远程服务端调用客户端的listener的方法时候,被调用的方法也运行在Binder线程池中,不过是客户端的线程池.因此如果服务端调用listener的方法的那个方法是UI线程中运行,它就不能在服务端中调用客户端的耗时方法.</li>
+<li>客户端的监听器的方法运行在客户端的Binder线程池中,因此不能在里面去访问UI的内容.<h2 id="2-4-使用ContentProvider"><a href="#2-4-使用ContentProvider" class="headerlink" title="2.4 使用ContentProvider"></a>2.4 使用ContentProvider</h2>ContentProvider是android中提供的专门的用于不同应用间数据共享的方式,具体使用在前面笔记已有涉及.</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+      
+    </div>
+
+    <div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2018/11/04/安卓之多进程IPC的学习/">安卓之多进程IPC的学习</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 AllenYu 的个人博客">AllenYu</a></p>
+  <p><span>发布时间:</span>2018年11月04日 - 19:11</p>
+  <p><span>最后更新:</span>2018年11月04日 - 19:11</p>
+  <p><span>原始链接:</span><a href="/2018/11/04/安卓之多进程IPC的学习/" title="安卓之多进程IPC的学习">http://yuzeduan.github.io/2018/11/04/安卓之多进程IPC的学习/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yuzeduan.github.io/2018/11/04/安卓之多进程IPC的学习/" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+	  $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android之进阶学习/" rel="tag"><i class="fa fa-tag"></i> Android之进阶学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/04/安卓框架之Volley的学习/" rel="next" title="安卓框架之Volley的学习">
+                <i class="fa fa-chevron-left"></i> 安卓框架之Volley的学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/04/安卓之Bitmap的学习/" rel="prev" title="安卓之Bitmap的学习">
+                安卓之Bitmap的学习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg" alt="AllenYu">
+            
+              <p class="site-author-name" itemprop="name">AllenYu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yuzeduan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.csdn.net/" target="_blank" title="csdn">
+                      
+                        <i class="fa fa-fw fa-globe"></i>csdn</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-globe"></i>YouTube</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-globe"></i>StackOverflow</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+          <br>
+
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=518894283&auto=1&height=66"></iframe>
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-简介"><span class="nav-number">1.</span> <span class="nav-text">1.简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-定义"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-使用原因"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 使用原因</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-android的IPC方式"><span class="nav-number">2.</span> <span class="nav-text">2.android的IPC方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-Bundle"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 Bundle</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-使用文件共享"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 使用文件共享</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-使用机理"><span class="nav-number">2.2.1.</span> <span class="nav-text">1.使用机理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-使用举例"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.使用举例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-使用局限性"><span class="nav-number">2.2.3.</span> <span class="nav-text">3.使用局限性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-使用Messenger"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 使用Messenger</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-使用机理-1"><span class="nav-number">2.3.1.</span> <span class="nav-text">1.使用机理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-具体使用"><span class="nav-number">2.3.2.</span> <span class="nav-text">2.具体使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-客户端只向服务端发送消息"><span class="nav-number">2.3.2.1.</span> <span class="nav-text">2.1 客户端只向服务端发送消息</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-局限性"><span class="nav-number">2.3.3.</span> <span class="nav-text">3.局限性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-使用AIDL"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 使用AIDL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-具体使用"><span class="nav-number">2.4.1.</span> <span class="nav-text">1. 具体使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-服务端"><span class="nav-number">2.4.1.1.</span> <span class="nav-text">1.1 服务端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-客户端"><span class="nav-number">2.4.1.2.</span> <span class="nav-text">1.2 客户端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-AIDL接口的创建"><span class="nav-number">2.4.1.3.</span> <span class="nav-text">1.3 AIDL接口的创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-AIDL中可以使用的类型"><span class="nav-number">2.4.1.4.</span> <span class="nav-text">1.4 AIDL中可以使用的类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-5-远程服务端的实现"><span class="nav-number">2.4.1.5.</span> <span class="nav-text">1.5 远程服务端的实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-客户端的实现"><span class="nav-number">2.4.1.6.</span> <span class="nav-text">1.6 客户端的实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-结合观察者模式的使用"><span class="nav-number">2.4.2.</span> <span class="nav-text">2.结合观察者模式的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-使用场景"><span class="nav-number">2.4.2.1.</span> <span class="nav-text">2.1 使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-使用方法"><span class="nav-number">2.4.2.2.</span> <span class="nav-text">2.2 使用方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-解除注册"><span class="nav-number">2.4.2.3.</span> <span class="nav-text">2.3 解除注册</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-1-问题"><span class="nav-number">2.4.2.3.1.</span> <span class="nav-text">2.3.1 问题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-2-原因"><span class="nav-number">2.4.2.3.2.</span> <span class="nav-text">2.3.2 原因</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-3-解决方式"><span class="nav-number">2.4.2.3.3.</span> <span class="nav-text">2.3.3 解决方式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-4-RemoteCallbackList"><span class="nav-number">2.4.2.3.4.</span> <span class="nav-text">2.3.4 RemoteCallbackList</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-AIDL中的定向Tag"><span class="nav-number">2.4.3.</span> <span class="nav-text">3.AIDL中的定向Tag</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-AIDL中注意点"><span class="nav-number">2.4.4.</span> <span class="nav-text">4.AIDL中注意点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-使用ContentProvider"><span class="nav-number">2.5.</span> <span class="nav-text">2.4 使用ContentProvider</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AllenYu</span>
+
+  
+</div>
+
+<!-- 
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+-->
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

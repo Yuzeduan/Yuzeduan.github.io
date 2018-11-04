@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android之四大组件,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="四大组件之BroadcastReceiver参考文章:https://blog.csdn.net/Hystudio_lzu/article/details/80656071  广播（Broadcast）是在组件之间传播数据（Intent）的一种机制；这些组件甚至是可以位于不同的进程中，这样它就像Binder机制一样，起到进程间通信的作用.">
+<meta name="keywords" content="Android之四大组件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安卓之BroadcastReceiver">
+<meta property="og:url" content="http://yuzeduan.github.io/2018/11/04/安卓之BroadcastReceiver/index.html">
+<meta property="og:site_name" content="Allen Home">
+<meta property="og:description" content="四大组件之BroadcastReceiver参考文章:https://blog.csdn.net/Hystudio_lzu/article/details/80656071  广播（Broadcast）是在组件之间传播数据（Intent）的一种机制；这些组件甚至是可以位于不同的进程中，这样它就像Binder机制一样，起到进程间通信的作用.">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.loli.net/2018/11/04/5bded2f8cca9c.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/04/5bded4a73f4d1.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/04/5bded4a6f009b.png">
+<meta property="og:updated_time" content="2018-11-04T11:17:32.127Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="安卓之BroadcastReceiver">
+<meta name="twitter:description" content="四大组件之BroadcastReceiver参考文章:https://blog.csdn.net/Hystudio_lzu/article/details/80656071  广播（Broadcast）是在组件之间传播数据（Intent）的一种机制；这些组件甚至是可以位于不同的进程中，这样它就像Binder机制一样，起到进程间通信的作用.">
+<meta name="twitter:image" content="https://i.loli.net/2018/11/04/5bded2f8cca9c.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yuzeduan.github.io/2018/11/04/安卓之BroadcastReceiver/">
+
+
+
+
+
+  <title>安卓之BroadcastReceiver | Allen Home</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/Yuzeduan"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Allen Home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yuzeduan.github.io/2018/11/04/安卓之BroadcastReceiver/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="AllenYu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Allen Home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">安卓之BroadcastReceiver</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-04T17:11:13+08:00">
+                2018-11-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.6k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="四大组件之BroadcastReceiver"><a href="#四大组件之BroadcastReceiver" class="headerlink" title="四大组件之BroadcastReceiver"></a>四大组件之BroadcastReceiver</h1><p>参考文章:<a href="https://blog.csdn.net/Hystudio_lzu/article/details/80656071" target="_blank" rel="noopener">https://blog.csdn.net/Hystudio_lzu/article/details/80656071</a></p>
+<blockquote>
+<p>广播（Broadcast）是在组件之间传播数据（Intent）的一种机制；这些组件甚至是可以位于不同的进程中，这样它就像Binder机制一样，起到进程间通信的作用.<br></p>
+</blockquote>
+<a id="more"></a>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p><img src="https://i.loli.net/2018/11/04/5bded2f8cca9c.png" alt=""></p>
+<h3 id="创建广播接收器"><a href="#创建广播接收器" class="headerlink" title="创建广播接收器"></a>创建广播接收器</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">class &lt;子类名&gt; extends BroadcastReceiver&#123;</span><br><span class="line">    @overide</span><br><span class="line">    public void onReceive(Context context, Intent intent)&#123;</span><br><span class="line">        // 接收到广播之后的逻辑</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>继承BroadcastReceiver父类,重写onReceive方法.<br><br><strong>注意:</strong> 在onReceive方法中不能添加过多的逻辑或者进行任何的耗时操作,广播接收器中是不允许开线程的,onReceive方法运行较长时间没有结束时,程序就会报错.一般情况下,根据实际业务需求,onReceive方法中都会涉及到与其他组件之间的交互,如发送Notification,启动service等</p>
+<h3 id="注册广播接收器"><a href="#注册广播接收器" class="headerlink" title="注册广播接收器"></a>注册广播接收器</h3><h4 id="1-动态注册广播接收器"><a href="#1-动态注册广播接收器" class="headerlink" title="1.动态注册广播接收器"></a>1.动态注册广播接收器</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">  protected void onResume()&#123;</span><br><span class="line">      super.onResume();</span><br><span class="line"></span><br><span class="line">    // 1. 实例化BroadcastReceiver子类 &amp;  IntentFilter</span><br><span class="line">     mBroadcastReceiver mBroadcastReceiver = new mBroadcastReceiver();</span><br><span class="line">     IntentFilter intentFilter = new IntentFilter();</span><br><span class="line"></span><br><span class="line">    // 2. 设置接收广播的类型</span><br><span class="line">    intentFilter.addAction(android.net.conn.CONNECTIVITY_CHANGE);</span><br><span class="line"></span><br><span class="line">    // 3. 动态注册：调用Context的registerReceiver（）方法</span><br><span class="line">     registerReceiver(mBroadcastReceiver, intentFilter);</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line"> @Override</span><br><span class="line"> protected void onPause() &#123;</span><br><span class="line">     super.onPause();</span><br><span class="line">      //销毁在onResume()方法中的广播</span><br><span class="line">     unregisterReceiver(mBroadcastReceiver);</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>注意:</strong><br>1.当系统因为内存不足（优先级更高的应用需要回收Activity占用的资源时，Activity在执行完onPause()方法后就会被销毁，有些生命周期方法onStop()，onDestory()就不会执行。当再回到此Activity时，是从onCreate方法开始执行.<br><br>2、假设我们将广播的注销放在onStop()，onDestory()方法里的话，有可能在Activity被销毁后还未执行onStop()，onDestory()方法，即广播仍还未注销，从而导致内存泄露。<br><br>3、但是，onPause()一定会被执行，从而保证了广播在App死亡前一定会被注销，从而防止内存泄露。</p>
+<h4 id="2-静态注册广播接收器"><a href="#2-静态注册广播接收器" class="headerlink" title="2.静态注册广播接收器"></a>2.静态注册广播接收器</h4><p>静态注册广播可以在程序未打开的情况下接收广播,要在AndriodManifest.xml进行注册.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;receiver android:enabled=[&quot;true&quot; | &quot;false&quot;]</span><br><span class="line">          android:exported=[&quot;true&quot; | &quot;false&quot;]</span><br><span class="line">          android:icon=&quot;drawable resource&quot;</span><br><span class="line">          android:label=&quot;string resource&quot;</span><br><span class="line">          android:name=&quot;string&quot;</span><br><span class="line">          android:permission=&quot;string&quot;</span><br><span class="line">          android:process=&quot;string&quot; &gt;</span><br><span class="line">          . . .</span><br><span class="line">          &lt;intent-filter&gt;</span><br><span class="line">              &lt;action  android:name=&quot;string&quot; /&gt;</span><br><span class="line">          &lt;/intent-filter&gt;</span><br><span class="line">&lt;/receiver&gt;</span><br></pre></td></tr></table></figure></p>
+<p>android:exported ——此BroadcastReceiver能否接收其他App发出的广播。其默认值是由receiver中有无intent-filter决定的，如果有intent-filter，默认值为true，否则为false。（同样的，activity/service中的此属性默认值一样遵循此规则）。同时，需要注意的是，这个值的设定是以application或者application user id为界的，而非进程为界（一个应用中可能含有多个进程）<br><br>android:name —— 此BoadcastReceiver类名（不能是内部类，内部类只能动态注册）；<br>android:permission ——如果设置，具有相应权限的广播发送方发送的广播才能被此broadcastReceiver所接收<br><br>android:process ——BroadcastReceiver运行所处的进程。默认为App的进程。可以指定独立的进程（Android四大基本组件都可以通过此属性指定自己的独立进程）<br><br>intent-filter ——指定此广播接收器将用于接收特定Action的广播。<br><br>当此App首次启动时，系统会自动实例化此BroadcastReceiver，并注册到系统中。 </p>
+<h3 id="广播的发送和分类"><a href="#广播的发送和分类" class="headerlink" title="广播的发送和分类"></a>广播的发送和分类</h3><h4 id="1-普通广播-Normal-Broadcast"><a href="#1-普通广播-Normal-Broadcast" class="headerlink" title="1.普通广播(Normal Broadcast)"></a>1.普通广播(Normal Broadcast)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sendBroadcast(intent)</span><br><span class="line">sendBroadcast(intent, receiverPermission)</span><br><span class="line">sendBroadcastAsUser(intent, userHandler)</span><br><span class="line">sendBroadcastAsUser(intent, userHandler, receiverPermission)</span><br></pre></td></tr></table></figure>
+<p>普通广播是我们可以自定义intent进行发送广播,它是完全异步的，可以在同一时刻（逻辑上）被所有接收者接收到，消息传递的效率比较高，但缺点是：接收者不能将处理结果传递给下一个接收者，并且无法终止广播Intent的传播。</p>
+<h4 id="2-系统广播-System-Broadcast"><a href="#2-系统广播-System-Broadcast" class="headerlink" title="2.系统广播(System Broadcast)"></a>2.系统广播(System Broadcast)</h4><h5 id="常见的系统广播"><a href="#常见的系统广播" class="headerlink" title="常见的系统广播"></a>常见的系统广播</h5><p><img src="https://i.loli.net/2018/11/04/5bded4a73f4d1.png" alt=""><br><img src="https://i.loli.net/2018/11/04/5bded4a6f009b.png" alt=""></p>
+<p>每个系统广播都具有特定的intent-filter，其中主要包括具体的action，系统广播发出后，将被相应的BroadcastReceiver接收。系统广播在系统内部当特定事件发生时，由系统自动发出。</p>
+<h4 id="3-有序广播-Ordered-Broadcast"><a href="#3-有序广播-Ordered-Broadcast" class="headerlink" title="3.有序广播(Ordered Broadcast)"></a>3.有序广播(Ordered Broadcast)</h4><ul>
+<li>当前多个已经注册且有效的BroadcastReceiver接收有序广播时，是按照先后顺序接收的，先后顺序判定标准遵循：将当前系统中所有有效的动态注册和静态注册的BroadcastReceiver按照priority属性值</li>
+<li>先接收的BroadcastReceiver可以对此有序广播进行截断(BroadcastReceiver.abortBroadcast())，使后面的BroadcastReceiver不再接收到此广播。也可以将处理结果通过setResultExtras(Bundle)方法存放进结果对象，然后传给下一个接收者，通过代码：Bundle bundle =getResultExtras(true))可以获取上一个接收者存入在结果对象中的数据.</li>
+</ul>
+<h4 id="4-App应用内广播-App应用以App应用进程为界"><a href="#4-App应用内广播-App应用以App应用进程为界" class="headerlink" title="4.App应用内广播(App应用以App应用进程为界)"></a>4.App应用内广播(App应用以App应用进程为界)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 获取LocalBroadcastManager实例</span><br><span class="line">localBroadcastManager = LocalBroadcastManager.getInstance(this);</span><br><span class="line">// 注册广播接收器</span><br><span class="line">localBroadcastManager.registerReceiver(&lt;BroadcastReceiver&gt;,&lt;intentFilter&gt;);</span><br><span class="line">// 发送广播</span><br><span class="line">localBroadcastManager.sendBroadcast(intent);</span><br></pre></td></tr></table></figure>
+<p>使用封装好的LocalBroadcastManager类，用于统一处理App应用内的广播问题,App应用内广播可以理解成一种局部广播的形式，广播的发送者和接收者都同属于一个App,</p>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>同一app具有多个进程的不同组件之间的消息通信</li>
+<li>不同app之间的组件之间消息通信</li>
+<li>Android系统在特定情况下与App之间的消息通信</li>
+</ul>
+<h3 id="onReceive-context-intent-中的context具体类型"><a href="#onReceive-context-intent-中的context具体类型" class="headerlink" title="onReceive(context, intent)中的context具体类型"></a>onReceive(context, intent)中的context具体类型</h3><ol>
+<li>对于静态注册的ContextReceiver，回调onReceive(context, intent)中的context具体指的是ReceiverRestrictedContext；<br>注：这个context是一个ReceiverRestrictedContext实例，它有两个主要函数被禁掉：registerReceiver()和bindService()。这两个函数在BroadcastReceiver.onReceive()不允许调用。每次Receiver处理一个广播，传递进来的context都是一个新的实例。 </li>
+<li>对于全局广播的动态注册的ContextReceiver，回调onReceive(context, intent)中的context具体指的是Activity Context； </li>
+<li>对于通过LocalBroadcastManager动态注册的ContextReceiver，回调onReceive(context, intent)中的context具体指的是Application Context。<br>注：对于LocalBroadcastManager方式发送的应用内广播，只能通过LocalBroadcastManager动态注册的BroadReceiver才有可能接收到（静态注册或其他方式动态注册的BroadReceiver是接收不到的）。</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+      
+    </div>
+
+    <div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2018/11/04/安卓之BroadcastReceiver/">安卓之BroadcastReceiver</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 AllenYu 的个人博客">AllenYu</a></p>
+  <p><span>发布时间:</span>2018年11月04日 - 17:11</p>
+  <p><span>最后更新:</span>2018年11月04日 - 19:11</p>
+  <p><span>原始链接:</span><a href="/2018/11/04/安卓之BroadcastReceiver/" title="安卓之BroadcastReceiver">http://yuzeduan.github.io/2018/11/04/安卓之BroadcastReceiver/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yuzeduan.github.io/2018/11/04/安卓之BroadcastReceiver/" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+	  $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android之四大组件/" rel="tag"><i class="fa fa-tag"></i> Android之四大组件</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/04/安卓之Service详解/" rel="next" title="安卓之Service详解">
+                <i class="fa fa-chevron-left"></i> 安卓之Service详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/04/安卓之ContentProvider详解/" rel="prev" title="安卓之ContentProvider详解">
+                安卓之ContentProvider详解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg" alt="AllenYu">
+            
+              <p class="site-author-name" itemprop="name">AllenYu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yuzeduan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.csdn.net/" target="_blank" title="csdn">
+                      
+                        <i class="fa fa-fw fa-globe"></i>csdn</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-globe"></i>YouTube</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-globe"></i>StackOverflow</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+          <br>
+
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=518894283&auto=1&height=66"></iframe>
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#四大组件之BroadcastReceiver"><span class="nav-number">1.</span> <span class="nav-text">四大组件之BroadcastReceiver</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">1.0.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建广播接收器"><span class="nav-number">1.0.2.</span> <span class="nav-text">创建广播接收器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注册广播接收器"><span class="nav-number">1.0.3.</span> <span class="nav-text">注册广播接收器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-动态注册广播接收器"><span class="nav-number">1.0.3.1.</span> <span class="nav-text">1.动态注册广播接收器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-静态注册广播接收器"><span class="nav-number">1.0.3.2.</span> <span class="nav-text">2.静态注册广播接收器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#广播的发送和分类"><span class="nav-number">1.0.4.</span> <span class="nav-text">广播的发送和分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-普通广播-Normal-Broadcast"><span class="nav-number">1.0.4.1.</span> <span class="nav-text">1.普通广播(Normal Broadcast)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-系统广播-System-Broadcast"><span class="nav-number">1.0.4.2.</span> <span class="nav-text">2.系统广播(System Broadcast)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#常见的系统广播"><span class="nav-number">1.0.4.2.1.</span> <span class="nav-text">常见的系统广播</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-有序广播-Ordered-Broadcast"><span class="nav-number">1.0.4.3.</span> <span class="nav-text">3.有序广播(Ordered Broadcast)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-App应用内广播-App应用以App应用进程为界"><span class="nav-number">1.0.4.4.</span> <span class="nav-text">4.App应用内广播(App应用以App应用进程为界)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用场景"><span class="nav-number">1.0.5.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#onReceive-context-intent-中的context具体类型"><span class="nav-number">1.0.6.</span> <span class="nav-text">onReceive(context, intent)中的context具体类型</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AllenYu</span>
+
+  
+</div>
+
+<!-- 
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+-->
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

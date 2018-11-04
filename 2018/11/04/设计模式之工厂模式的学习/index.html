@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="设计模式的学习,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="工厂模式工厂模式是我们最常用的实例化对象模式,是用工厂方法代替new操作的一种模式,用来封装对象的创建,减少应用程序具体类之间的依赖,促进松耦合.其中有三种子模式,分别是简单工厂模式,工厂方法模式和抽象工厂模式">
+<meta name="keywords" content="设计模式的学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式之工厂模式的学习">
+<meta property="og:url" content="http://yuzeduan.github.io/2018/11/04/设计模式之工厂模式的学习/index.html">
+<meta property="og:site_name" content="Allen Home">
+<meta property="og:description" content="工厂模式工厂模式是我们最常用的实例化对象模式,是用工厂方法代替new操作的一种模式,用来封装对象的创建,减少应用程序具体类之间的依赖,促进松耦合.其中有三种子模式,分别是简单工厂模式,工厂方法模式和抽象工厂模式">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3985563-5e3b5da5f25c51a6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/675">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3985563-c40f9e18f891d00a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/466">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3985563-837d93237cf1143b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700">
+<meta property="og:updated_time" content="2018-11-04T12:39:25.203Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式之工厂模式的学习">
+<meta name="twitter:description" content="工厂模式工厂模式是我们最常用的实例化对象模式,是用工厂方法代替new操作的一种模式,用来封装对象的创建,减少应用程序具体类之间的依赖,促进松耦合.其中有三种子模式,分别是简单工厂模式,工厂方法模式和抽象工厂模式">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/3985563-5e3b5da5f25c51a6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/675">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yuzeduan.github.io/2018/11/04/设计模式之工厂模式的学习/">
+
+
+
+
+
+  <title>设计模式之工厂模式的学习 | Allen Home</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/Yuzeduan"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Allen Home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yuzeduan.github.io/2018/11/04/设计模式之工厂模式的学习/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="AllenYu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Allen Home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">设计模式之工厂模式的学习</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-04T20:31:50+08:00">
+                2018-11-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.4k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h1><p>工厂模式是我们最常用的<strong>实例化对象模式</strong>,是用工厂方法代替new操作的一种模式,用来封装对象的创建,减少应用程序具体类之间的依赖,促进松耦合.其中有三种子模式,分别是<strong>简单工厂模式,工厂方法模式和抽象工厂模式</strong><br><a id="more"></a></p>
+<h2 id="1-简单工厂模式"><a href="#1-简单工厂模式" class="headerlink" title="1.简单工厂模式"></a>1.简单工厂模式</h2><h3 id="1-1-定义"><a href="#1-1-定义" class="headerlink" title="1.1 定义"></a>1.1 定义</h3><p>其又称为静态工厂方法模式,属于类创建型模式,可以根据参数的不同返回不同类的实例,简单工厂模式定义一个类来负责创建其他类的实例,被创建的实例通常都具有共同的父类.</p>
+<h3 id="1-2-应用场景"><a href="#1-2-应用场景" class="headerlink" title="1.2 应用场景"></a>1.2 应用场景</h3><p>有不同的子类继承同一个父类,但不同子类修改了部分属性,此时就可使用简单工厂模式,提供一个静态方法,通过<strong>传入不同的参数即可返回不同的对象</strong>,此时我们并不需要这些具体类的名字,只需要知道表示该具体类的参数.</p>
+<h3 id="1-3-简单工厂模式结构"><a href="#1-3-简单工厂模式结构" class="headerlink" title="1.3 简单工厂模式结构"></a>1.3 简单工厂模式结构</h3><p><img src="https://upload-images.jianshu.io/upload_images/3985563-5e3b5da5f25c51a6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/675" alt=""></p>
+<h5 id="工厂角色-Factory"><a href="#工厂角色-Factory" class="headerlink" title="工厂角色(Factory)"></a>工厂角色(Factory)</h5><p>负责实现创建所有实例的内部逻辑.</p>
+<h5 id="抽象产品角色-Product"><a href="#抽象产品角色-Product" class="headerlink" title="抽象产品角色(Product)"></a>抽象产品角色(Product)</h5><p>所创建的所有对象的父类,负责描述所有实例所共有的公共接口.</p>
+<h5 id="具体产品角色-ConcreteProduct"><a href="#具体产品角色-ConcreteProduct" class="headerlink" title="具体产品角色(ConcreteProduct)"></a>具体产品角色(ConcreteProduct)</h5><p>创建目标,所有创建的对象都都充当这个角色的某个具体类的实例.</p>
+<h3 id="1-4一个使用实例"><a href="#1-4一个使用实例" class="headerlink" title="1.4一个使用实例"></a>1.4一个使用实例</h3><p>实现一个登陆功能,假如需要支持多种登陆方式,此时我们可以建立一个各种登陆方式都适用的接口.<br><img src="https://upload-images.jianshu.io/upload_images/3985563-c40f9e18f891d00a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/466" alt=""></p>
+<h5 id="抽象产品"><a href="#抽象产品" class="headerlink" title="抽象产品"></a>抽象产品</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public interface Login &#123;</span><br><span class="line">    //登录验证</span><br><span class="line">    public boolean verify(String name , String password);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>具体产品DomainLogin和PasswordLogin<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public class DomainLogin implements Login &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public boolean verify(String name, String password) &#123;</span><br><span class="line">        // TODO Auto-generated method stub</span><br><span class="line">        /**</span><br><span class="line">         * 业务逻辑</span><br><span class="line">         */</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class PasswordLogin implements Login &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public boolean verify(String name, String password) &#123;</span><br><span class="line">        // TODO Auto-generated method stub</span><br><span class="line">        /**</span><br><span class="line">         * 业务逻辑</span><br><span class="line">         */</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="工厂类"><a href="#工厂类" class="headerlink" title="工厂类"></a>工厂类</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public class LoginManager &#123;</span><br><span class="line">    public static Login factory(String type)&#123;</span><br><span class="line">        if(type.equals(&quot;password&quot;))&#123;</span><br><span class="line">            </span><br><span class="line">            return new PasswordLogin();</span><br><span class="line">            </span><br><span class="line">        &#125;else if(type.equals(&quot;passcode&quot;))&#123;</span><br><span class="line">            </span><br><span class="line">            return new DomainLogin();</span><br><span class="line">            </span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            /**</span><br><span class="line">             * 这里抛出一个自定义异常会更恰当</span><br><span class="line">             */</span><br><span class="line">            throw new RuntimeException(&quot;没有找到登录类型&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="测试调用"><a href="#测试调用" class="headerlink" title="测试调用"></a>测试调用</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public class Test &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        String loginType = &quot;password&quot;;</span><br><span class="line">        String name = &quot;name&quot;;</span><br><span class="line">        String password = &quot;password&quot;;</span><br><span class="line">        Login login = LoginManager.factory(loginType);</span><br><span class="line">        boolean bool = login.verify(name, password);</span><br><span class="line">        if (bool) &#123;</span><br><span class="line">            /**</span><br><span class="line">             * 业务逻辑</span><br><span class="line">             */</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            /**</span><br><span class="line">             * 业务逻辑</span><br><span class="line">             */</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="1-5-简单工厂模式的优缺点"><a href="#1-5-简单工厂模式的优缺点" class="headerlink" title="1.5 简单工厂模式的优缺点"></a>1.5 简单工厂模式的优缺点</h3><h5 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h5><p>通过使用工厂类，外界不再需要关心如何创造各种具体的产品，只要提供一个产品的名称作为参数传给工厂，就可以直接得到一个想要的产品对象，并且可以按照接口规范来调用产品对象的所有功能（方法),<br>构造容易，逻辑简单。</p>
+<h5 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h5><ol>
+<li><p>简单工厂模式中的if else判断非常多，完全是Hard Code，如果有一个新产品要加进来，就要同时添加一个新产品类，并且必须修改工厂类，再加入一个 else if 分支才可以， 这样就违背了 “开放-关闭原则”中的对修改关闭的准则了。当系统中的具体产品类不断增多时候，就要不断的修改工厂类，对系统的维护和扩展不利。</p>
+</li>
+<li><p>一个工厂类中集合了所有的类的实例创建逻辑，违反了高内聚的责任分配原则，将全部的创建逻辑都集中到了一个工厂类当中，所有的业务逻辑都在这个工厂类中实现。什么时候它不能工作了，整个系统都会受到影响。因此一般只在很简单的情况下应用，比如当工厂类负责创建的对象比较少时。</p>
+</li>
+<li><p>简单工厂模式由于使用了静态工厂方法，造成工厂角色无法形成基于继承的等级结构。</p>
+</li>
+</ol>
+<h3 id="1-6-适用环境"><a href="#1-6-适用环境" class="headerlink" title="1.6 适用环境"></a>1.6 适用环境</h3><ol>
+<li>工厂类负责创建的对象比较少：由于创建的对象较少，不会造成工厂方法中的业务逻辑太过复杂。</li>
+<li>客户端只知道传入工厂类的参数，对于如何创建对象不关心：客户端既不需要关心创建细节，甚至连类名都不需要记住，只需要知道类型所对应的参数.</li>
+</ol>
+<h2 id="2-工厂方法模式"><a href="#2-工厂方法模式" class="headerlink" title="2.工厂方法模式"></a>2.工厂方法模式</h2><h3 id="2-1与简单工厂模式的区别"><a href="#2-1与简单工厂模式的区别" class="headerlink" title="2.1与简单工厂模式的区别"></a>2.1与简单工厂模式的区别</h3><p>与简单工厂模式不同之处在于添加了一个<strong>抽象的工厂类</strong>,核心的工厂类不再提供所有产品的创建工作，而是将具体的产品交给具体的工厂类去实现。核心工厂类值负责制定具体工厂需要实现的接口即可，至于具体的工作交给子类去实现。</p>
+<h3 id="2-2优缺点"><a href="#2-2优缺点" class="headerlink" title="2.2优缺点"></a>2.2优缺点</h3><h5 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h5><p>由于工厂方法模式中的核心是抽象的工厂类，所有的工厂类必须实现抽象工厂类的接口。当系统需要扩展添加新的产品，则只需要添加一个具体的产品对象和具体的工厂对象即可。不需要对原有工厂进行修改。也不需要修改客户端，这就符合了“开闭原则”。</p>
+<h5 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h5><p>使用工厂模式，客户端需要判断要实例化哪个具体的工厂。具体的实现工厂可能需要增加代码量。</p>
+<h2 id="3-抽象工厂模式"><a href="#3-抽象工厂模式" class="headerlink" title="3.抽象工厂模式"></a>3.抽象工厂模式</h2><h4 id="3-1-定义"><a href="#3-1-定义" class="headerlink" title="3.1 定义"></a>3.1 定义</h4><p>抽象工厂模式(Abstract Factory Pattern)：提供一个创建一系列相关或相互依赖对象的接口，而无须指定它们具体的类。抽象工厂模式又称为Kit模式，属于对象创建型模式。</p>
+<h4 id="3-2-定义的阐述"><a href="#3-2-定义的阐述" class="headerlink" title="3.2 定义的阐述"></a>3.2 定义的阐述</h4><h5 id="3-2-1-为什么需要抽象工厂模式"><a href="#3-2-1-为什么需要抽象工厂模式" class="headerlink" title="3.2.1 为什么需要抽象工厂模式"></a>3.2.1 为什么需要抽象工厂模式</h5><p>在工厂方法模式中具体的工厂负责生产具体的产品,每一个具体的工厂对应一种或几种具体的产品,一般情况下,一个具体工厂中只用一个工厂方法或者一组重载的工厂方法,但当我们需要一个工厂可以提供<strong>多个不同种类</strong>产品对象,而不是<strong>单一种类</strong>的产品对象,此时便需要用到抽象工厂模式了.抽象工厂模式与工厂方法模式最大的区别在于<strong>工厂方法模式针对的是一个产品等级结构,而抽象工厂模式则需要面对多个产品等级结构</strong></p>
+<h5 id="3-2-2-产品等级结构"><a href="#3-2-2-产品等级结构" class="headerlink" title="3.2.2 产品等级结构"></a>3.2.2 产品等级结构</h5><p>产品等级结构便是产品的继承结构.</p>
+<h5 id="3-2-3-产品族"><a href="#3-2-3-产品族" class="headerlink" title="3.2.3 产品族"></a>3.2.3 产品族</h5><p>在抽象工厂模式中,产品族是指由同一个工厂生产的,位于不同产品等级结构的一组产品.</p>
+<h3 id="3-3-模式结构图"><a href="#3-3-模式结构图" class="headerlink" title="3.3 模式结构图"></a>3.3 模式结构图</h3><p><img src="https://upload-images.jianshu.io/upload_images/3985563-837d93237cf1143b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700" alt=""><br>一般操作时序</p>
+<ol>
+<li>先调用具体工厂对象中的方法createProductX()。根据具体工厂不同可以选择不同的方法，针对同一种工厂也可以选择不同的方法创建不同类型的产品对象。</li>
+<li>根据传入产品类型参数（也可以无参），获得具体的产品对象</li>
+<li>返回产品对象并使用</li>
+</ol>
+<h3 id="3-4-优缺点"><a href="#3-4-优缺点" class="headerlink" title="3.4 优缺点"></a>3.4 优缺点</h3><h5 id="3-4-1-优点"><a href="#3-4-1-优点" class="headerlink" title="3.4.1 优点"></a>3.4.1 优点</h5><ol>
+<li>抽象工厂模式隔离了具体类的生成，使得客户并不需要知道什么被创建。由于这种隔离，更换一个具体工厂就变得相对容易。所有的具体工厂都实现了抽象工厂中定义的那些公共接口，因此只需改变具体工厂的实例，就可以在某种程度上改变整个软件系统的行为。另外，应用抽象工厂模式可以实现高内聚低耦合的设计目的，因此抽象工厂模式得到了广泛的应用</li>
+<li>增加新的具体工厂和产品族很方便，因为一个具体的工厂实现代表的是一个产品族，无须修改已有系统，符合“开闭原则”.</li>
+</ol>
+<h5 id="3-4-2-缺点"><a href="#3-4-2-缺点" class="headerlink" title="3.4.2 缺点"></a>3.4.2 缺点</h5><p>在添加新的产品对象（不同于现有的产品等级结构）时，难以扩展抽象工厂来生产新种类的产品，这是因为在抽象工厂角色中规定了所有可能被创建的产品集合，要支持新种类的产品就意味着要对该接口进行扩展，而这将涉及到对抽象工厂角色及其所有子类的修改，显然会带来较大的不便。</p>
+<h3 id="3-5-适用环境"><a href="#3-5-适用环境" class="headerlink" title="3.5 适用环境"></a>3.5 适用环境</h3><ol>
+<li>一个系统不应当依赖于产品类实例如何被创建、组合和表达的细节，这对于所有类型的工厂模式都是重要的。</li>
+<li>系统中有多于一个的产品族，而每次只使用其中某一产品族。<strong>与工厂方法模式的区别</strong></li>
+<li>属于同一个产品族的产品将在一起使用，这一约束必须在系统的设计中体现出来</li>
+<li>系统提供一个产品类的库，所有的产品以同样的接口出现，从而使客户端不依赖于具体实现.</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+      
+    </div>
+
+    <div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2018/11/04/设计模式之工厂模式的学习/">设计模式之工厂模式的学习</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 AllenYu 的个人博客">AllenYu</a></p>
+  <p><span>发布时间:</span>2018年11月04日 - 20:11</p>
+  <p><span>最后更新:</span>2018年11月04日 - 20:11</p>
+  <p><span>原始链接:</span><a href="/2018/11/04/设计模式之工厂模式的学习/" title="设计模式之工厂模式的学习">http://yuzeduan.github.io/2018/11/04/设计模式之工厂模式的学习/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yuzeduan.github.io/2018/11/04/设计模式之工厂模式的学习/" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+	  $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/设计模式的学习/" rel="tag"><i class="fa fa-tag"></i> 设计模式的学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/04/安卓之Fragment的简单使用/" rel="next" title="安卓之Fragment的简单使用">
+                <i class="fa fa-chevron-left"></i> 安卓之Fragment的简单使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/04/设计模式之建造者模式的学习/" rel="prev" title="设计模式之建造者模式的学习">
+                设计模式之建造者模式的学习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg" alt="AllenYu">
+            
+              <p class="site-author-name" itemprop="name">AllenYu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yuzeduan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.csdn.net/" target="_blank" title="csdn">
+                      
+                        <i class="fa fa-fw fa-globe"></i>csdn</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-globe"></i>YouTube</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-globe"></i>StackOverflow</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+          <br>
+
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=518894283&auto=1&height=66"></iframe>
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#工厂模式"><span class="nav-number">1.</span> <span class="nav-text">工厂模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-简单工厂模式"><span class="nav-number">1.1.</span> <span class="nav-text">1.简单工厂模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-定义"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-应用场景"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 应用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-简单工厂模式结构"><span class="nav-number">1.1.3.</span> <span class="nav-text">1.3 简单工厂模式结构</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#工厂角色-Factory"><span class="nav-number">1.1.3.0.1.</span> <span class="nav-text">工厂角色(Factory)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#抽象产品角色-Product"><span class="nav-number">1.1.3.0.2.</span> <span class="nav-text">抽象产品角色(Product)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#具体产品角色-ConcreteProduct"><span class="nav-number">1.1.3.0.3.</span> <span class="nav-text">具体产品角色(ConcreteProduct)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4一个使用实例"><span class="nav-number">1.1.4.</span> <span class="nav-text">1.4一个使用实例</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#抽象产品"><span class="nav-number">1.1.4.0.1.</span> <span class="nav-text">抽象产品</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#工厂类"><span class="nav-number">1.1.4.0.2.</span> <span class="nav-text">工厂类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#测试调用"><span class="nav-number">1.1.4.0.3.</span> <span class="nav-text">测试调用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-简单工厂模式的优缺点"><span class="nav-number">1.1.5.</span> <span class="nav-text">1.5 简单工厂模式的优缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#优点"><span class="nav-number">1.1.5.0.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#缺点"><span class="nav-number">1.1.5.0.2.</span> <span class="nav-text">缺点</span></a></li></ol></li></ol><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-适用环境"><span class="nav-number">1.1.6.</span> <span class="nav-text">1.6 适用环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-工厂方法模式"><span class="nav-number">1.2.</span> <span class="nav-text">2.工厂方法模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1与简单工厂模式的区别"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1与简单工厂模式的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2优缺点"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2优缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#优点-1"><span class="nav-number">1.2.2.0.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#缺点-1"><span class="nav-number">1.2.2.0.2.</span> <span class="nav-text">缺点</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-抽象工厂模式"><span class="nav-number">1.3.</span> <span class="nav-text">3.抽象工厂模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-定义"><span class="nav-number">1.3.0.1.</span> <span class="nav-text">3.1 定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-定义的阐述"><span class="nav-number">1.3.0.2.</span> <span class="nav-text">3.2 定义的阐述</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-1-为什么需要抽象工厂模式"><span class="nav-number">1.3.0.2.1.</span> <span class="nav-text">3.2.1 为什么需要抽象工厂模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-2-产品等级结构"><span class="nav-number">1.3.0.2.2.</span> <span class="nav-text">3.2.2 产品等级结构</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-3-产品族"><span class="nav-number">1.3.0.2.3.</span> <span class="nav-text">3.2.3 产品族</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-模式结构图"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.3 模式结构图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-优缺点"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.4 优缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#3-4-1-优点"><span class="nav-number">1.3.2.0.1.</span> <span class="nav-text">3.4.1 优点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-4-2-缺点"><span class="nav-number">1.3.2.0.2.</span> <span class="nav-text">3.4.2 缺点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-适用环境"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.5 适用环境</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AllenYu</span>
+
+  
+</div>
+
+<!-- 
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+-->
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

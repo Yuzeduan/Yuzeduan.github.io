@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android之四大组件,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="四大组件之Service Service运行在主线程中,适合执行不需要和用户交互而且要求长期运行的任务,可在服务内部手动创建子线程,并在这里执行具体的耗时任务.">
+<meta name="keywords" content="Android之四大组件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安卓之Service详解">
+<meta property="og:url" content="http://yuzeduan.github.io/2018/11/04/安卓之Service详解/index.html">
+<meta property="og:site_name" content="Allen Home">
+<meta property="og:description" content="四大组件之Service Service运行在主线程中,适合执行不需要和用户交互而且要求长期运行的任务,可在服务内部手动创建子线程,并在这里执行具体的耗时任务.">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.loli.net/2018/11/04/5bded13694c77.png">
+<meta property="og:updated_time" content="2018-11-04T11:02:33.978Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="安卓之Service详解">
+<meta name="twitter:description" content="四大组件之Service Service运行在主线程中,适合执行不需要和用户交互而且要求长期运行的任务,可在服务内部手动创建子线程,并在这里执行具体的耗时任务.">
+<meta name="twitter:image" content="https://i.loli.net/2018/11/04/5bded13694c77.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yuzeduan.github.io/2018/11/04/安卓之Service详解/">
+
+
+
+
+
+  <title>安卓之Service详解 | Allen Home</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/Yuzeduan"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Allen Home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yuzeduan.github.io/2018/11/04/安卓之Service详解/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="AllenYu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Allen Home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">安卓之Service详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-04T17:10:21+08:00">
+                2018-11-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.4k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="四大组件之Service"><a href="#四大组件之Service" class="headerlink" title="四大组件之Service"></a>四大组件之Service</h1><blockquote>
+<p>Service运行在主线程中,适合执行不需要和用户交互而且要求长期运行的任务,可在服务内部手动创建子线程,并在这里执行具体的耗时任务.</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="服务的生命周期"><a href="#服务的生命周期" class="headerlink" title="服务的生命周期"></a>服务的生命周期</h2><p><img src="https://i.loli.net/2018/11/04/5bded13694c77.png" alt=""></p>
+<p>onCreate().在服务第一次创建的时候调用.<br><br>onStartCommand().每次启动服务的时候都会调用,服务一旦启动就调用,可将希望服务一旦启动就执行的某个动作的逻辑写在该方法内.<br><br>onDestroy().服务销毁的时候, 调用该方法,可在方法内回收不需要的资源.<br></p>
+<h2 id="服务与活动之间的通信"><a href="#服务与活动之间的通信" class="headerlink" title="服务与活动之间的通信"></a>服务与活动之间的通信</h2><ul>
+<li>在服务中创建自己的内部Binder类继承Binder类,在OnBind方法中返回该类的一个实例.</li>
+<li>活动中创建ServiceConnecion匿名内部类,重写其中的onServiceConnected()和onServiceDisconnected().<strong>onServiceDisneccted()系统在与服务以外中断时才会被调用,客户端取消绑定的时候不会调用</strong></li>
+<li>活动调用bindService(),此时onServiceConnected()会被调用,可获得Binder对象,进行活动和服务间的通信</li>
+<li>调用unBindService()解除绑定.</li>
+<li><strong>注意点</strong><ul>
+<li>多个客户端可绑定同一个服务,onBind()方法只会在与第一个客户端绑定的时候调用,它们获取的是同一个IBinder对象,当最后一个客户端与服务解绑的时候,服务就会被销毁(如果没有使用startService()启动服务)</li>
+<li>若先使用了startService()启动服务再进行绑定服务,则服务解绑之后,服务还会在后台运行,直到有Context调用了stopService()或是服务本身调用了stopSelf()方法抑或内存不足时才会销毁服务.</li>
+<li>切勿在 Activity 的 onResume() 和 onPause() 期间绑定和取消绑定，因为每一次生命周期转换都会发生这些回调，这样反复绑定与解绑是不合理的</li>
+</ul>
+</li>
+</ul>
+<h2 id="前台服务和通知的结合"><a href="#前台服务和通知的结合" class="headerlink" title="前台服务和通知的结合"></a>前台服务和通知的结合</h2><ul>
+<li><p>在服务创建的onCreate()方法中,构建出Notification对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = new Intent(this,&lt;ActivityName&gt;.class;</span><br><span class="line">pendingIntent pi = PendingIntent.getActivity(this,0,intent,0);</span><br><span class="line">Notification notification = new NotificationCompat.Builder(this).set....build();</span><br><span class="line">startForground(&lt;id&gt;,notification);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用startForeground()方法,传入id和Notification对象,使服务变成前台服务,以通知的形式进行展现.</p>
+</li>
+</ul>
+<h2 id="intentService类"><a href="#intentService类" class="headerlink" title="intentService类"></a>intentService类</h2><blockquote>
+<p>它本质是一种特殊的Service,继承自Service并且本身就是一个抽象类<br><br>它可以用于在后台执行耗时的异步任务，当任务完成后会自动停止(如果后台任务只有一个的话，onHandleIntent执行完，服务就会销毁，但如果后台任务有多个的话，onHandleIntent执行完最后一个任务时，服务才销毁.)<br><br>它拥有较高的优先级，不易被系统杀死（继承自Service的缘故），因此比较适合执行一些高优先级的异步任务<br><br>它内部通过HandlerThread和Handler实现异步操作<br><br>创建IntentService时，只需实现onHandleIntent和构造方法(提供一个无参构造函数,并在内部调用父类的有参函数,传入的参数为继承子类的类名)，onHandleIntent为异步方法，可以执行耗时操作<br>每次执行一个后台任务就必须启动一次IntentService，而IntentService内部则是通过消息的方式发送给HandlerThread的，然后由Handler中的Looper来处理消息，而Looper是按顺序从消息队列中取任务的，也就是说IntentService的后台任务时顺序执行的，当有多个后台任务同时存在时，这些后台任务会按外部调用的顺序排队执行.<br> 所有的请求的处理都在一个工作线程中完成,它们会交替执行(但不会阻塞主线程的执行),一次只能执行一个请求</p>
+</blockquote>
+<ul>
+<li><p>原理</p>
+<ul>
+<li><p>当第一次启动IntentService时，它的onCreate方法将会被调用，其内部会去创建一个HandlerThread并启动它，接着创建一个ServiceHandler（继承Handler），传入HandlerThread的Looper对象，这样ServiceHandler就变成可以处理异步线程的执行类了（因为Looper对象与HandlerThread绑定，而HandlerThread又是一个异步线程，我们把HandlerThread持有的Looper对象传递给Handler后，ServiceHandler内部就持有异步线程的Looper，自然就可以执行异步任务了）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> @Override</span><br><span class="line"> public void onCreate() &#123;</span><br><span class="line">// TODO: It would be nice to have an option to hold a partial wakelock</span><br><span class="line">// during processing, and to have a static startService(Context, Intent)</span><br><span class="line">// method that would launch the service &amp; hand off a wakelock.</span><br><span class="line"></span><br><span class="line">     super.onCreate();</span><br><span class="line">     HandlerThread thread = new HandlerThread(&quot;IntentService[&quot; + mName + &quot;]&quot;);</span><br><span class="line">     thread.start();</span><br><span class="line"></span><br><span class="line">     mServiceLooper = thread.getLooper();</span><br><span class="line">     mServiceHandler = new ServiceHandler(mServiceLooper);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>IntentService启动后还会去调用onStartCommand方法，而onStartCommand方法又会去调用onStart方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void onStart(Intent intent, int startId) &#123;</span><br><span class="line">    Message msg = mServiceHandler.obtainMessage();</span><br><span class="line">    msg.arg1 = startId;</span><br><span class="line">    msg.obj = intent;</span><br><span class="line">    mServiceHandler.sendMessage(msg);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line">* You should not override this method for your IntentService. Instead,</span><br><span class="line">* override &#123;@link #onHandleIntent&#125;, which the system calls when the IntentService</span><br><span class="line">* receives a start request.</span><br><span class="line">* @see android.app.Service#onStartCommand</span><br><span class="line">*/</span><br><span class="line">@Override</span><br><span class="line">public int onStartCommand(Intent intent, int flags, int startId) &#123;</span><br><span class="line">    onStart(intent, startId);</span><br><span class="line">    return mRedelivery ? START_REDELIVER_INTENT : START_NOT_STICKY;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在onStart方法中，IntentService通过mServiceHandler的sendMessage方法发送了一个消息，这个消息将会发送到HandlerThread中进行处理（因为HandlerThread持有Looper对象，所以其实是Looper从消息队列中取出消息进行处理，然后调用mServiceHandler的handleMessage方法</p>
+</li>
+<li>在onHandleIntent方法执行结束后，IntentService会通过 stopSelf(int startId)方法来尝试停止服务。这里采用stopSelf(int startId)而不是stopSelf()来停止服务，是因为stopSelf()会立即停止服务，而stopSelf(int startId)会等待所有消息都处理完后才终止服务.<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">private final class ServiceHandler extends Handler &#123;</span><br><span class="line">    public ServiceHandler(Looper looper) &#123;</span><br><span class="line">        super(looper);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void handleMessage(Message msg) &#123;</span><br><span class="line">        onHandleIntent((Intent)msg.obj);</span><br><span class="line">        stopSelf(msg.arg1);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+      
+    </div>
+
+    <div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2018/11/04/安卓之Service详解/">安卓之Service详解</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 AllenYu 的个人博客">AllenYu</a></p>
+  <p><span>发布时间:</span>2018年11月04日 - 17:11</p>
+  <p><span>最后更新:</span>2018年11月04日 - 19:11</p>
+  <p><span>原始链接:</span><a href="/2018/11/04/安卓之Service详解/" title="安卓之Service详解">http://yuzeduan.github.io/2018/11/04/安卓之Service详解/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yuzeduan.github.io/2018/11/04/安卓之Service详解/" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+	  $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android之四大组件/" rel="tag"><i class="fa fa-tag"></i> Android之四大组件</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/04/安卓之Activity详解/" rel="next" title="安卓之Activity详解">
+                <i class="fa fa-chevron-left"></i> 安卓之Activity详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/04/安卓之BroadcastReceiver/" rel="prev" title="安卓之BroadcastReceiver">
+                安卓之BroadcastReceiver <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg" alt="AllenYu">
+            
+              <p class="site-author-name" itemprop="name">AllenYu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yuzeduan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.csdn.net/" target="_blank" title="csdn">
+                      
+                        <i class="fa fa-fw fa-globe"></i>csdn</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-globe"></i>YouTube</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-globe"></i>StackOverflow</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+          <br>
+
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=518894283&auto=1&height=66"></iframe>
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#四大组件之Service"><span class="nav-number">1.</span> <span class="nav-text">四大组件之Service</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#服务的生命周期"><span class="nav-number">1.1.</span> <span class="nav-text">服务的生命周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务与活动之间的通信"><span class="nav-number">1.2.</span> <span class="nav-text">服务与活动之间的通信</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前台服务和通知的结合"><span class="nav-number">1.3.</span> <span class="nav-text">前台服务和通知的结合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#intentService类"><span class="nav-number">1.4.</span> <span class="nav-text">intentService类</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AllenYu</span>
+
+  
+</div>
+
+<!-- 
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+-->
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>
