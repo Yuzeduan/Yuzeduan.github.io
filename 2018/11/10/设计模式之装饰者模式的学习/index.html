@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="设计模式的学习,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="装饰者模式1.介绍 装饰者也称包装模式，是结构型设计模式之一，其使用一种对客户端透明的方式来动态地扩展对象的功能，它是继承关系的一种替代方案。 动态地给一个对象添加额外的职责。">
+<meta name="keywords" content="设计模式的学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式之装饰者模式的学习">
+<meta property="og:url" content="http://yuzeduan.github.io/2018/11/10/设计模式之装饰者模式的学习/index.html">
+<meta property="og:site_name" content="Allen Home">
+<meta property="og:description" content="装饰者模式1.介绍 装饰者也称包装模式，是结构型设计模式之一，其使用一种对客户端透明的方式来动态地扩展对象的功能，它是继承关系的一种替代方案。 动态地给一个对象添加额外的职责。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://img-blog.csdn.net/20160803225047686">
+<meta property="og:updated_time" content="2018-11-10T13:54:45.049Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式之装饰者模式的学习">
+<meta name="twitter:description" content="装饰者模式1.介绍 装饰者也称包装模式，是结构型设计模式之一，其使用一种对客户端透明的方式来动态地扩展对象的功能，它是继承关系的一种替代方案。 动态地给一个对象添加额外的职责。">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20160803225047686">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yuzeduan.github.io/2018/11/10/设计模式之装饰者模式的学习/">
+
+
+
+
+
+  <title>设计模式之装饰者模式的学习 | Allen Home</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/Yuzeduan"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Allen Home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yuzeduan.github.io/2018/11/10/设计模式之装饰者模式的学习/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="AllenYu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Allen Home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">设计模式之装饰者模式的学习</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-10T21:51:55+08:00">
+                2018-11-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.3k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="装饰者模式"><a href="#装饰者模式" class="headerlink" title="装饰者模式"></a>装饰者模式</h1><h2 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1.介绍"></a>1.介绍</h2><ul>
+<li>装饰者也称包装模式，是结构型设计模式之一，其使用一种对客户端透明的方式来动态地扩展对象的功能，它是<strong>继承关系的一种替代方案</strong>。</li>
+<li>动态地给一个对象添加额外的职责。<a id="more"></a>
+</li>
+</ul>
+<h2 id="2-使用场景"><a href="#2-使用场景" class="headerlink" title="2.使用场景"></a>2.使用场景</h2><ul>
+<li>在不影响其他对象的前提下，以<strong>动态、透明</strong>的方式添加对象的功能</li>
+<li>当不能使用继承的方式对系统进行扩展或者采用继承不利于系统扩展和维护的时候使用</li>
+<li>不能采用继承的情况主要有系统中存在大量独立的扩展，为支持每一种扩展或者扩展之间的组合将产生大量的子类，使得子类数目呈爆炸性增长；类已定义为不能被继承（譬如final类），下文继续讲解。</li>
+</ul>
+<h2 id="3-UML图"><a href="#3-UML图" class="headerlink" title="3.UML图"></a>3.UML图</h2><p><img src="https://img-blog.csdn.net/20160803225047686" alt=""></p>
+<h2 id="4-组成"><a href="#4-组成" class="headerlink" title="4.组成"></a>4.组成</h2><h3 id="4-1-Component"><a href="#4-1-Component" class="headerlink" title="4.1 Component"></a>4.1 Component</h3><ul>
+<li>Component是基类，通常是一个抽象类或者是接口。</li>
+<li>具体构件和抽象装饰类继承于它，其声明了在具体构件中实现的方法。</li>
+<li>它的引入可以使客户端以<strong>一致的方法</strong>处理未被装饰的对象以及装饰后的对象，实现客户端的透明操作。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface Person &#123;</span><br><span class="line">    void eat();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="4-2-ConcreteComponent"><a href="#4-2-ConcreteComponent" class="headerlink" title="4.2 ConcreteComponent"></a>4.2 ConcreteComponent</h3><ul>
+<li>ConcreteComponent是具体构件，实现了抽象构件的方法，充当被装饰者的角色，装饰器可以给它添加额外的职责。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class PersonBefore implements Person &#123;</span><br><span class="line"></span><br><span class="line">    public void eat()&#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="4-3-Decorator"><a href="#4-3-Decorator" class="headerlink" title="4.3 Decorator"></a>4.3 Decorator</h3><ul>
+<li>它是抽象控件的子类，用于给具体构件增加职责，但是具体职责在其子类中实现。<strong>它维护一个指向抽象构件对象的引用</strong>，通过该引用可以调用装饰之前构件对象的方法，并通过其子类扩展该方法，以达到装饰的目的。<strong>不是必须存在的</strong>。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class Decortor implenments Person&#123;</span><br><span class="line">    protected Person person;</span><br><span class="line">    </span><br><span class="line">    public Decortor(Person person)&#123;</span><br><span class="line">        this.person = person;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public void eat()&#123;</span><br><span class="line">        person.eat();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="4-4-ConcreteDecorator"><a href="#4-4-ConcreteDecorator" class="headerlink" title="4.4 ConcreteDecorator"></a>4.4 ConcreteDecorator</h3><ul>
+<li>它是抽象装饰类的子类，<strong>负责向构件添加新的职责。</strong> 每一个具体装饰类都定义了一些新的行为，它可以调用在抽象装饰类中定义的方法，并可以增加新的方法用以扩充对象的行为。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class PersonNow extends Decortor &#123;</span><br><span class="line">    </span><br><span class="line">    public PersonNow(Person person)&#123;</span><br><span class="line">        this.person = person;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public void eat()&#123;</span><br><span class="line">        super.eat();</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="4-注意事项"><a href="#4-注意事项" class="headerlink" title="4.注意事项"></a>4.注意事项</h2><ol>
+<li>尽量保持装饰类的接口与被装饰类的接口相同，这样，对于客户端而言，<strong>无论是装饰之前的对象还是装饰之后的对象都可以一致对待</strong>。</li>
+<li>尽量保持具体装饰类是一个“轻”类，也就是说不要把太多的行为放在具体构件类中，我们可以通过装饰类对其进行扩展。</li>
+<li>如果<strong>只有一个具体构件类</strong>，那么抽象装饰类可以作为该具体构件类的直接子类。</li>
+<li>抽象装饰者类不是一定要有的，除非是有多个装饰类，需要定义一套装饰的规范。</li>
+<li>装饰者类保存的构件的引用，如果可以，尽量存父类抽象构件的引用，这样便可以达到多态的效果，可以同时装饰不同的具体构件。</li>
+</ol>
+<h2 id="5-装饰者模式的应用"><a href="#5-装饰者模式的应用" class="headerlink" title="5.装饰者模式的应用"></a>5.装饰者模式的应用</h2><h3 id="5-1-Java中的IO"><a href="#5-1-Java中的IO" class="headerlink" title="5.1 Java中的IO"></a>5.1 Java中的IO</h3><p>以字节流举例</p>
+<ul>
+<li>InputStream和OutputStream：它们是我们熟知的两个父类，它们便是装饰者模式下的Component类。</li>
+<li>FileInputStream等子类：它们便是装饰者模式下的ConcreteComponen，具体实现父类的行为。</li>
+<li>FilterInputStream：它们是我们熟知的<strong>FileInputStream的子类</strong>，它便是一个抽象装饰者。</li>
+<li>BufferedInputStream和DataInputStream：他们是FilterInputStrem的子类，它们便是具体的装饰者了。</li>
+</ul>
+<h2 id="6-为什么使用装饰者不使用继承"><a href="#6-为什么使用装饰者不使用继承" class="headerlink" title="6.为什么使用装饰者不使用继承"></a>6.为什么使用装饰者不使用继承</h2><blockquote>
+<p>从装饰者的实现过程中看，如果使用继承完全也可以实现，为什么会出现装饰者模式，为什么有些地方用它替代继承。</p>
+</blockquote>
+<ul>
+<li>如果有final类，则无法继承了。</li>
+<li><p>以应用了装饰者模式的java的IO为例，假如我们自己要实现一套IO系统，以读操作</p>
+<ul>
+<li>我们需要有一个InputClass顶层父类，提供一套规范去以便不同的子类去重写读取不同的数据。</li>
+<li><p>Input的子类假如有TextInput，MediaInput等…</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//此时的继承关系</span><br><span class="line">InputClass</span><br><span class="line">         --TextInput</span><br><span class="line">         --MediaInput</span><br><span class="line">         ...根据功能需求扩展</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>此时模仿Java的IO系统，为了提升效率，引入缓冲类， 对读方法进行复写，如果使用继承，则</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//此时的继承关系</span><br><span class="line">InputClass</span><br><span class="line">         --TextInput</span><br><span class="line">                    --BufferedTextInput</span><br><span class="line">         --MediaInput</span><br><span class="line">                    --BufferedMediaInput</span><br><span class="line">         ...根据功能需求扩展</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>由继承体系可以看出，如果扩展一个功能，则会对应生成两个子类， <strong>扩展性非常不好，也难维护，且会生成多个子类</strong>，此时，装饰者模式便起到了用处。</p>
+</li>
+<li>所有的缓冲子类使用的技术都是相同的，没必要都给定义一个子类。现在可以直接单独定义一个缓冲类继承自InputClass类。就是<strong>装饰者的角色</strong>。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//此时的继承体系</span><br><span class="line">InputClass</span><br><span class="line">         --TextInput</span><br><span class="line">         --MediaInput</span><br><span class="line">         --BufferedInput</span><br><span class="line">         ...根据功能需求扩展</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+      
+    </div>
+
+    <div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2018/11/10/设计模式之装饰者模式的学习/">设计模式之装饰者模式的学习</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 AllenYu 的个人博客">AllenYu</a></p>
+  <p><span>发布时间:</span>2018年11月10日 - 21:11</p>
+  <p><span>最后更新:</span>2018年11月10日 - 21:11</p>
+  <p><span>原始链接:</span><a href="/2018/11/10/设计模式之装饰者模式的学习/" title="设计模式之装饰者模式的学习">http://yuzeduan.github.io/2018/11/10/设计模式之装饰者模式的学习/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yuzeduan.github.io/2018/11/10/设计模式之装饰者模式的学习/" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+	  $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/设计模式的学习/" rel="tag"><i class="fa fa-tag"></i> 设计模式的学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/10/git-flow-使用指南/" rel="next" title="git-flow 使用指南">
+                <i class="fa fa-chevron-left"></i> git-flow 使用指南
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg" alt="AllenYu">
+            
+              <p class="site-author-name" itemprop="name">AllenYu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yuzeduan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.csdn.net/" target="_blank" title="csdn">
+                      
+                        <i class="fa fa-fw fa-globe"></i>csdn</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-globe"></i>YouTube</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-globe"></i>StackOverflow</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+          <br>
+
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=518894283&auto=1&height=66"></iframe>
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#装饰者模式"><span class="nav-number">1.</span> <span class="nav-text">装饰者模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-介绍"><span class="nav-number">1.1.</span> <span class="nav-text">1.介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-使用场景"><span class="nav-number">1.2.</span> <span class="nav-text">2.使用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-UML图"><span class="nav-number">1.3.</span> <span class="nav-text">3.UML图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-组成"><span class="nav-number">1.4.</span> <span class="nav-text">4.组成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-Component"><span class="nav-number">1.4.1.</span> <span class="nav-text">4.1 Component</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-ConcreteComponent"><span class="nav-number">1.4.2.</span> <span class="nav-text">4.2 ConcreteComponent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-Decorator"><span class="nav-number">1.4.3.</span> <span class="nav-text">4.3 Decorator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-ConcreteDecorator"><span class="nav-number">1.4.4.</span> <span class="nav-text">4.4 ConcreteDecorator</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-注意事项"><span class="nav-number">1.5.</span> <span class="nav-text">4.注意事项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-装饰者模式的应用"><span class="nav-number">1.6.</span> <span class="nav-text">5.装饰者模式的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-Java中的IO"><span class="nav-number">1.6.1.</span> <span class="nav-text">5.1 Java中的IO</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-为什么使用装饰者不使用继承"><span class="nav-number">1.7.</span> <span class="nav-text">6.为什么使用装饰者不使用继承</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AllenYu</span>
+
+  
+</div>
+
+<!-- 
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+-->
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>
