@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="基础知识,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Java注解入门（Annotation）参考文章:https://www.jianshu.com/p/596d389282a0https://tocreate.app/2017/07/20/Annotation/ 1.何为元数据？ 学习Java注解，就要先了解下何为元数据">
+<meta name="keywords" content="基础知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java注解入门学习">
+<meta property="og:url" content="http://yuzeduan.github.io/2018/11/13/Java注解入门学习/index.html">
+<meta property="og:site_name" content="Allen Home">
+<meta property="og:description" content="Java注解入门（Annotation）参考文章:https://www.jianshu.com/p/596d389282a0https://tocreate.app/2017/07/20/Annotation/ 1.何为元数据？ 学习Java注解，就要先了解下何为元数据">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/3985563-4077bbaef5b27a4b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/711/format/webp">
+<meta property="og:updated_time" content="2018-11-13T15:23:24.147Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java注解入门学习">
+<meta name="twitter:description" content="Java注解入门（Annotation）参考文章:https://www.jianshu.com/p/596d389282a0https://tocreate.app/2017/07/20/Annotation/ 1.何为元数据？ 学习Java注解，就要先了解下何为元数据">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/3985563-4077bbaef5b27a4b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/711/format/webp">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yuzeduan.github.io/2018/11/13/Java注解入门学习/">
+
+
+
+
+
+  <title>Java注解入门学习 | Allen Home</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/Yuzeduan"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Allen Home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yuzeduan.github.io/2018/11/13/Java注解入门学习/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="AllenYu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Allen Home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java注解入门学习</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-13T23:20:57+08:00">
+                2018-11-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.3k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  9
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Java注解入门（Annotation）"><a href="#Java注解入门（Annotation）" class="headerlink" title="Java注解入门（Annotation）"></a>Java注解入门（Annotation）</h1><p>参考文章:<br><br><a href="https://www.jianshu.com/p/596d389282a0" target="_blank" rel="noopener">https://www.jianshu.com/p/596d389282a0</a><br><br><a href="https://tocreate.app/2017/07/20/Annotation/" target="_blank" rel="noopener">https://tocreate.app/2017/07/20/Annotation/</a></p>
+<h2 id="1-何为元数据？"><a href="#1-何为元数据？" class="headerlink" title="1.何为元数据？"></a>1.何为元数据？</h2><blockquote>
+<p>学习Java注解，就要先了解下何为元数据</p>
+</blockquote>
+<a id="more"></a>
+<ul>
+<li>元数据是关于数据的数据，元数据是添加到方法、类等上的额外信息，对数据进行说明描述的数据。</li>
+<li>元数据的作用<ul>
+<li>编写文档：通过代码中的元数据生成JavaDoc文档</li>
+<li>代码分析：通过代码里标识的元数据对代码进行分析</li>
+<li>编译检查：通过代码里标识的元数据让编译器执行检查</li>
+</ul>
+</li>
+<li>通过提供为程序元素（类、方法等）附加额外数据的标准方法，元数据功能具有简化和改进许多应用程序开发领域的潜在能力，其中包括配置管理、框架实现和代码生成。</li>
+</ul>
+<h2 id="2-何为注解？"><a href="#2-何为注解？" class="headerlink" title="2.何为注解？"></a>2.何为注解？</h2><ul>
+<li>注解是JDK1.5之后引入的一个新特性，<strong>@interface类型</strong>便是注解了，它就是Java平台的<strong>元数据</strong>。</li>
+<li>注解机制的出现，使我们可以在代码中添加自定义注释，可以通过<strong>反射获取注解的属性</strong>，其作为程序的元数据嵌入程序中。</li>
+<li>注解本身除了定义信息外其实什么都没做，它和业务逻辑没有关系，其不影响代码的执行，如果要使注解起一定的作用，只有通过<strong>解析工具或编译工具</strong>对Annotation中的信息进行解析和处理。</li>
+<li>例如：当我们使用@Override却没有重写父类的方法，编译器会报错，当我们使用ButterKnife这种工具时会有类文件被自动生成…这些都不是注解负责的，它们主要交由解析工具或者是编译工具等消费器来处理。</li>
+<li>注解中的数据可以在编译、运行时进行解析和使用，也可以单纯为编码人员提供很多的信息。</li>
+</ul>
+<h2 id="3-何为元注解"><a href="#3-何为元注解" class="headerlink" title="3.何为元注解?"></a>3.何为元注解?</h2><blockquote>
+<p>元注解是描述其他注解的注解，其本身也由元注解描述</p>
+</blockquote>
+<h3 id="3-1-Documented"><a href="#3-1-Documented" class="headerlink" title="3.1 @Documented"></a>3.1 @Documented</h3><p>@Documented修饰的Annotation类将会被javadoc工具提取成文档，即所有使用该Annotation修饰的程序元素的API文档中将会包含该Annotation说明。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Documented</span><br><span class="line">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="line">@Target(ElementType.ANNOTATION_TYPE)</span><br><span class="line">public @interface Documented &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-2-Inherited"><a href="#3-2-Inherited" class="headerlink" title="3.2 @Inherited"></a>3.2 @Inherited</h3><p>@Inherited指定被它修饰的Annotation将具有继承性，即如果某个类使用了@Xxx注解（定义该Annotation时使用了@Inherited修饰）修饰，则其子类将自动被@Xxx修饰。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Documented</span><br><span class="line">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="line">@Target(ElementType.ANNOTATION_TYPE)</span><br><span class="line">public @interface Inherited &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-3-Retention"><a href="#3-3-Retention" class="headerlink" title="3.3 @Retention"></a>3.3 @Retention</h3><ul>
+<li>@Retention表示该注解类型的注解保留的时长，<strong>特殊地</strong>，当注解类型声明中没有@Retention元注解，则默认保留策略为RetentionPolicy.CLASS。</li>
+<li>保留策略（枚举类型）<ul>
+<li>SOURCE：仅存在源文件中，经过编译之后，便丢弃该注解。</li>
+<li>CLASS：存在源文件和编译生成的字节码文件，但在运行时被JVM忽略。</li>
+<li>RUNTIME：保存在运行时JVM中，可通过反射性获取。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@Documented</span><br><span class="line">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="line">@Target(ElementType.ANNOTATION_TYPE)</span><br><span class="line">public @interface Retention &#123;</span><br><span class="line">    /**</span><br><span class="line">     * Returns the retention policy.</span><br><span class="line">     * @return the retention policy</span><br><span class="line">     */</span><br><span class="line">    RetentionPolicy value();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-4-Target"><a href="#3-4-Target" class="headerlink" title="3.4 @Target"></a>3.4 @Target</h3><ul>
+<li>表示该注解类型的所适用的程序元素类型。<strong>特殊地</strong>，当注解类型声明中没有@Target元注解，则默认为可适用所有的程序元素。</li>
+<li>程序元素（ElementType，枚举类型）<ul>
+<li>ElementType.TYPE:只能描述类、接口或enum   </li>
+<li>ElementType.FIELD:只能描述实例变量</li>
+<li>ElementType.METHOD:只能描述方法</li>
+<li>ElementType.PARAMETER:只能描述方法的参数</li>
+<li>ElementType.CONSTRUCTOR:只能描述构造器</li>
+<li>ElementType.LOCAL_VARIABLE:只能描述局部变量</li>
+<li>ElementType.ANNOTATION_TYPE:只能描述另一个注释</li>
+<li>ElementType.PACKAGE: 只能描述包名<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@Documented</span><br><span class="line">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="line">@Target(ElementType.ANNOTATION_TYPE)</span><br><span class="line">public @interface Target &#123;</span><br><span class="line">    /**</span><br><span class="line">     * Returns an array of the kinds of elements an annotation type</span><br><span class="line">     * can be applied to.</span><br><span class="line">     * @return an array of the kinds of elements an annotation type</span><br><span class="line">     * can be applied to</span><br><span class="line">     */</span><br><span class="line">    ElementType[] value();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-5-Repeatable（Java-8）"><a href="#3-5-Repeatable（Java-8）" class="headerlink" title="3.5 @Repeatable（Java 8）"></a>3.5 @Repeatable（Java 8）</h3><ul>
+<li><p>jdk1.8新增的该注解用于指示被该注解修饰的注解可以在用一个元素中多次使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@Documented</span><br><span class="line">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="line">@Target(ElementType.ANNOTATION_TYPE)</span><br><span class="line">public @interface Repeatable &#123;</span><br><span class="line">    /**</span><br><span class="line">         * Indicates the &lt;em&gt;containing annotation type&lt;/em&gt; for the</span><br><span class="line">     * repeatable annotation type.</span><br><span class="line">     * @return the containing annotation type</span><br><span class="line">     */</span><br><span class="line">    Class&lt;? extends Annotation&gt; value();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对比Java1.8前和之后使用重复注解的解决方案</p>
+</li>
+<li>另一个注解来存储重复注解，在使用时候，用<strong>存储注解</strong>来扩展重复注解，重复注解加上@Repeatable修饰，<strong>指向存储注解</strong>。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">//例子</span><br><span class="line">//jdk1.8前</span><br><span class="line">public @interface Authority &#123;</span><br><span class="line">     String role();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public @interface Authorities &#123;</span><br><span class="line">    Authority[] value();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class RepeatAnnotationUseOldVersion &#123;</span><br><span class="line"></span><br><span class="line">    @Authorities(&#123;@Authority(role=&quot;Admin&quot;),@Authority(role=&quot;Manager&quot;)&#125;)</span><br><span class="line">    public void doSomeThing()&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//jdk1.8后</span><br><span class="line">@Repeatable(Authorities.class)</span><br><span class="line">public @interface Authority &#123;</span><br><span class="line">     String role();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public @interface Authorities &#123;</span><br><span class="line">    Authority[] value();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class RepeatAnnotationUseNewVersion &#123;</span><br><span class="line">    @Authority(role=&quot;Admin&quot;)</span><br><span class="line">    @Authority(role=&quot;Manager&quot;)</span><br><span class="line">    public void doSomeThing()&#123; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="4-何为内建注解"><a href="#4-何为内建注解" class="headerlink" title="4.何为内建注解"></a>4.何为内建注解</h2><blockquote>
+<p>即Java本身提供的多种注解，其主要实现了元数据的第二个作用：<strong>编译检查</strong>。</p>
+</blockquote>
+<p>常见的内建注解</p>
+<h3 id="4-1-Override"><a href="#4-1-Override" class="headerlink" title="4.1 @Override"></a>4.1 @Override</h3><ul>
+<li>用于告诉编译器，当前方法要重写父类的该方法。如果某个方法带有该注解但并没有覆写超类相应的方法，则编译器会生成一条错误信息。如果父类没有这个要覆写的方法，则编译器也会生成一条错误信息。</li>
+<li>可适用的元素是方法，且仅仅是保留在源文件内<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@Target(&#123;ElementType.METHOD&#125;)</span><br><span class="line">@Retention(RetentionPolicy.SOURCE)</span><br><span class="line">public @interface Override &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="4-2-Deprecated"><a href="#4-2-Deprecated" class="headerlink" title="4.2 @Deprecated"></a>4.2 @Deprecated</h3><ul>
+<li>用于告知编译器，某一程序元素(比如方法，成员变量)不建议使用了（即过时了）。</li>
+<li>@Deprecated可适合用于除注解类型声明之外的所有元素，保留时长为运行时。</li>
+<li>使用的时候最好是<strong>同时使用Java Doc的@deprecated符号，用来描述当前类、方法或者字段是不赞成使用的，并且告诉开发者应该用哪个对象替换，进行注释。</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Documented</span><br><span class="line">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="line">@Target(&#123;ElementType.CONSTRUCTOR, ElementType.FIELD, ElementType.LOCAL_VARIABLE, ElementType.METHOD, ElementType.PACKAGE, ElementType.PARAMETER, ElementType.TYPE&#125;)</span><br><span class="line">public @interface Deprecated &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="4-3-SuppressWarnings"><a href="#4-3-SuppressWarnings" class="headerlink" title="4.3 @SuppressWarnings"></a>4.3 @SuppressWarnings</h3><ul>
+<li>用于告知编译器忽略特定的警告信息，当使用该注解后，则不会发出警告。</li>
+<li>可适合用于除注解类型声明和包名之外的所有元素，保留在字节码文件中。</li>
+<li>注解有方法value(）,可支持<strong>多个字符串参数</strong>，用户指定忽略哪种警告。</li>
+<li>参数（部分常用的）<ul>
+<li>deprecation：使用了过时的类或者方法的警告</li>
+<li>unchecked：执行了未检查的转换时的警告</li>
+<li>fallthrough：当switch程序块进入下一个case时候没有break的警告</li>
+<li>serial：忽略在serializable类中没有声明serialVersionUID变量</li>
+<li>unused：抑制没被使用过的代码的警告</li>
+<li>finally：抑制finally模块没有返回的警告</li>
+<li>rawtypes：使用泛型时忽略没有指定相应的类型</li>
+<li>all：抑制所有警告<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Target(&#123;ElementType.TYPE, ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.CONSTRUCTOR, ElementType.LOCAL_VARIABLE&#125;)</span><br><span class="line">@Retention(RetentionPolicy.CLASS)</span><br><span class="line">public @interface SuppressLint &#123;</span><br><span class="line">    String[] value();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-4-FunctionalInterface-jdk1-8"><a href="#4-4-FunctionalInterface-jdk1-8" class="headerlink" title="4.4  @FunctionalInterface(jdk1.8)"></a>4.4  @FunctionalInterface(jdk1.8)</h3><ul>
+<li>告知编译器，检查这个接口，保证该接口是函数式接口，即只能包含一个抽象方法，否则就会编译出错。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Documented</span><br><span class="line">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="line">@Target(&#123;ElementType.TYPE&#125;)</span><br><span class="line">public @interface FunctionalInterface &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="5-创建自定义注解"><a href="#5-创建自定义注解" class="headerlink" title="5.创建自定义注解"></a>5.创建自定义注解</h2><blockquote>
+<p>学习完元注解和java的内建注解，我们可以自己定义一个注解</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@Documented</span><br><span class="line">@Target(ElementType.METHOD)</span><br><span class="line">@Inherited</span><br><span class="line">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="line">public @interface MyAnnotataion&#123;</span><br><span class="line">    String name();</span><br><span class="line">    String website() default &quot;hello&quot;;</span><br><span class="line">    int revision() default 1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>定义成员变量的规则<ul>
+<li>其定义是以无形参的方法形式来声明的，即注解方法中不带任何参数</li>
+<li>注解方法返回值类型：基本类型、String、Enums、Annotation以及前面这些类型的数组类型</li>
+<li>注解方法可有默认值，比如default “hello”，默认website=”hello”</li>
+</ul>
+</li>
+<li><p>注意点</p>
+<ul>
+<li>注解中也可以没有成员变量，因此解析这类注解进行操作时，仅以是否包含该注解来进行操作</li>
+<li>当注解中有成员变量时，若没有默认值，需要在使用注解时，指定成员变量的值。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class AnnotationDemo &#123;</span><br><span class="line">    @AuthorAnno(name=&quot;lvr&quot;, website=&quot;hello&quot;, revision=1)</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        System.out.println(&quot;I am main method&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @SuppressWarnings(&#123; &quot;unchecked&quot;, &quot;deprecation&quot; &#125;)</span><br><span class="line">    @AuthorAnno(name=&quot;lvr&quot;, website=&quot;hello&quot;, revision=2)</span><br><span class="line">    public void demo()&#123;</span><br><span class="line">        System.out.println(&quot;I am demo method&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>由于该注解的保留策略是RetentionPolicy.RUNTIME，故可在运行期通过反射机制来使用，注解实现的就是元数据的第二个作用：<strong>代码分析</strong>。</p>
+</li>
+</ul>
+<h2 id="6-注解解析-获取注解属性"><a href="#6-注解解析-获取注解属性" class="headerlink" title="6. 注解解析(获取注解属性)"></a>6. 注解解析(获取注解属性)</h2><p>通过<strong>反射技术</strong>来解析自定义注解，位于java.lang.reflect的一个接口AnnotatedElement，接口主要有如下几个实现类：Class,Constructor,Field,Method,Package。除此之外，该接口定义了注释相关的几个核心方法，如下：<br><img src="https://upload-images.jianshu.io/upload_images/3985563-4077bbaef5b27a4b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/711/format/webp" alt=""><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Class&lt;AnnotationParser&gt; clazz = AnnotationParser.class;</span><br><span class="line">for (Method method : clazz.getMethods()) &#123;</span><br><span class="line">    MyAnnotataion ann = (MyAnnotataion) method.getAnnotation(MyAnnotataion.class);</span><br><span class="line">    if (ann != null) &#123;</span><br><span class="line">        Log.d(TAG, &quot;getInfo: &quot;+method.getName());</span><br><span class="line">        Log.d(TAG, &quot;getInfo: &quot;+ann.name());</span><br><span class="line">        Log.d(TAG, &quot;getInfo: &quot;+ann.website());</span><br><span class="line">        Log.d(TAG, &quot;getInfo: &quot;+ann.revision());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>以上只是获取到属性之后打印出，事实上可以根据获取的注解信息去实现更多的东西。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+      
+    </div>
+
+    <div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2018/11/13/Java注解入门学习/">Java注解入门学习</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 AllenYu 的个人博客">AllenYu</a></p>
+  <p><span>发布时间:</span>2018年11月13日 - 23:11</p>
+  <p><span>最后更新:</span>2018年11月13日 - 23:11</p>
+  <p><span>原始链接:</span><a href="/2018/11/13/Java注解入门学习/" title="Java注解入门学习">http://yuzeduan.github.io/2018/11/13/Java注解入门学习/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yuzeduan.github.io/2018/11/13/Java注解入门学习/" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+	  $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/基础知识/" rel="tag"><i class="fa fa-tag"></i> 基础知识</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/13/安卓框架之GreenDao的学习/" rel="next" title="安卓框架之GreenDao的学习">
+                <i class="fa fa-chevron-left"></i> 安卓框架之GreenDao的学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg" alt="AllenYu">
+            
+              <p class="site-author-name" itemprop="name">AllenYu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yuzeduan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.csdn.net/" target="_blank" title="csdn">
+                      
+                        <i class="fa fa-fw fa-globe"></i>csdn</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-globe"></i>YouTube</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-globe"></i>StackOverflow</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.str-mo.com" target="_blank" title="字节莫">
+                      
+                        <i class="fa fa-fw fa-globe"></i>字节莫</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+          <br>
+
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=518894283&auto=1&height=66"></iframe>
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java注解入门（Annotation）"><span class="nav-number">1.</span> <span class="nav-text">Java注解入门（Annotation）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-何为元数据？"><span class="nav-number">1.1.</span> <span class="nav-text">1.何为元数据？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-何为注解？"><span class="nav-number">1.2.</span> <span class="nav-text">2.何为注解？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-何为元注解"><span class="nav-number">1.3.</span> <span class="nav-text">3.何为元注解?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Documented"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 @Documented</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Inherited"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 @Inherited</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-Retention"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.3 @Retention</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-Target"><span class="nav-number">1.3.4.</span> <span class="nav-text">3.4 @Target</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-Repeatable（Java-8）"><span class="nav-number">1.3.5.</span> <span class="nav-text">3.5 @Repeatable（Java 8）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-何为内建注解"><span class="nav-number">1.4.</span> <span class="nav-text">4.何为内建注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-Override"><span class="nav-number">1.4.1.</span> <span class="nav-text">4.1 @Override</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-Deprecated"><span class="nav-number">1.4.2.</span> <span class="nav-text">4.2 @Deprecated</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-SuppressWarnings"><span class="nav-number">1.4.3.</span> <span class="nav-text">4.3 @SuppressWarnings</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-FunctionalInterface-jdk1-8"><span class="nav-number">1.4.4.</span> <span class="nav-text">4.4  @FunctionalInterface(jdk1.8)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-创建自定义注解"><span class="nav-number">1.5.</span> <span class="nav-text">5.创建自定义注解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-注解解析-获取注解属性"><span class="nav-number">1.6.</span> <span class="nav-text">6. 注解解析(获取注解属性)</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AllenYu</span>
+
+  
+</div>
+
+<!-- 
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+-->
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

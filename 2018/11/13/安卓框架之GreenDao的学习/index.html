@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android框架学习,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="GreenDao源码的学习 本文没有提及GreenDao的简单使用，本文讲述的是从GreenDao的源码去学习GreenDao框架。">
+<meta name="keywords" content="Android框架学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安卓框架之GreenDao的学习">
+<meta property="og:url" content="http://yuzeduan.github.io/2018/11/13/安卓框架之GreenDao的学习/index.html">
+<meta property="og:site_name" content="Allen Home">
+<meta property="og:description" content="GreenDao源码的学习 本文没有提及GreenDao的简单使用，本文讲述的是从GreenDao的源码去学习GreenDao框架。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-e645b2328eca473c9c68e3a1882df4ad_hd.jpg">
+<meta property="og:updated_time" content="2018-11-13T15:18:55.327Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="安卓框架之GreenDao的学习">
+<meta name="twitter:description" content="GreenDao源码的学习 本文没有提及GreenDao的简单使用，本文讲述的是从GreenDao的源码去学习GreenDao框架。">
+<meta name="twitter:image" content="https://pic2.zhimg.com/80/v2-e645b2328eca473c9c68e3a1882df4ad_hd.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yuzeduan.github.io/2018/11/13/安卓框架之GreenDao的学习/">
+
+
+
+
+
+  <title>安卓框架之GreenDao的学习 | Allen Home</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/Yuzeduan"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Allen Home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yuzeduan.github.io/2018/11/13/安卓框架之GreenDao的学习/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="AllenYu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Allen Home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">安卓框架之GreenDao的学习</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-13T23:05:25+08:00">
+                2018-11-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.8k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  13
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="GreenDao源码的学习"><a href="#GreenDao源码的学习" class="headerlink" title="GreenDao源码的学习"></a>GreenDao源码的学习</h1><blockquote>
+<p>本文没有提及GreenDao的简单使用，本文讲述的是从GreenDao的源码去学习GreenDao框架。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="1-简述"><a href="#1-简述" class="headerlink" title="1.简述"></a>1.简述</h2><h3 id="1-1-核心类"><a href="#1-1-核心类" class="headerlink" title="1.1 核心类"></a>1.1 核心类</h3><ul>
+<li>DaoMaster：GreenDao的总入口，负责整个库的运行。</li>
+<li>DaoSession：会话层，操作Dao的具体对象，包括DAO对象的注册。</li>
+<li>xxEntity：实体类，和表内容一一对应。</li>
+<li>xxDao：生成的DAO对象，进行具体的数据库操作。</li>
+</ul>
+<h3 id="1-2-UML图"><a href="#1-2-UML图" class="headerlink" title="1.2 UML图"></a>1.2 UML图</h3><p><img src="https://pic2.zhimg.com/80/v2-e645b2328eca473c9c68e3a1882df4ad_hd.jpg" alt=""></p>
+<h2 id="2-DaoMaster类"><a href="#2-DaoMaster类" class="headerlink" title="2.DaoMaster类"></a>2.DaoMaster类</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, &quot;students-db&quot;, null);</span><br></pre></td></tr></table></figure>
+<p>还记得这行代码吗？这就是我们开启GreenDao的入口，接下来分析下DaoMaster的内部。</p>
+<h3 id="2-1-DevOpenHelper"><a href="#2-1-DevOpenHelper" class="headerlink" title="2.1 DevOpenHelper"></a>2.1 DevOpenHelper</h3><p>讲述这个类的时候，先回想下我们使用android的数据库时候的操作用到的一个抽象类SQLiteOpenHelper。</p>
+<h4 id="2-1-1-SQLiteOpenHelper"><a href="#2-1-1-SQLiteOpenHelper" class="headerlink" title="2.1.1 SQLiteOpenHelper"></a>2.1.1 SQLiteOpenHelper</h4><ul>
+<li><p>它是一个抽象类，里面有两个抽象方法，用于创建表和更新表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public abstract void onCreate(SQLiteDatabase var1);</span><br><span class="line"></span><br><span class="line">public abstract void onUpgrade(SQLiteDatabase var1, int var2, int var3);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>它有两个重要的方法：getWritableDatabase()，getReadableDatabase()。</p>
+</li>
+<li>这两个方法都可以创建一个数据库，或者打开一个已经创建好的数据库。</li>
+<li><p>区别是：当数据库不可写入的时候（如磁盘空间已满），getWritableDatabase()会出现异常，getReadableDatabase()则返回一个只读对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">public SQLiteDatabase getWritableDatabase() &#123;</span><br><span class="line">    throw new RuntimeException(&quot;Stub!&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public SQLiteDatabase getReadableDatabase() &#123;</span><br><span class="line">    throw new RuntimeException(&quot;Stub!&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>我们在使用的时候只需写一个类<strong>继承</strong>该抽象类，并重写onCreate()和onUpdate()，分别用于实现创建表和更新表的逻辑。</p>
+</li>
+<li>外界开启数据库的时候，只需创建出实现类的实例，调用读写的任意一个方法即可。</li>
+</ul>
+<h4 id="2-1-2-DatabaseOpenHelper类"><a href="#2-1-2-DatabaseOpenHelper类" class="headerlink" title="2.1.2 DatabaseOpenHelper类"></a>2.1.2 DatabaseOpenHelper类</h4><blockquote>
+<p>也许你会疑惑讲述前面的意义究竟在哪里，接下来就一步一步剖析GeenDao如何创建数据库</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">//GreenDao中的DatabaseOpenHelper</span><br><span class="line">public abstract class DatabaseOpenHelper extends SQLiteOpenHelper&#123;</span><br><span class="line">    public DatabaseOpenHelper(Context context, String name, int version) &#123;</span><br><span class="line">        this(context, name, null, version);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public DatabaseOpenHelper(Context context, String name, CursorFactory factory, int version) &#123;</span><br><span class="line">        super(context, name, factory, version);</span><br><span class="line">        this.context = context;</span><br><span class="line">        this.name = name;</span><br><span class="line">        this.version = version;</span><br><span class="line">    protected Database wrap(SQLiteDatabase sqLiteDatabase) &#123;</span><br><span class="line">        return new StandardDatabase(sqLiteDatabase);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Delegates to &#123;@link #onCreate(Database)&#125;, which uses greenDAO&apos;s database abstraction.</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public void onCreate(SQLiteDatabase db) &#123;</span><br><span class="line">        onCreate(wrap(db));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Override this if you do not want to depend on &#123;@link SQLiteDatabase&#125;.</span><br><span class="line">     */</span><br><span class="line">    public void onCreate(Database db) &#123;</span><br><span class="line">        // Do nothing by default</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Delegates to &#123;@link #onUpgrade(Database, int, int)&#125;, which uses greenDAO&apos;s database abstraction.</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) &#123;</span><br><span class="line">        onUpgrade(wrap(db), oldVersion, newVersion);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Override this if you do not want to depend on &#123;@link SQLiteDatabase&#125;.</span><br><span class="line">     */</span><br><span class="line">    public void onUpgrade(Database db, int oldVersion, int newVersion) &#123;</span><br><span class="line">        // Do nothing by default</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>DatabaseOpenHelper是继承SQLiteOpenHelper的，但它自己写了onCreate和onUpdate方法，参数是GreenDao中的DataBase接口，接下来提到的都是这两个方法。</li>
+<li>DataBase是一个GreenDao的接口，里面有创建表等方法，StandardDatabase则是它的实现类</li>
+<li>当调用父类的onCreated和onUpdate方法的时候，运用代理模式，将SQLitebase传入StandardDatabase进行，减少里面的一些没有用到的方法，并且将StandardDatabase对象传到自己定义的onCreate和onUpdate方法，有兴趣的可以看下。</li>
+</ul>
+<p>接下来进入DaoMaster类看下具体的调用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">     * Calls &#123;@link #createAllTables(Database, boolean)&#125; in &#123;@link #onCreate(Database)&#125; -</span><br><span class="line">     */</span><br><span class="line">    public static abstract class OpenHelper extends DatabaseOpenHelper &#123;</span><br><span class="line">        public OpenHelper(Context context, String name) &#123;</span><br><span class="line">            super(context, name, SCHEMA_VERSION);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public OpenHelper(Context context, String name, CursorFactory factory) &#123;</span><br><span class="line">            super(context, name, factory, SCHEMA_VERSION);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onCreate(Database db) &#123;</span><br><span class="line">            Log.i(&quot;greenDAO&quot;, &quot;Creating tables for schema version &quot; + SCHEMA_VERSION);</span><br><span class="line">            createAllTables(db, false);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /** WARNING: Drops all table on Upgrade! Use only during development. */</span><br><span class="line">    public static class DevOpenHelper extends OpenHelper &#123;</span><br><span class="line">        public DevOpenHelper(Context context, String name) &#123;</span><br><span class="line">            super(context, name);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public DevOpenHelper(Context context, String name, CursorFactory factory) &#123;</span><br><span class="line">            super(context, name, factory);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onUpgrade(Database db, int oldVersion, int newVersion) &#123;</span><br><span class="line">            Log.i(&quot;greenDAO&quot;, &quot;Upgrading schema from version &quot; + oldVersion + &quot; to &quot; + newVersion + &quot; by dropping all tables&quot;);</span><br><span class="line">            dropAllTables(db, true);</span><br><span class="line">            onCreate(db);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>可以看见在DaoMaster类中的两个内部类，DevOpenHelper则是我们外界的进入的开口了。</li>
+<li><p>接下来来看下createAllTables(db, false)和 dropAllTables(db, true)两个方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public static void createAllTables(Database db, boolean ifNotExists) &#123;</span><br><span class="line">    playConditionDao.createTable(db, ifNotExists);</span><br><span class="line">&#125;</span><br><span class="line">public static void dropAllTables(Database db, boolean ifExists) &#123;</span><br><span class="line">    playConditionDao.dropTable(db, ifExists);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//此处插入xxDao中代码</span><br><span class="line">public static void createTable(Database db, boolean ifNotExists) &#123;</span><br><span class="line">    String constraint = ifNotExists? &quot;IF NOT EXISTS &quot;: &quot;&quot;;</span><br><span class="line">    db.execSQL(&quot;CREATE TABLE &quot; + constraint + &quot;\&quot;PLAY_CONDITION\&quot; (&quot; + //</span><br><span class="line">            &quot;\&quot;mPosition\&quot; INTEGER NOT NULL ,&quot; + // 0: mPosition</span><br><span class="line">            &quot;\&quot;mPlayMode\&quot; INTEGER NOT NULL );&quot;); // 1: mPlayMode</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/** Drops the underlying database table. */</span><br><span class="line">public static void dropTable(Database db, boolean ifExists) &#123;</span><br><span class="line">    String sql = &quot;DROP TABLE &quot; + (ifExists ? &quot;IF EXISTS &quot; : &quot;&quot;) + &quot;\&quot;PLAY_CONDITION\&quot;&quot;;</span><br><span class="line">    db.execSQL(sql);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>由xxxDao的方法中可以清楚的看到，这两个方法实现的便是创建表和删除表的功能。</p>
+</li>
+<li><strong>注意</strong>：GreenDao更新数据库的时候会删除所有的表和数据，再进行创建所有新表。</li>
+</ul>
+<h3 id="2-2-AbstractDaoMaster类"><a href="#2-2-AbstractDaoMaster类" class="headerlink" title="2.2 AbstractDaoMaster类"></a>2.2 AbstractDaoMaster类</h3><p>DaoMaster的父类，看下它的源码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">public abstract class AbstractDaoMaster &#123;</span><br><span class="line">    protected final Database db;</span><br><span class="line">    protected final int schemaVersion;</span><br><span class="line">    protected final Map&lt;Class&lt;? extends AbstractDao&lt;?, ?&gt;&gt;, DaoConfig&gt; daoConfigMap;</span><br><span class="line"></span><br><span class="line">    public AbstractDaoMaster(Database db, int schemaVersion) &#123;</span><br><span class="line">        this.db = db;</span><br><span class="line">        this.schemaVersion = schemaVersion;</span><br><span class="line"></span><br><span class="line">        daoConfigMap = new HashMap&lt;Class&lt;? extends AbstractDao&lt;?, ?&gt;&gt;, DaoConfig&gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    protected void registerDaoClass(Class&lt;? extends AbstractDao&lt;?, ?&gt;&gt; daoClass) &#123;</span><br><span class="line">        DaoConfig daoConfig = new DaoConfig(db, daoClass);</span><br><span class="line">        daoConfigMap.put(daoClass, daoConfig);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public int getSchemaVersion() &#123;</span><br><span class="line">        return schemaVersion;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /** Gets the SQLiteDatabase for custom database access. Not needed for greenDAO entities. */</span><br><span class="line">    public Database getDatabase() &#123;</span><br><span class="line">        return db;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public abstract AbstractDaoSession newSession();</span><br><span class="line"></span><br><span class="line">    public abstract AbstractDaoSession newSession(IdentityScopeType type);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p>我们可以看到它的内部维护了一个Map，Key是继承自AbstractDao类的字节码对象，Value则为DaoConfig对象，且在registerDaoClass方法中添加数据进集合，而这个方法调用处则在DaoMaster的初始化中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> public DaoMaster(Database db) &#123;</span><br><span class="line">    super(db, SCHEMA_VERSION);</span><br><span class="line">    registerDaoClass(playConditionDao.class);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Map的功能现在很清楚了，就是为每一个EntityDao字节码对象建立与之对应的db数据库的映射关系，从而管理所有的EntityDao类。</p>
+</li>
+</ul>
+<h2 id="3-DaoSession类"><a href="#3-DaoSession类" class="headerlink" title="3.DaoSession类"></a>3.DaoSession类</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//外界获取DaoSession</span><br><span class="line">mDaoSession = daoMaster.newSession();</span><br><span class="line">//DaoMaster的newSession方法</span><br><span class="line">public DaoSession newSession() &#123;</span><br><span class="line">    return new DaoSession(db, IdentityScopeType.Session, daoConfigMap);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public DaoSession newSession(IdentityScopeType type) &#123;</span><br><span class="line">    return new DaoSession(db, type, daoConfigMap);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>外界通过DaoMaster可以获得DaoSession对象，再根据该对象获取xxxDao进行增删查改操作，接下来进入它的源码，看它的内部结构。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">public class DaoSession extends AbstractDaoSession &#123;</span><br><span class="line">    private final DaoConfig playConditionDaoConfig;</span><br><span class="line">    </span><br><span class="line">    private final playConditionDao playConditionDao;</span><br><span class="line">    </span><br><span class="line">    public DaoSession(Database db, IdentityScopeType type, Map&lt;Class&lt;? extends AbstractDao&lt;?, ?&gt;&gt;, DaoConfig&gt;</span><br><span class="line">            daoConfigMap) &#123;</span><br><span class="line">        super(db);</span><br><span class="line"></span><br><span class="line">        playConditionDaoConfig = daoConfigMap.get(playConditionDao.class).clone();</span><br><span class="line">        playConditionDaoConfig.initIdentityScope(type);</span><br><span class="line">        </span><br><span class="line">        playConditionDao = new playConditionDao(playConditionDaoConfig, this);</span><br><span class="line">        </span><br><span class="line">        registerDao(playCondition.class, playConditionDao);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public void clear() &#123;</span><br><span class="line">        playConditionDaoConfig.clearIdentityScope();</span><br><span class="line">    &#125;    </span><br><span class="line">    </span><br><span class="line">    public playConditionDao getPlayConditionDao() &#123;</span><br><span class="line">        return playConditionDao;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在DaoMaster创建的Map集合中取出key为StudentDao.class的DaoConfig对象，刚刚就说了Map集合中保存了StudentDao类对应的数据库db的关系映射，而这个DaoConfig对象正是管理了对应的db对象。然后把这个DaoConfig传给StudentDao(studentDaoConfig, this)，所以这就说明了我们使用StudentDao对象来进行数据库上的CRUD操作而对应的数据库也会变化的原因，这个过程实际上就是在间接操作数据库。 </p>
+</li>
+</ul>
+<h2 id="4-AbstractDaoSession类"><a href="#4-AbstractDaoSession类" class="headerlink" title="4.AbstractDaoSession类"></a>4.AbstractDaoSession类</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">private final Map&lt;Class&lt;?&gt;, AbstractDao&lt;?, ?&gt;&gt; entityToDao;</span><br><span class="line"></span><br><span class="line">private volatile RxTransaction rxTxPlain;</span><br><span class="line">private volatile RxTransaction rxTxIo;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Run the given Runnable inside a database transaction. If you except a result, consider callInTx.</span><br><span class="line"> */</span><br><span class="line">public void runInTx(Runnable runnable) &#123;</span><br><span class="line">    db.beginTransaction();</span><br><span class="line">    try &#123;</span><br><span class="line">        runnable.run();</span><br><span class="line">        db.setTransactionSuccessful();</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        db.endTransaction();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Calls the given Callable inside a database transaction and returns the result of the Callable. If you don&apos;t</span><br><span class="line"> * except a result, consider runInTx.</span><br><span class="line"> */</span><br><span class="line">public &lt;V&gt; V callInTx(Callable&lt;V&gt; callable) throws Exception &#123;</span><br><span class="line">    db.beginTransaction();</span><br><span class="line">    try &#123;</span><br><span class="line">        V result = callable.call();</span><br><span class="line">        db.setTransactionSuccessful();</span><br><span class="line">        return result;</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        db.endTransaction();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>entityToDao主要是用于存储实体类与对应AbstractDao之间的映射关系，而各种对表的操作其实都是通过这个映射关系找到对应的AbstractDao然后操作。</li>
+<li>其中RxTransaction是把当前的AbstractDaoSession进行rx化，在GreenDao的RXTransaction类源码中可得知。</li>
+<li>其中比较特殊的便是runInTx和callInTx方法，这两个方法是通过事务进行数据库操作的，RXTransaction类中可看到RX化的DaoSession调用了这个方法。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">@Experimental</span><br><span class="line">public Observable&lt;Void&gt; run(final Runnable runnable) &#123;</span><br><span class="line">    return wrap(new Callable&lt;Void&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public Void call() throws Exception &#123;</span><br><span class="line">            daoSession.runInTx(runnable);</span><br><span class="line">            return null;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Rx version of &#123;@link AbstractDaoSession#callInTx(Callable)&#125; returning an Observable.</span><br><span class="line"> */</span><br><span class="line">@Experimental</span><br><span class="line">public &lt;T&gt; Observable&lt;T&gt; call(final Callable&lt;T&gt; callable) &#123;</span><br><span class="line">    return wrap(new Callable&lt;T&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public T call() throws Exception &#123;</span><br><span class="line">            return daoSession.callInTx(callable);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="5-AbstractDao类"><a href="#5-AbstractDao类" class="headerlink" title="5.AbstractDao类"></a>5.AbstractDao类</h2><p>AbstractDao是所有的XXXdDao的父类，里面封装了一些关于CRUD操作以及TX结尾的带事务的CRUD操作，以及RX的一些操作。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">private volatile RxDao&lt;T, K&gt; rxDao;</span><br><span class="line">private volatile RxDao&lt;T, K&gt; rxDaoPlain;</span><br></pre></td></tr></table></figure></p>
+<h3 id="5-1-GreenDao结合RxJava使用"><a href="#5-1-GreenDao结合RxJava使用" class="headerlink" title="5.1 GreenDao结合RxJava使用"></a>5.1 GreenDao结合RxJava使用</h3><ul>
+<li><p>以添加为例，外界调用的时候就是可以实现响应式编程，在添加成功之后做一些逻辑</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//外界调用</span><br><span class="line">RxDao&lt;xxEntity, Long&gt; xxDao = daoSession.getXXDao().rx();</span><br><span class="line">xxDao.insert(xxEntity)</span><br><span class="line">    .observerOn(AndroidSchedules.mainThread())</span><br><span class="line">    .subscribe(new Action1&lt;xxEntity&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void call(xxEntity entity) &#123;</span><br><span class="line">            // insert success</span><br><span class="line">        &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>这是AbstractDao中rx()，用于初始化一个RxDao对象，传入AbstractDao的当前对象，用于实现CRUD操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public RxDao&lt;T, K&gt; rx() &#123;</span><br><span class="line">    if (rxDao == null) &#123;</span><br><span class="line">        rxDao = new RxDao&lt;&gt;(this, Schedulers.io());</span><br><span class="line">    &#125;</span><br><span class="line">    return rxDao;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>看下RxDao中的inset方法，其中是调用了具体dao对象的inset方法，看下wrap方法的实现。</p>
+</li>
+<li>通过wrap可以构建出Observable对象，并在指定的线程中执行Callable的call方法。</li>
+<li><p>使用defer操作符创建一个Observable对象。延迟创建，确保Observable被订阅后才执行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">public Observable&lt;T&gt; insert(final T entity) &#123;</span><br><span class="line">    return wrap(new Callable&lt;T&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public T call() throws Exception &#123;</span><br><span class="line">            dao.insert(entity);</span><br><span class="line">            return entity;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">protected &lt;R&gt; Observable&lt;R&gt; wrap(Callable&lt;R&gt; callable) &#123;</span><br><span class="line">    return wrap(RxUtils.fromCallable(callable));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">protected &lt;R&gt; Observable&lt;R&gt; wrap(Observable&lt;R&gt; observable) &#123;</span><br><span class="line">    if (scheduler != null) &#123;</span><br><span class="line">        return observable.subscribeOn(scheduler);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        return observable;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">static &lt;T&gt; Observable&lt;T&gt; fromCallable(final Callable&lt;T&gt; callable) &#123;</span><br><span class="line">    return Observable.defer(new Func0&lt;Observable&lt;T&gt;&gt;() &#123;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public Observable&lt;T&gt; call() &#123;</span><br><span class="line">            T result;</span><br><span class="line">            try &#123;</span><br><span class="line">                result = callable.call();</span><br><span class="line">            &#125; catch (Exception e) &#123;</span><br><span class="line">                return Observable.error(e);</span><br><span class="line">            &#125;</span><br><span class="line">            return Observable.just(result);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>之前提及的AbstractDaoSession中的Rx化和这个使用是一致的。</p>
+</li>
+</ul>
+<h3 id="5-2-优化性能方面"><a href="#5-2-优化性能方面" class="headerlink" title="5.2 优化性能方面"></a>5.2 优化性能方面</h3><ul>
+<li><p>GreenDao不管是做查询还是其他操作都是使用Statement来进行优化性能的，而且Statement是可以重用的，所以GreenDao有自己的Statement管理类，就是TableStatements，我们来看看TableStatements对插入声明的创建：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public DatabaseStatement getInsertStatement() &#123;</span><br><span class="line">    if (insertStatement == null) &#123;</span><br><span class="line">        String sql = SqlUtils.createSqlInsert(&quot;INSERT INTO &quot;, tablename, allColumns);</span><br><span class="line">        DatabaseStatement newInsertStatement = db.compileStatement(sql);</span><br><span class="line">        synchronized (this) &#123;</span><br><span class="line">            if (insertStatement == null) &#123;</span><br><span class="line">                insertStatement = newInsertStatement;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        if (insertStatement != newInsertStatement) &#123;</span><br><span class="line">            newInsertStatement.close();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return insertStatement;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>TableStatements维护着一个insertStatement对象，如果不为null就直接返回，为null就拼接创建，以达到复用优化性能的作用，这是数据库常见的操作。</p>
+</li>
+<li>看下单个实体做插入的情况<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">private long executeInsert(T entity, DatabaseStatement stmt, boolean setKeyAndAttach) &#123;</span><br><span class="line">    long rowId;</span><br><span class="line">    //先判断当前线程是否连接了数据库</span><br><span class="line">    if (db.isDbLockedByCurrentThread()) &#123;</span><br><span class="line">        //返回true 直接插入数据</span><br><span class="line">        rowId = insertInsideTx(entity, stmt);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        //在锁定stmt之前通过开启transation请求连接</span><br><span class="line">        db.beginTransaction();</span><br><span class="line">        try &#123;</span><br><span class="line">            rowId = insertInsideTx(entity, stmt);</span><br><span class="line">            db.setTransactionSuccessful();</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            db.endTransaction();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if (setKeyAndAttach) &#123;</span><br><span class="line">        updateKeyAfterInsertAndAttach(entity, rowId, true);</span><br><span class="line">    &#125;</span><br><span class="line">    return rowId;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ol>
+<li>通过判断当前线程是否和数据库关联来决定是否需要开启事务。</li>
+<li>最后都执行insertInsideTx，里面的操作很简单就是调用之前子类的bindValue方法进行绑定值后执行Sql操作。</li>
+<li>插入后的善后处理，这里就是更新实体的ID为RowId和做内存缓存,还有一些特殊操作实体绑定DaoSeesion，使用active = true会用到。</li>
+<li>IdentityScope&lt;K, T&gt;是GreenDao用来做内存缓存的，可以看成是一个Map,如果是Long，GreenDao做了对应的优化(PS：Integer的HashCode就是自己，而Long则要把高32位异或下来变成int)</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+      
+    </div>
+
+    <div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2018/11/13/安卓框架之GreenDao的学习/">安卓框架之GreenDao的学习</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 AllenYu 的个人博客">AllenYu</a></p>
+  <p><span>发布时间:</span>2018年11月13日 - 23:11</p>
+  <p><span>最后更新:</span>2018年11月13日 - 23:11</p>
+  <p><span>原始链接:</span><a href="/2018/11/13/安卓框架之GreenDao的学习/" title="安卓框架之GreenDao的学习">http://yuzeduan.github.io/2018/11/13/安卓框架之GreenDao的学习/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yuzeduan.github.io/2018/11/13/安卓框架之GreenDao的学习/" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+	  $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android框架学习/" rel="tag"><i class="fa fa-tag"></i> Android框架学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/10/设计模式之装饰者模式的学习/" rel="next" title="设计模式之装饰者模式的学习">
+                <i class="fa fa-chevron-left"></i> 设计模式之装饰者模式的学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/13/Java注解入门学习/" rel="prev" title="Java注解入门学习">
+                Java注解入门学习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg" alt="AllenYu">
+            
+              <p class="site-author-name" itemprop="name">AllenYu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yuzeduan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.csdn.net/" target="_blank" title="csdn">
+                      
+                        <i class="fa fa-fw fa-globe"></i>csdn</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://youtube.com" target="_blank" title="YouTube">
+                      
+                        <i class="fa fa-fw fa-globe"></i>YouTube</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-globe"></i>StackOverflow</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.str-mo.com" target="_blank" title="字节莫">
+                      
+                        <i class="fa fa-fw fa-globe"></i>字节莫</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+          <br>
+
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=518894283&auto=1&height=66"></iframe>
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#GreenDao源码的学习"><span class="nav-number">1.</span> <span class="nav-text">GreenDao源码的学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-简述"><span class="nav-number">1.1.</span> <span class="nav-text">1.简述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-核心类"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 核心类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-UML图"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 UML图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-DaoMaster类"><span class="nav-number">1.2.</span> <span class="nav-text">2.DaoMaster类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-DevOpenHelper"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 DevOpenHelper</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-1-SQLiteOpenHelper"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">2.1.1 SQLiteOpenHelper</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-2-DatabaseOpenHelper类"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">2.1.2 DatabaseOpenHelper类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-AbstractDaoMaster类"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 AbstractDaoMaster类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-DaoSession类"><span class="nav-number">1.3.</span> <span class="nav-text">3.DaoSession类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-AbstractDaoSession类"><span class="nav-number">1.4.</span> <span class="nav-text">4.AbstractDaoSession类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-AbstractDao类"><span class="nav-number">1.5.</span> <span class="nav-text">5.AbstractDao类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-GreenDao结合RxJava使用"><span class="nav-number">1.5.1.</span> <span class="nav-text">5.1 GreenDao结合RxJava使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-优化性能方面"><span class="nav-number">1.5.2.</span> <span class="nav-text">5.2 优化性能方面</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AllenYu</span>
+
+  
+</div>
+
+<!-- 
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+-->
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>
