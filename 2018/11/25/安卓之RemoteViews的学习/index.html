@@ -95,7 +95,7 @@
 <meta property="og:description" content="RemoteViews的学习1.定义">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://i.loli.net/2018/11/24/5bf8dc2b17d80.png">
-<meta property="og:updated_time" content="2018-11-25T09:46:52.306Z">
+<meta property="og:updated_time" content="2018-11-25T12:25:55.848Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="安卓之RemoteViews的学习">
 <meta name="twitter:description" content="RemoteViews的学习1.定义">
@@ -398,11 +398,10 @@
 <li><p>前面提到RemoteViews只是显示View的工具，因此我们需要为小部件自定义一个视图布局，在res的layout文件夹中进行自定义布局</p>
 </li>
 <li><p>此处需要注意有些View元素，RemoteViews是不支持的，下面会提到。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;LinearLayout</span><br><span class="line">        xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">        android:layout_width=&quot;match_parent&quot;</span><br><span class="line">        android:layout_height=&quot;match_parent&quot;</span><br><span class="line">        android:gravity=&quot;center_horizontal&quot;</span><br><span class="line">        android:orientation=&quot;horizontal&quot;&gt;  </span><br><span class="line">    &lt;TextView</span><br><span class="line">        android:id=&quot;@+id/widget_tv&quot;</span><br><span class="line">        android:text=&quot;我是桌面小部件&quot;</span><br><span class="line">        android:textColor=&quot;#ffffff&quot;</span><br><span class="line">        android:layout_width=&quot;wrap_content&quot;</span><br><span class="line">        android:layout_height=&quot;wrap_content&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;/LinearLayout&gt;</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;LinearLayout</span><br><span class="line">        xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">        android:layout_width=&quot;match_parent&quot;</span><br><span class="line">        android:layout_height=&quot;match_parent&quot;</span><br><span class="line">        android:gravity=&quot;center_horizontal&quot;</span><br><span class="line">        android:orientation=&quot;horizontal&quot;&gt;  </span><br><span class="line">    &lt;TextView</span><br><span class="line">        android:id=&quot;@+id/widget_tv&quot;</span><br><span class="line">        android:text=&quot;我是桌面小部件&quot;</span><br><span class="line">        android:textColor=&quot;#ffffff&quot;</span><br><span class="line">        android:layout_width=&quot;wrap_content&quot;</span><br><span class="line">        android:layout_height=&quot;wrap_content&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;/LinearLayout&gt;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>小部件的布局我只定义了一个用于展示的TextView。</li>
+<li><p>小部件的布局我只定义了一个用于展示的TextView。</p>
+</li>
 </ul>
 <h3 id="2-2-定义小部件的配置信息（AppWidgetProviderInfo）"><a href="#2-2-定义小部件的配置信息（AppWidgetProviderInfo）" class="headerlink" title="2.2 定义小部件的配置信息（AppWidgetProviderInfo）"></a>2.2 定义小部件的配置信息（AppWidgetProviderInfo）</h3><ul>
 <li>在res新建一个xml的文件夹，新建一个xml文件，这个xml对应的便是AppWidgetProviderInfo类的类属性，包含了整个AppWidget的配置信息。<pre><code>&lt;appwidget-provider&gt;
@@ -659,7 +658,7 @@
   <p><span>本文标题:</span><a href="/2018/11/25/安卓之RemoteViews的学习/">安卓之RemoteViews的学习</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 AllenYu 的个人博客">AllenYu</a></p>
   <p><span>发布时间:</span>2018年11月25日 - 17:11</p>
-  <p><span>最后更新:</span>2018年11月25日 - 17:11</p>
+  <p><span>最后更新:</span>2018年11月25日 - 20:11</p>
   <p><span>原始链接:</span><a href="/2018/11/25/安卓之RemoteViews的学习/" title="安卓之RemoteViews的学习">http://yuzeduan.github.io/2018/11/25/安卓之RemoteViews的学习/</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yuzeduan.github.io/2018/11/25/安卓之RemoteViews的学习/" aria-label="复制成功！"></i></span>
   </p>
@@ -714,6 +713,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/25/安卓框架之ARouter的学习/" rel="prev" title="安卓框架之ARouter的学习">
+                安卓框架之ARouter的学习 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -792,7 +795,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -814,7 +817,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
