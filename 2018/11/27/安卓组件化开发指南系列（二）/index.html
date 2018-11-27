@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="组件化开发指南系列,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="安卓组件化开发指南系列（二） 上一篇文章中提到的是关于组件化的一些配置，这篇讲下组件化开发中可能会遇到的坑">
+<meta name="keywords" content="组件化开发指南系列">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安卓组件化开发指南系列（二）">
+<meta property="og:url" content="http://yuzeduan.github.io/2018/11/27/安卓组件化开发指南系列（二）/index.html">
+<meta property="og:site_name" content="Allen Home">
+<meta property="og:description" content="安卓组件化开发指南系列（二） 上一篇文章中提到的是关于组件化的一些配置，这篇讲下组件化开发中可能会遇到的坑">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-27T15:42:21.106Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="安卓组件化开发指南系列（二）">
+<meta name="twitter:description" content="安卓组件化开发指南系列（二） 上一篇文章中提到的是关于组件化的一些配置，这篇讲下组件化开发中可能会遇到的坑">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yuzeduan.github.io/2018/11/27/安卓组件化开发指南系列（二）/">
+
+
+
+
+
+  <title>安卓组件化开发指南系列（二） | Allen Home</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/Yuzeduan"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Allen Home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yuzeduan.github.io/2018/11/27/安卓组件化开发指南系列（二）/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="AllenYu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Allen Home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">安卓组件化开发指南系列（二）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-27T23:31:29+08:00">
+                2018-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.8k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="安卓组件化开发指南系列（二）"><a href="#安卓组件化开发指南系列（二）" class="headerlink" title="安卓组件化开发指南系列（二）"></a>安卓组件化开发指南系列（二）</h1><blockquote>
+<p>上一篇文章中提到的是关于组件化的一些配置，这篇讲下组件化开发中可能会遇到的坑</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="1-AndroidManifest的合并问题"><a href="#1-AndroidManifest的合并问题" class="headerlink" title="1.AndroidManifest的合并问题"></a>1.AndroidManifest的合并问题</h2><h3 id="1-1-问题提出"><a href="#1-1-问题提出" class="headerlink" title="1.1 问题提出"></a>1.1 问题提出</h3><p>正如我们之前提到的，每个人在开发自己业务组件会单独进行编译运行，则每个组件会有自己的一份AndroidManifest文件，其中肯定会有每个组件的application类和一些属性，以及四大组件注册，权限等。因此可想而知，当我们合并每个业务组件的时候，势必会产生冲突，那么要怎么解决呢？从上篇文章的设置一个开关来判断各个组件是否单独运行的思路，我们可以有如下解决方案。 </p>
+<h3 id="1-2-解决思路"><a href="#1-2-解决思路" class="headerlink" title="1.2 解决思路"></a>1.2 解决思路</h3><p>根据上一篇文章中设置的isSigleModuleBuild的值进行设置两份不同的AndroidManifest文件，一张用于单独组件开发运行使用，一张用于合并到主工程时使用，当我们的组件注册四大组件和添加权限的时候，两个文件都要添加。</p>
+<h3 id="1-3-代码实现"><a href="#1-3-代码实现" class="headerlink" title="1.3 代码实现"></a>1.3 代码实现</h3><ul>
+<li>在每个业务组件的main文件夹中建立一个manifest文件夹，再在其中建立两个文件夹（一般名为debug和release，见名知意），在debug文件夹中放置的是组件单独运行所需的AndroidManifest文件，release文件夹放置的是合并时候的AndroidManifest文件。</li>
+<li>debug和release下的AndroidManifest文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">//举例</span><br><span class="line">//集成模式下</span><br><span class="line">&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">    package=&quot;com.yuzeduan.mylibrary&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;application&gt;</span><br><span class="line">        &lt;activity android:name=&quot;...&quot; /&gt;</span><br><span class="line">    &lt;/application&gt;</span><br><span class="line">&lt;/manifest&gt;</span><br><span class="line"></span><br><span class="line">//组件模式下Manifest</span><br><span class="line">&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">    package=&quot;com.yuzeduan.mylibrary&quot;&gt;</span><br><span class="line">    &lt;application</span><br><span class="line">        android:name=&quot;...&quot;</span><br><span class="line">        android:allowBackup=&quot;true&quot;</span><br><span class="line">        android:label=&quot;@string/app_name&quot;</span><br><span class="line">        android:theme=&quot;@style/AdmTheme&quot;&gt;</span><br><span class="line"></span><br><span class="line">        &lt;activity android:name=&quot;...&quot;&gt;</span><br><span class="line">            &lt;intent-filter&gt;</span><br><span class="line">                &lt;action android:name=&quot;android.intent.action.MAIN&quot; /&gt;</span><br><span class="line">                &lt;category android:name=&quot;android.intent.category.LAUNCHER&quot; /&gt;</span><br><span class="line">            &lt;/intent-filter&gt;</span><br><span class="line">        &lt;/activity&gt;</span><br><span class="line">    &lt;/application&gt;</span><br><span class="line">&lt;/manifest&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>对比上面的两个文件，我们可以发现：<ul>
+<li>debug文件夹下的文件中有自定义的application类，和一些application属性，而release中没有。</li>
+<li>debug文件夹下的该activity设置主activity，而release中没有。</li>
+</ul>
+</li>
+<li>在每个module的bulid.gradle中添加如下代码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">sourceSets &#123;</span><br><span class="line">    main &#123;</span><br><span class="line">        if (isSigleModuleBuild.toBoolean()) &#123;</span><br><span class="line">            manifest.srcFile &apos;src/main/manifest/debug/AndroidManifest.xml&apos;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            manifest.srcFile &apos;src/main/manifest/release/AndroidManifest.xml&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="1-4-补充点"><a href="#1-4-补充点" class="headerlink" title="1.4 补充点"></a>1.4 补充点</h3><ul>
+<li>一个app只能有一个入口Activity，因此有一个module中的集成AndroidManifest文件要有定义一个入口Activity，其他的用于集成的AndroidManifest文件的Activity不能定义为入口Activity。</li>
+<li>四大组件的声明除了主Activity有点特殊之外，其他都是和之前声明那样即可，合成的时候，会集成到主moduleAndroidManifest文件中。</li>
+<li>关于权限的声明，不同module允许重复声明同一个权限，集成的时候相同的权限只会被声明一次。也可以在BaseModule中声明全部的权限，这样就不用在每个业务module中重复去声明权限。</li>
+<li>关于shareUid，它的作用是拥有同一个UserId的多个app可以配置成运行在同一个进程中的，所以默认可以互相访问数据，然而只有在主module中声明的sharedUserId才会最终被打包。</li>
+</ul>
+<h2 id="2-Application的冲突"><a href="#2-Application的冲突" class="headerlink" title="2. Application的冲突"></a>2. Application的冲突</h2><h3 id="2-1-问题提出"><a href="#2-1-问题提出" class="headerlink" title="2.1 问题提出"></a>2.1 问题提出</h3><p>众所周知，当app启动的时候，系统会为每个app创建一个Application类的对象，而且只创建一个，Application类的对象的生命周期是最长的，它的生命周期就等于这个程序的生命周期。一般情况下，如果我们自定义application，系统会自动帮我们生成Application对象，如果自定义的话，就需要在AndroidManifest中进行声明我们自定义的Application。</p>
+<p>在组件化开发中，如果我们需要在业务组件中获取全局的context，此时，在业务组件中自定义application，并在debug的AndroidManfiest中进行声明可以解决。然而，进行集成的时候，便会出现各个组件的Application的冲突，并且原先组件的Application是不可用的了。因此，现在的问题是<strong>如何实现在每个业务组件中可以获取到全局的context，并且在组件开发模式和在集成开发模式都是适用的</strong>。</p>
+<h3 id="2-2-解决思路"><a href="#2-2-解决思路" class="headerlink" title="2.2 解决思路"></a>2.2 解决思路</h3><p>从问题的角度出发，每个业务组件都要实现的，因此我们可以自然而然的想到我们的基础组件。</p>
+<ul>
+<li>我们可以定义一个BaseApplication继承自Application，在该类中提供获取全局context的接口，在业务组件中继承BaseAplication，自定义Application，用于在组件开发模式下使用，此时我们就需要在debug文件夹中的AndroidManifest中声明自定义的application，而正是这个声明，当程序运行时候，我们的BaseAppication就会被动实例化，于是从BaseApplication中获取到的context便会生效了。</li>
+<li>组件开发模式解决了，现在要解决集成开发模式。自定义的application是不能用的了，因此它集成的时候会被忽略（下面会说）。此时，我们就需要在主module中进行自定义我们的Application类并继承自BaseApplication，并在其AndroidManifest中进行声明，这样子集成之后，当整个项目运行之后，BaseApplication会被被动实例化，所以各个业务组件中获取的全局context便会生效。</li>
+</ul>
+<h3 id="2-3-代码实现"><a href="#2-3-代码实现" class="headerlink" title="2.3 代码实现"></a>2.3 代码实现</h3><ul>
+<li>BaseApplication的实现便不提了，主要是实现获取全局context和进行一些第三方库的初始化。</li>
+<li>在集成的时候如何忽略我们自定义的Application类？此时又要想起我们刚刚根据isSigleModuleBuild进行更换AndroidManifest的实现，我们可以在release模式下，忽略掉我们的自定义Application。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//我们可以在java文件夹中建立一个debug文件夹，并把自定义的Application放进去，并修改下面代码</span><br><span class="line">sourceSets &#123;</span><br><span class="line">    main &#123;</span><br><span class="line">        if (isSigleModuleBuild.toBoolean()) &#123;</span><br><span class="line">            manifest.srcFile &apos;src/main/manifest/debug/AndroidManifest.xml&apos;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            manifest.srcFile &apos;src/main/manifest/release/AndroidManifest.xml&apos;</span><br><span class="line">            //release模式下排除debug文件夹中的所有Java文件</span><br><span class="line">            java &#123;</span><br><span class="line">                exclude &apos;debug/**&apos;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-4-补充点"><a href="#2-4-补充点" class="headerlink" title="2.4 补充点"></a>2.4 补充点</h3><ul>
+<li>在我们进行组件开发模式时候，我们的组件能够单独运行，则运行时候，系统会默认创建一个Application类对象（如果不是自定义），然而，由于集成之后依旧能获取到全局context，我们就必须去自定义Application继承BaseApplication。其实，自定义Application还有一个作用，便是可以<strong>在组件开发模式下，为我们的业务组件进行初始化一些需要的数据</strong>。</li>
+<li>在debug文件夹也可创建Activity，用于给我们组件的目标Activity提供数据，它不需要进行显示，只需要模拟一个外界的角色，使我们的目标Activity获取到数据（适用于目标Activity需要外界提供数据启动的情况），同样的，集成时候，它不需要被集成来项目里，并且，release下的AndroidManifest也不需要对它的声明。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+      
+    </div>
+
+    <div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2018/11/27/安卓组件化开发指南系列（二）/">安卓组件化开发指南系列（二）</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 AllenYu 的个人博客">AllenYu</a></p>
+  <p><span>发布时间:</span>2018年11月27日 - 23:11</p>
+  <p><span>最后更新:</span>2018年11月27日 - 23:11</p>
+  <p><span>原始链接:</span><a href="/2018/11/27/安卓组件化开发指南系列（二）/" title="安卓组件化开发指南系列（二）">http://yuzeduan.github.io/2018/11/27/安卓组件化开发指南系列（二）/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yuzeduan.github.io/2018/11/27/安卓组件化开发指南系列（二）/" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+	  $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+      
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/组件化开发指南系列/" rel="tag"><i class="fa fa-tag"></i> 组件化开发指南系列</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/27/安卓组件化开发指南系列（一）/" rel="next" title="安卓组件化开发指南系列（一）">
+                <i class="fa fa-chevron-left"></i> 安卓组件化开发指南系列（一）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://i.loli.net/2018/11/04/5bde51f7304a7.jpg" alt="AllenYu">
+            
+              <p class="site-author-name" itemprop="name">AllenYu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Yuzeduan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-globe"></i>StackOverflow</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.str-mo.com" title="字节莫的个人博客" target="_blank">字节莫的个人博客</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.n0texpecterr0r.cn" title="JustCode" target="_blank">JustCode</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://sherlock-y.com" title="sherlock-y" target="_blank">sherlock-y</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://c1over.github.io" title="c1over" target="_blank">c1over</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+          <br>
+
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=518894283&auto=1&height=66"></iframe>
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#安卓组件化开发指南系列（二）"><span class="nav-number">1.</span> <span class="nav-text">安卓组件化开发指南系列（二）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-AndroidManifest的合并问题"><span class="nav-number">1.1.</span> <span class="nav-text">1.AndroidManifest的合并问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-问题提出"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 问题提出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-解决思路"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 解决思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-代码实现"><span class="nav-number">1.1.3.</span> <span class="nav-text">1.3 代码实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-补充点"><span class="nav-number">1.1.4.</span> <span class="nav-text">1.4 补充点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Application的冲突"><span class="nav-number">1.2.</span> <span class="nav-text">2. Application的冲突</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-问题提出"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 问题提出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-解决思路"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 解决思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-代码实现"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 代码实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-补充点"><span class="nav-number">1.2.4.</span> <span class="nav-text">2.4 补充点</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AllenYu</span>
+
+  
+</div>
+
+<!-- 
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+-->
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>
