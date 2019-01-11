@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="Android之四大组件,">
+  <meta name="keywords" content="JVM系列,">
 
 
 
@@ -86,18 +86,20 @@
 
 
 
-<meta name="description" content="四大组件之Activity活动的生命周期">
-<meta name="keywords" content="Android之四大组件">
+<meta name="description" content="初识Java虚拟机1. 什么是Java虚拟机">
+<meta name="keywords" content="JVM系列">
 <meta property="og:type" content="article">
-<meta property="og:title" content="安卓之Activity详解">
-<meta property="og:url" content="http://yuzeduan.github.io/2018/11/04/安卓之Activity详解/index.html">
+<meta property="og:title" content="JVM系列(一)">
+<meta property="og:url" content="http://yuzeduan.github.io/2019/01/11/JVM系列-一/index.html">
 <meta property="og:site_name" content="Allen Home">
-<meta property="og:description" content="四大组件之Activity活动的生命周期">
+<meta property="og:description" content="初识Java虚拟机1. 什么是Java虚拟机">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-10T13:45:07.449Z">
+<meta property="og:image" content="https://img-blog.csdn.net/20140317235203656?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhhbmdqZ19ibG9n/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2019-01-11T08:25:59.561Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="安卓之Activity详解">
-<meta name="twitter:description" content="四大组件之Activity活动的生命周期">
+<meta name="twitter:title" content="JVM系列(一)">
+<meta name="twitter:description" content="初识Java虚拟机1. 什么是Java虚拟机">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20140317235203656?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhhbmdqZ19ibG9n/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 
 
 
@@ -127,13 +129,13 @@
 
 
 
-  <link rel="canonical" href="http://yuzeduan.github.io/2018/11/04/安卓之Activity详解/">
+  <link rel="canonical" href="http://yuzeduan.github.io/2019/01/11/JVM系列-一/">
 
 
 
 
 
-  <title>安卓之Activity详解 | Allen Home</title>
+  <title>JVM系列(一) | Allen Home</title>
   
 
 
@@ -261,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yuzeduan.github.io/2018/11/04/安卓之Activity详解/">
+    <link itemprop="mainEntityOfPage" href="http://yuzeduan.github.io/2019/01/11/JVM系列-一/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="AllenYu">
@@ -278,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">安卓之Activity详解</h1>
+          <h1 class="post-title" itemprop="name headline">JVM系列(一)</h1>
         
 
         <div class="post-meta">
@@ -290,8 +292,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-04T17:10:04+08:00">
-                2018-11-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-11T16:21:28+08:00">
+                2019-01-11
               </time>
             
 
@@ -313,8 +315,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
                   </a>
                 </span>
 
@@ -344,7 +346,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.9k
+                  1.2k
                 </span>
               
 
@@ -360,7 +362,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  6
+                  4
                 </span>
               
             </div>
@@ -381,67 +383,23 @@
       
 
       
-        <h1 id="四大组件之Activity"><a href="#四大组件之Activity" class="headerlink" title="四大组件之Activity"></a>四大组件之Activity</h1><h2 id="活动的生命周期"><a href="#活动的生命周期" class="headerlink" title="活动的生命周期"></a>活动的生命周期</h2> <a id="more"></a>
-<ul>
-<li><p>Activity类的在生命周期中回调方法</p>
-<ul>
-<li>onCreate() 每个活动第一次被创建的时候调用,应该在这个方法中完成对活动的初始化动作,例如加载布局,和绑定事件等.</li>
-<li>onStart() 这个方法是活动由不可见变为可见的时候调用的.</li>
-<li>onResume() 这个方法在活动准备用户进行交互的时候调用的,此时的活动是位于返回栈栈顶的.</li>
-<li>onPause() 这个方法在系统准备去启动或者恢复另一个活动的时候调用,通常会在这个方法中将一些消耗cpu资源的东西释放掉,以及保存一些关键的数据,这个方法执行的速度一定要快,不然会影响新的栈顶活动的使用.</li>
-<li>onStop() 这个方法在活动<strong>完全不可见</strong><br>的时候调用,区别于onPause()方法的是如果启动的活动是一个对话框的活动,那么onPause()会被调用,而onStop()不会调用.</li>
-<li>onDestroy() 这个方法在活动被销毁之前会调用,在该方法中完成释放内存的操作.</li>
-<li>onRestart() 这个方法在活动由停止状态变为运行状态之前调用,就是活动被重新启动了.</li>
+        <h1 id="初识Java虚拟机"><a href="#初识Java虚拟机" class="headerlink" title="初识Java虚拟机"></a>初识Java虚拟机</h1><h2 id="1-什么是Java虚拟机"><a href="#1-什么是Java虚拟机" class="headerlink" title="1. 什么是Java虚拟机"></a>1. 什么是Java虚拟机</h2><a id="more"></a>
+<p>虚拟机是一种抽象化的计算机，通过在实际的计算机上仿真模拟各种计算机功能来实现的。Java虚拟机有自己完善的硬体架构，如处理器、堆栈、寄存器等，还具有相应的指令系统。<strong>JVM屏蔽了与具体操作系统平台相关的信息</strong>，使得Java程序只需生成在Java虚拟机上运行的目标代码（字节码），就可以在多种平台上不加修改地运行。</p>
+<p>Java虚拟机存在的原因是可以屏蔽底层操作系统的不同，使得同一个java文件编译生成的字节码文件可以通过不同的操作系统对应的java虚拟机，它把字节码解释成具体平台上的机器指令执行 。java使得java语言可以做到”一次编译，到处运行“。因此，java是一种跨平台的语言。</p>
+<p>因为有了Java虚拟机这一层“解释”，会使得java程序运行时间比C/C++等语言慢。    </p>
+<h2 id="2-从进程的角度理解JVM"><a href="#2-从进程的角度理解JVM" class="headerlink" title="2. 从进程的角度理解JVM"></a>2. 从进程的角度理解JVM</h2><p>众所周知，Java虚拟机是运行在操作系统之中的，那么它在运行的时候就是操作系统的一个进程，因为进程是操作系统的执行单位。当它在运行的时候，它就是一个操作系统中的进程实例，当它没有在运行时（作为可执行文件存放于文件系统中），可以把它叫做程序。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">javac xxx.java</span><br><span class="line">java xxx</span><br></pre></td></tr></table></figure>
+<p>相信上面两条命令，大家肯定很熟悉了。执行完第一步之后，生成java文件对应的字节码，而操作系统是无法直接识别字节码的，此时就需要调用操作系统对应的虚拟机将字节码解释成操作系统所能识别的二进制可执行文件。此时我们调用了一个名叫java的程序，而这个程序运行之后就是一个JVM实例。</p>
+<h3 id="执行的流程"><a href="#执行的流程" class="headerlink" title="执行的流程"></a>执行的流程</h3><p>java命令执行后启动虚拟机进程，虚拟机进程启动完毕之后会读取参数（即 java命令后面接的.class文件名和一些命令行传参的参数），把他作为初始类加载到内存，对这个类进行初始化和动态链接。（初始化和动态链接在后面会讲，此处留个印象即可）接下来便是从该类的main方法开始执行。</p>
+<h3 id="总结分析"><a href="#总结分析" class="headerlink" title="总结分析"></a>总结分析</h3><ul>
+<li>.class文件不是直接被系统加载之后就直接在CPU执行的，而是被一个叫做虚拟机的进程托管的。首先必须虚拟机进程启动就绪，然后由虚拟机中的类加载器加载必要的class文件，包括jdk中的基础类（如String和Object等），然后由虚拟机进程解释class字节码指令，把这些字节码指令翻译成本机cpu能够识别的指令，才能在cpu上运行。 </li>
+<li>更深层次的讲，当我们在运行class文件的时候，<strong>其实真正执行的是Java虚拟机进程，而不是我们的程序</strong>。那我们写的编译生成的class文件是有什么作用呢？它只是虚拟机进程执行时需要的“原料”。这些“原料”在运行时被加载到虚拟机中，被虚拟机解释执行，以控制虚拟机实现我们java代码中所定义的一些相对高层的操作，比如创建一个文件等，<strong>可以将class文件中的信息看做对虚拟机的控制信息，也就是一种虚拟指令。 </strong>虚拟机只是处理一些底层的操作，例如内存的分配和释放等等。</li>
 </ul>
-</li>
-<li><p>完整的生存期:活动在onCreate()到onDestroy()方法所经历的就是一个活动完整的生存期.</p>
-</li>
-<li>可见生存期:活动在onStart()到onStop()方法所经历的过程,在可见生存期内,活动对于用户是可见的,但不一定是可以交互的.可以在onStart()方法中对资源进行加载,而在onStop()方法中对资源进行释放,从而保证处于停止状态的活动不会占用过多内存.</li>
-<li>前台生存期:活动在onResume()方法到onPause()方法之间经历的就是前台生存期,在这个生存期里,活动总是处于运行状态,此时的活动和用户是可以进行交互的.</li>
-<li>多个Activity切换的时候生命周期方法的执行顺序<ul>
-<li>两个普通活动的切换<ul>
-<li>启动活动1,依次调用活动1的onCreate(),onStart(),onResume().  </li>
-<li>从活动1到活动2切换的过程中,首先调用的是活动1的onPause()然后依次调用活动2的onCreate(),onStart(),onResume(),再调用活动1的onStop()方法.</li>
-<li>当按下back键finsh活动2,从活动2返回活动1的时候,此时先执行活动2的onPause(),再依次执行活动2的onRestart(),onStart(),onResume(),再依次执行活动2的onStop(),onDestory().<strong>注意:此时候若是由于内存不足,处于停止状态的活动1被系统回收了,按下back键返回的时候,活动A是要再创建一次,不会执行活动1的onRestart()而是执行onCreate()方法.</strong></li>
-<li>再按下back键finish活动1,此时依次执行活动1的onPause(),onStop(),onDestory().</li>
-</ul>
-</li>
-<li>普通活动和对话框式活动的切换<br><br><strong>注意:对话框式的活动指定活动的theme为对话框,此时如果该活动是继承AppCompatActivity的,theme要指定为@android:style/Theme.AppCompat.Dialog,若是继承Activity,则直接指定theme为Dialog</strong><ul>
-<li>活动1切换到活动2的时候,调用活动1的onPause(),再依次调用活动2的onCreate(),onStart(),onResume()方法.</li>
-<li>活动2finish后返回活动,首先调用活动1的onResume(),再依次调用活动2的onStop和onDestroy()方法.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>若是按下home键的情况,依次执行该活动的onPause(),onStop(),再显示活动的时候,依次执行活动的onRestart(),onStart(),onResume().</li>
-<li>活动中若只是跳出对话框,此时不执行任何回调函数.</li>
-<li>屏幕旋转的时候,会依次执行该可见活动的onPause(),onStop(),onDestroy().再执行onCreate(),onStart(),onResume().</li>
-<li>处于停止状态的活动,当系统内存不足的时候会被回收,当活动被重新创建的时候,一些数据会消失,此时需要使用Activity类中的onSaveInstanceState()去保存数据.<br>onSaveInstanceState()携带一个Bundle参数,使用其提供的putString等方法,利用键值对的方式储存数据,该方法在活动被回收之前一定调用.<br>onCreate()方法也带有Bundle参数,在该方法内判断Bundle对象的引用是否为null,就可通过Bundle提供的getString等方法通过键取值的方法获得数据了.</li>
-</ul>
-<hr>
-<h2 id="活动的四种启动模式"><a href="#活动的四种启动模式" class="headerlink" title="活动的四种启动模式"></a>活动的四种启动模式</h2><blockquote>
-<p>安卓是根据返回栈来管理活动的.<br>通过指定android:launchMode的属性来选择启动模式,默认是standard模式.<br>当按下back键退出应用程序的时候,需要一个一个销毁返回栈中所有的活动实例才能退出应用程序,若是有多个返回栈,则一个返回栈空之后,会到另一个返回栈,直到所有的返回栈都空了,才退出应用程序.</p>
-</blockquote>
-<ul>
-<li>standard:每启动一个新的活动,它就会在返回栈入栈,并处于栈顶的位置,对于使用该模式的活动,系统不会在乎这个活动是否已经在返回栈中存在,每次启动都会创建该活动的一个新的实例.</li>
-<li>singleTop:在启动活动的时候,如果这个活动是处于返回栈栈顶的话,就直接使用它.如果没有处于栈顶,系统还是会再创建一个该活动的实例.</li>
-<li>singleTask:启动活动的时候,会再返回栈中检查是否存在该活动的实例,假如存在该活动的实例则直接使用该实例,并把在这个活动之上的所有活动都统统出栈,如果没有发现就会创建一个新的活动实例.</li>
-<li>singleInstance:使用该模式启动的活动,会有一个单独的返回栈来管理这个活动,可解决多个应用程序共享同一个活动的实例,因为一个活动在不同的返回栈入栈必然是创建了新的实例.</li>
-</ul>
-<hr>
-<h2 id="Activity之间的数据传递"><a href="#Activity之间的数据传递" class="headerlink" title="Activity之间的数据传递"></a>Activity之间的数据传递</h2><ul>
-<li>向下一个活动传递数据<ul>
-<li>单独使用Intent传递数据,使用intent的putExtra()方法,传入键值对,启动下一个活动.<br>在下一个活动中使用getIntent()方法取得Intent对象,再调用该对象的getStringExtra()等方法,传入相应键取得上一个活动传递的值.</li>
-<li>Intent结合Bundle进行传递数据.新建一个Bundle对象,使用putString()等方法,传入键值对,再新建Intent对象,调用其putExtras()方法,传入Bundle对象,启动下一个活动.<br>在下一个活动中,先获得Intent对象,再使用getExtras()方法获得Bundle对象,再采用Bundle的getString()等方法传入键获取对应的数据.</li>
-</ul>
-</li>
-<li>返回数据给上一个活动<ol>
-<li>使用startActivityForResult()方法启动下一个活动,在该方法中传入请求码,区别是哪个活动传回来的数据.</li>
-<li>在下一个活动中结束活动的逻辑中,新建一个用于传递数据的Intent对象,将数据存放在Intent之后,调用setResult()方法,该方法第一个参数用于向上一个活动返回处理结果,一般只使用RESULT_OK或者RESULT_CANCEL两个值,第二个参数则把带有数据的Intent对象返回去.</li>
-<li>重写上一个活动的onActivityResult()方法,判断请求码确定是哪个活动返回的,再判断处理结果参数,获取数据.</li>
-</ol>
-</li>
-</ul>
+<h2 id="3-JVM体系结构简介"><a href="#3-JVM体系结构简介" class="headerlink" title="3.JVM体系结构简介"></a>3.JVM体系结构简介</h2><p><img src="https://img-blog.csdn.net/20140317235203656?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhhbmdqZ19ibG9n/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt=""></p>
+<p>一个Java虚拟机在运行过程中有三个子系统保证它的正常运行，分别是类加载器子系统，执行引擎子系统，垃圾收集子系统。</p>
+<h3 id="类加载器子系统"><a href="#类加载器子系统" class="headerlink" title="类加载器子系统"></a>类加载器子系统</h3><p>这个子系统用来在运行的时候根据需要动态加载类，“根据需要”代表的便是当虚拟机运行过程中需要该类，才会去加载它，而不是一次性加载所有的类。</p>
+<h3 id="执行引擎子系统"><a href="#执行引擎子系统" class="headerlink" title="执行引擎子系统"></a>执行引擎子系统</h3><p>由虚拟机加载的类，被加载到Java虚拟机内存中之后，虚拟机会读取并执行它里面存在的字节码指令。虚拟机中执行字节码指令的部分叫做执行引擎。</p>
+<h3 id="垃圾收集子系统"><a href="#垃圾收集子系统" class="headerlink" title="垃圾收集子系统"></a>垃圾收集子系统</h3><p>Java虚拟机会进行自动内存管理。具体说来就是自动释放没有用的对象，而不需要程序员编写代码来释放分配的内存。这部分工作由垃圾收集子系统负责。 </p>
 
       
     </div>
@@ -468,12 +426,12 @@
   <!-- JS库 sweetalert 可修改路径 -->
   <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <p><span>本文标题:</span><a href="/2018/11/04/安卓之Activity详解/">安卓之Activity详解</a></p>
+  <p><span>本文标题:</span><a href="/2019/01/11/JVM系列-一/">JVM系列(一)</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 AllenYu 的个人博客">AllenYu</a></p>
-  <p><span>发布时间:</span>2018年11月04日 - 17:11</p>
-  <p><span>最后更新:</span>2018年11月10日 - 21:11</p>
-  <p><span>原始链接:</span><a href="/2018/11/04/安卓之Activity详解/" title="安卓之Activity详解">http://yuzeduan.github.io/2018/11/04/安卓之Activity详解/</a>
-    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yuzeduan.github.io/2018/11/04/安卓之Activity详解/" aria-label="复制成功！"></i></span>
+  <p><span>发布时间:</span>2019年01月11日 - 16:01</p>
+  <p><span>最后更新:</span>2019年01月11日 - 16:01</p>
+  <p><span>原始链接:</span><a href="/2019/01/11/JVM系列-一/" title="JVM系列(一)">http://yuzeduan.github.io/2019/01/11/JVM系列-一/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yuzeduan.github.io/2019/01/11/JVM系列-一/" aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
 </div>
@@ -504,7 +462,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Android之四大组件/" rel="tag"><i class="fa fa-tag"></i> Android之四大组件</a>
+            <a href="/tags/JVM系列/" rel="tag"><i class="fa fa-tag"></i> JVM系列</a>
           
         </div>
       
@@ -517,8 +475,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/04/安卓之Handler详解/" rel="next" title="安卓之Handler详解">
-                <i class="fa fa-chevron-left"></i> 安卓之Handler详解
+              <a href="/2018/11/27/安卓组件化开发指南系列（二）/" rel="next" title="安卓组件化开发指南系列（二）">
+                <i class="fa fa-chevron-left"></i> 安卓组件化开发指南系列（二）
               </a>
             
           </div>
@@ -527,8 +485,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/11/04/安卓之Service详解/" rel="prev" title="安卓之Service详解">
-                安卓之Service详解 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/01/11/Java并发系列-一/" rel="prev" title="Java并发系列(一)">
+                Java并发系列(一) <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -707,7 +665,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#四大组件之Activity"><span class="nav-number">1.</span> <span class="nav-text">四大组件之Activity</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#活动的生命周期"><span class="nav-number">1.1.</span> <span class="nav-text">活动的生命周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#活动的四种启动模式"><span class="nav-number">1.2.</span> <span class="nav-text">活动的四种启动模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Activity之间的数据传递"><span class="nav-number">1.3.</span> <span class="nav-text">Activity之间的数据传递</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#初识Java虚拟机"><span class="nav-number">1.</span> <span class="nav-text">初识Java虚拟机</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-什么是Java虚拟机"><span class="nav-number">1.1.</span> <span class="nav-text">1. 什么是Java虚拟机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-从进程的角度理解JVM"><span class="nav-number">1.2.</span> <span class="nav-text">2. 从进程的角度理解JVM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#执行的流程"><span class="nav-number">1.2.1.</span> <span class="nav-text">执行的流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结分析"><span class="nav-number">1.2.2.</span> <span class="nav-text">总结分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-JVM体系结构简介"><span class="nav-number">1.3.</span> <span class="nav-text">3.JVM体系结构简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类加载器子系统"><span class="nav-number">1.3.1.</span> <span class="nav-text">类加载器子系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行引擎子系统"><span class="nav-number">1.3.2.</span> <span class="nav-text">执行引擎子系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#垃圾收集子系统"><span class="nav-number">1.3.3.</span> <span class="nav-text">垃圾收集子系统</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
