@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="Java并发,">
+  <meta name="keywords" content="Java,">
 
 
 
@@ -86,18 +86,18 @@
 
 
 
-<meta name="description" content="并发编程面临的挑战1. 多线程一定快吗？">
-<meta name="keywords" content="Java并发">
+<meta name="description" content="NIO基本介绍1. NIO与传统IO的区别 传统IO是面向流进行数据传递，NIO是基于通道（channel）与缓冲区（buffer）面向块进行数据传递。 流的方向是单向的，而通道的方向是双向的，即一个通道可同时用于读写（读写操作均为操控缓冲区）。 传统IO是阻塞型IO，而NIO是属于非阻塞型IO。（使得NIO更适用于网络编程，后面会详细讲述）">
+<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java并发系列(一)">
-<meta property="og:url" content="http://yuzeduan.github.io/2019/01/11/Java并发系列-一/index.html">
+<meta property="og:title" content="JAVA——NIO学习(一)">
+<meta property="og:url" content="http://yuzeduan.github.io/2020/01/15/JAVA-A——NIO学习-一/index.html">
 <meta property="og:site_name" content="Allen Home">
-<meta property="og:description" content="并发编程面临的挑战1. 多线程一定快吗？">
+<meta property="og:description" content="NIO基本介绍1. NIO与传统IO的区别 传统IO是面向流进行数据传递，NIO是基于通道（channel）与缓冲区（buffer）面向块进行数据传递。 流的方向是单向的，而通道的方向是双向的，即一个通道可同时用于读写（读写操作均为操控缓冲区）。 传统IO是阻塞型IO，而NIO是属于非阻塞型IO。（使得NIO更适用于网络编程，后面会详细讲述）">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-11T08:30:12.304Z">
+<meta property="og:updated_time" content="2020-01-17T13:07:41.288Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java并发系列(一)">
-<meta name="twitter:description" content="并发编程面临的挑战1. 多线程一定快吗？">
+<meta name="twitter:title" content="JAVA——NIO学习(一)">
+<meta name="twitter:description" content="NIO基本介绍1. NIO与传统IO的区别 传统IO是面向流进行数据传递，NIO是基于通道（channel）与缓冲区（buffer）面向块进行数据传递。 流的方向是单向的，而通道的方向是双向的，即一个通道可同时用于读写（读写操作均为操控缓冲区）。 传统IO是阻塞型IO，而NIO是属于非阻塞型IO。（使得NIO更适用于网络编程，后面会详细讲述）">
 
 
 
@@ -127,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://yuzeduan.github.io/2019/01/11/Java并发系列-一/">
+  <link rel="canonical" href="http://yuzeduan.github.io/2020/01/15/JAVA-A——NIO学习-一/">
 
 
 
 
 
-  <title>Java并发系列(一) | Allen Home</title>
+  <title>JAVA——NIO学习(一) | Allen Home</title>
   
 
 
@@ -261,7 +261,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yuzeduan.github.io/2019/01/11/Java并发系列-一/">
+    <link itemprop="mainEntityOfPage" href="http://yuzeduan.github.io/2020/01/15/JAVA-A——NIO学习-一/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="AllenYu">
@@ -278,7 +278,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Java并发系列(一)</h1>
+          <h1 class="post-title" itemprop="name headline">JAVA——NIO学习(一)</h1>
         
 
         <div class="post-meta">
@@ -290,8 +290,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-11T16:28:32+08:00">
-                2019-01-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-15T21:03:25+08:00">
+                2020-01-15
               </time>
             
 
@@ -344,7 +344,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2.1k
+                  735
                 </span>
               
 
@@ -360,7 +360,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  7
+                  2
                 </span>
               
             </div>
@@ -381,80 +381,53 @@
       
 
       
-        <h1 id="并发编程面临的挑战"><a href="#并发编程面临的挑战" class="headerlink" title="并发编程面临的挑战"></a>并发编程面临的挑战</h1><h2 id="1-多线程一定快吗？"><a href="#1-多线程一定快吗？" class="headerlink" title="1. 多线程一定快吗？"></a>1. 多线程一定快吗？</h2><a id="more"></a>
-<p>毫无疑问，对于很多程序员来说，当被问到，怎么缩短程序运行的时间，提高程序的效率。很多人的第一个反应便是，使用并发，多线程的方式进行编写程序。无可否认，多线程确实在很多情况下可以达到我们需要的效果，但是也不是绝对的。</p>
-<p>学过多线程的应该了解，单核处理器中执行多线程的代码的时候，并不是真正意义上的并发，同一时刻CPU可以执行多个任务，CPU是通过给每个线程分配CPU时间片来执行的，多个线程进行切换，因为时间片一般是几十毫秒，因此在我们看来，像是多个线程同时执行的。</p>
-<p>现在问题来了，多个线程进行频繁的切换，到底会产生怎样的影响？此处需要引入一个<strong>上下文切换</strong>的概念，当切换线程的时候，CPU需要先保存上一个线程的状态，例如：本地数据，程序指针等，以便下次切换回该线程的时候，可以再加载这个任务的状态，然后再载入另一个线程。一个线程从<strong>保存到被再加载</strong>就是一个上下文切换的过程。而这个过程显然并不廉价。</p>
-<p>举个栗子，假如现在有<strong>一个人</strong>在挖山，单线程就好比，他从山的这一头挖到另一头，而多线程就好比从两头向中间挖，而如果这个时候，采用多线程的话，他这个人就必须在山的这一头挖一点，又得绕个大圈去到山的另一头，这样来回的切换，你认为效率会变吗？也许这个栗子有点夸大，但当我们程序执行一个简单的任务，就两个for循环吧。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> b = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span> ; i&lt;<span class="number">10000</span>; i++)&#123;</span><br><span class="line">    		b++;</span><br><span class="line">		&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;).start();</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; i&lt;<span class="number">10000</span>; j++)&#123;</span><br><span class="line">    System.out.println(b--);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这其实是一个简单的串行任务，便可以解决的，当使用的多线程的实现时候，如果数据没有达到百万级别的时候，并发的运行效率是低于单线程的。原因在于多线程创建和上下文的切换是需要耗费时间的。</p>
-<p>什么时候才应该使用多线程呢？</p>
-<p><strong>充分利用CPU的效率</strong>，便是多线程提高程序运行效率的本质。</p>
-<p>还是举刚刚挖山的栗子，现在你在挖山，你那些是石头是要有清理的吧，假如现在是单线程处理，那便意味着，在清理石头的时候，工人是在等待的，那如果是多线程处理，现在有了一条运石头线程，在你挖完这一边的时候，运石头线程在执行它的操作时候，工人继续到另一边执行它的挖山。此处，需要注意的便是<strong>充分利用了工人的空余时间</strong>。</p>
-<p>举下多线程用的栗子</p>
-<ul>
-<li>当我们在进行磁盘读取文件的时候，大部分的CPU时间都用于等待磁盘去读取数据，此时，CPU是非常空闲的，我们便可以让CPU去执行其他操作。网络io的时候、等待用户输入的时候也同理。</li>
-<li>当我们一个服务器接收客户端的响应的时候，我们需要开一条线程去监听客户端的行为，和开一条工作线程去执行操作返回给客户端。假如我们使用单线程处理的话，如果我们在执行的操作是耗时的，那下一个用户的行为，我们将无法立即接收到。</li>
+        <h1 id="NIO基本介绍"><a href="#NIO基本介绍" class="headerlink" title="NIO基本介绍"></a>NIO基本介绍</h1><h2 id="1-NIO与传统IO的区别"><a href="#1-NIO与传统IO的区别" class="headerlink" title="1. NIO与传统IO的区别"></a>1. NIO与传统IO的区别</h2><ul>
+<li>传统IO是面向流进行数据传递，NIO是基于通道（channel）与缓冲区（buffer）面向块进行数据传递。</li>
+<li>流的方向是单向的，而通道的方向是双向的，即一个通道可同时用于读写（读写操作均为操控缓冲区）。</li>
+<li>传统IO是阻塞型IO，而NIO是属于非阻塞型IO。（使得NIO更适用于网络编程，后面会详细讲述）</li>
 </ul>
-<p>如何减少上下文切换？</p>
-<ul>
-<li>无锁并发编程：多线程在竞争锁的时候，会引起上下文切换，因此我们使用多线程处理数据的时候，可以采用一些办法来避免使用锁，如将数据的ID按照Hash算法取模分段，不同的线程处理不同段的数据。</li>
-<li>CAS算法。（下面会提下）</li>
-<li>使用最少线程：避免创建不需要的线程，避免处于等待状态的线程过多，减少线程创建和上下文切换的开销。</li>
-<li>协程：在单线程中实现多任务的调度，并在单线程中维持多个任务之间的切换。 </li>
+<a id="more"></a>
+<h2 id="2-Channel"><a href="#2-Channel" class="headerlink" title="2. Channel"></a>2. Channel</h2><ol>
+<li>NIO中最重要的角色之一便是通道，通道其实就是传统IO的流的代替者，通道是连接起点与中点，与流最大的区别便是通道是双向的。</li>
+<li>可以形象的将通道比喻成铁轨，而缓冲区便是这条铁轨上的车厢，通过铁轨进行双向移动，实现数据的读写。</li>
+<li>Channel的最大职责就是，读操作时，从缓冲区读取数据进入应用程序，写操作时，从写入数据到缓冲区。</li>
+<li>Channel的分类<ol>
+<li>FileChannel：从文件读取数据</li>
+<li>DatagramChannel：读写UDP网络协议数据</li>
+<li>SocketChannel：读写TCP网络协议数据</li>
+<li>ServerSocketChannel：可以监听TCP连接</li>
+</ol>
+</li>
+<li>后面三种通道用于网络编程，也是实现非阻塞IO的基础。</li>
+</ol>
+<h2 id="3-buffer"><a href="#3-buffer" class="headerlink" title="3. buffer"></a>3. buffer</h2><h3 id="3-1-介绍"><a href="#3-1-介绍" class="headerlink" title="3.1 介绍"></a>3.1 介绍</h3><ul>
+<li>buffer是一个可以进行读写数据的内存块，底层数据结构就是数组。</li>
+<li>除boolean外，所有的基本类型数据的包装类都有与之对应的…Buffer</li>
+<li>ByteBuffer 下定义了内存映射缓冲区 MappedByteBuffer，基于零拷贝概念可以直接进行磁盘操作，HeapByteBuffer为间接缓冲区，DirectByteBuffer为直接缓冲区，继承自MappedByteBuffer。 </li>
 </ul>
-<h2 id="2-死锁"><a href="#2-死锁" class="headerlink" title="2. 死锁"></a>2. 死锁</h2><p>锁是实现线程同步的一个很有效的工具，相信很多人都并不陌生，当被提到如何同步线程，如何实现线程安全，第一个想到的便是——锁机制。无可否认，加锁的确能实现线程的同步，但是如果使用不当，便会产生<strong>死锁</strong>。</p>
-<ol>
-<li><p>何为线程死锁？</p>
-<p>死锁就是两个或两个以上的线程在执行过程中，因争夺资源而造成的一种互相等待的现象，谁也不让着谁，若无外力的作用，他们将无法推进下去。</p>
-</li>
-<li><p>举一个简单的栗子</p>
-</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 线程1中的run方法代码</span></span><br><span class="line">syschronized(A)&#123;</span><br><span class="line">    ...</span><br><span class="line">    syschronized(B);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 线程2</span></span><br><span class="line">syschronized(B)&#123;</span><br><span class="line">    ...</span><br><span class="line">    syschronized(A);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这只是一个简单的展示，应该没有人会写出这样的代码，但这种<strong>都想获得对方的资源，但不肯释放自己的资源，便是产生死锁的一个原因了</strong>。在一些复杂的场景下，假设1线程拿到锁之后，出于某种情况无法释放锁，也是会出现死锁的情况。</p>
-<ol>
-<li>死锁产生的条件</li>
-</ol>
-<ul>
-<li>互斥性：一个资源只能被一个线程使用。</li>
-<li>请求和保持：一个线程请求新的资源的时候，不会释放已有的资源。</li>
-<li>不剥夺条件：线程已有的资源在完成任务之前不能剥夺，只能自己释放。</li>
-<li>循环等待条件：线程之间形成首尾相接的循环等待资源的关系。</li>
+<h3 id="3-1-关键属性"><a href="#3-1-关键属性" class="headerlink" title="3.1 关键属性"></a>3.1 关键属性</h3><ul>
+<li>mark：位置标记。    </li>
+<li>position：缓冲区当前操作的位置，即读写位置。</li>
+<li>limit：缓冲区当前操作的最大索引。</li>
+<li>capcity：缓冲区的容量，初始化时设定，不能改变。</li>
+<li>底层数组：如LongBuffer，则为long[] hb。</li>
 </ul>
-<ol>
-<li>如何避免死锁？<ol>
-<li>避免一个线程中同时获取多个锁。</li>
-<li>避免一个线程在锁内同时占用多个资源，尽量保证每个锁只占用一个资源。</li>
-<li>改变加锁的顺序，当使用多个锁的时候，如果能确保所有的线程都是按照相同的顺序获取锁，那么死锁便不会发生了。</li>
-<li>尝试使用定时锁，使用lock.tryLock(long time, TimeUnit unit)来替代使用内部锁机制。在尝试获取锁的时候加一个超时时间，这也就意味着在尝试获取锁的过程中若超过了这个时限该线程则放弃对该锁请求。若一个线程没有在给定的时限内成功获得所有需要的锁，则会进行回退并释放所有已经获得的锁，然后等待一段随机的时间再重试 。</li>
-</ol>
-</li>
-</ol>
-<h2 id="3-资源限制"><a href="#3-资源限制" class="headerlink" title="3.资源限制"></a>3.资源限制</h2><ol>
-<li><p>什么是资源限制？</p>
-<ol>
-<li><p>资源限制是指在进行并发编程的时候，程序执行的速度受限于计算机硬件资源和软件资源。</p>
-</li>
-<li><p>举个栗子</p>
-<p>假设服务器的带宽只用2Mb/s，某个资源的下载速度是1Mb/s，系统启动了10个线程去下载资源，下载速度是不可能变成10Mb/s的。因此我们在进行并发编程的时候，要考虑这些资源的限制，</p>
-</li>
-</ol>
-</li>
-<li><p>硬件资源限制：有带宽的上传/下载速度，硬盘读写速度和CPU的处理速度。</p>
-</li>
-<li><p>软件资源限制：有数据的连接数和socket的连接数等。</p>
-</li>
-<li><p>会引发什么问题？</p>
-<p>当我们将某些串行的代码并发执行的时候，如果受限于资源，此时依然是串行执行的，这时候程序不但不会加快执行，还会比原先串行的时候还慢，因为增加了上下文切换、线程创建和资源调度的时间。</p>
-</li>
-<li><p>如何解决资源限制的问题呢?</p>
-<ol>
-<li>对于硬件资源的限制，可以考虑集群并行执行程序。既然单机的资源有限制，那就让程序在多机上运行。</li>
-<li>对于软件资源的限制，可以考虑使用资源池将资源进行复用。</li>
-</ol>
-</li>
-</ol>
+<h3 id="3-2-常用API"><a href="#3-2-常用API" class="headerlink" title="3.2 常用API"></a>3.2 常用API</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">mark</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        mark = position;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>mark初始值为-1，调用mark方法将当前操作的位置进行标记。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">reset</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> m = mark;</span><br><span class="line">        <span class="keyword">if</span> (m &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> InvalidMarkException();</span><br><span class="line">        position = m;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>reset方法将标记值赋值给当前的操作位置，mark与reset配合使用，可<strong>实现对某一区域的重复读写</strong>。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">clear</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        position = <span class="number">0</span>;</span><br><span class="line">        limit = capacity;</span><br><span class="line">        mark = -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>该方法用于清除缓冲区，所有标志位重置，但实际数据并没有进行真正的擦除，该方法用与<strong>缓冲区的数据写入通道后</strong>，调用后，通道就可以读入数据进缓冲区了。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">flip</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        limit = position;</span><br><span class="line">        position = <span class="number">0</span>;</span><br><span class="line">        mark = -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>该方法用于反转缓冲区，使得缓冲区从写转换到读，当position==limit的时候，说明读取结束，调用了flip后，positon为0，（limit-positon）的距离刚好就是写入的数据长度。</li>
+</ul>
 
       
     </div>
@@ -481,12 +454,12 @@
   <!-- JS库 sweetalert 可修改路径 -->
   <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <p><span>本文标题:</span><a href="/2019/01/11/Java并发系列-一/">Java并发系列(一)</a></p>
+  <p><span>本文标题:</span><a href="/2020/01/15/JAVA-A——NIO学习-一/">JAVA——NIO学习(一)</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 AllenYu 的个人博客">AllenYu</a></p>
-  <p><span>发布时间:</span>2019年01月11日 - 16:01</p>
-  <p><span>最后更新:</span>2019年01月11日 - 16:01</p>
-  <p><span>原始链接:</span><a href="/2019/01/11/Java并发系列-一/" title="Java并发系列(一)">http://yuzeduan.github.io/2019/01/11/Java并发系列-一/</a>
-    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yuzeduan.github.io/2019/01/11/Java并发系列-一/" aria-label="复制成功！"></i></span>
+  <p><span>发布时间:</span>2020年01月15日 - 21:01</p>
+  <p><span>最后更新:</span>2020年01月17日 - 21:01</p>
+  <p><span>原始链接:</span><a href="/2020/01/15/JAVA-A——NIO学习-一/" title="JAVA——NIO学习(一)">http://yuzeduan.github.io/2020/01/15/JAVA-A——NIO学习-一/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yuzeduan.github.io/2020/01/15/JAVA-A——NIO学习-一/" aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
 </div>
@@ -517,7 +490,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Java并发/" rel="tag"><i class="fa fa-tag"></i> Java并发</a>
+            <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
           
         </div>
       
@@ -530,8 +503,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/11/JVM系列-一/" rel="next" title="JVM系列(一)">
-                <i class="fa fa-chevron-left"></i> JVM系列(一)
+              <a href="/2019/01/16/JVM系列-五/" rel="next" title="JVM系列(五)">
+                <i class="fa fa-chevron-left"></i> JVM系列(五)
               </a>
             
           </div>
@@ -540,8 +513,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/01/12/JVM系列-二/" rel="prev" title="JVM系列(二)">
-                JVM系列(二) <i class="fa fa-chevron-right"></i>
+              <a href="/2020/01/17/JAVA——NIO学习-一/" rel="prev" title="JAVA-A——NIO学习(一)">
+                JAVA-A——NIO学习(一) <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -720,7 +693,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#并发编程面临的挑战"><span class="nav-number">1.</span> <span class="nav-text">并发编程面临的挑战</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-多线程一定快吗？"><span class="nav-number">1.1.</span> <span class="nav-text">1. 多线程一定快吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-死锁"><span class="nav-number">1.2.</span> <span class="nav-text">2. 死锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-资源限制"><span class="nav-number">1.3.</span> <span class="nav-text">3.资源限制</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#NIO基本介绍"><span class="nav-number">1.</span> <span class="nav-text">NIO基本介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-NIO与传统IO的区别"><span class="nav-number">1.1.</span> <span class="nav-text">1. NIO与传统IO的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Channel"><span class="nav-number">1.2.</span> <span class="nav-text">2. Channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-buffer"><span class="nav-number">1.3.</span> <span class="nav-text">3. buffer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-介绍"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-关键属性"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.1 关键属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-常用API"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.2 常用API</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
