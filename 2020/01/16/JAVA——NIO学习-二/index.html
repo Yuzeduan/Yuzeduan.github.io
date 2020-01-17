@@ -86,18 +86,22 @@
 
 
 
-<meta name="description" content="NIO基本介绍1. NIO与传统IO的区别 传统IO是面向流进行数据传递，NIO是基于通道（channel）与缓冲区（buffer）面向块进行数据传递。 流的方向是单向的，而通道的方向是双向的，即一个通道可同时用于读写（读写操作均为操控缓冲区）。 传统IO是阻塞型IO，而NIO是属于非阻塞型IO。（使得NIO更适用于网络编程，后面会详细讲述）">
+<meta name="description" content="NIO 零拷贝与直接内存 本文主要讲述NIO的零拷贝以及其直接内存映射原理，零拷贝与直接内存映射两个技术不是等价的  1. 零拷贝 零拷贝技术出现的目的是为了避免在内核态和用户态之间来回拷贝。零拷贝不是真正的零次拷贝，只是减少了内核空间与用户进程空间的内存复制。NIO在读取数据并进行网络传输的过程中使用了零拷贝技术之一的sendfile()系统调用。      1.1 传统IO的读取数据并进行网络">
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JAVA——NIO学习(一)">
-<meta property="og:url" content="http://yuzeduan.github.io/2020/01/15/JAVA-A——NIO学习-一/index.html">
+<meta property="og:title" content="JAVA——NIO学习(二)">
+<meta property="og:url" content="http://yuzeduan.github.io/2020/01/16/JAVA——NIO学习-二/index.html">
 <meta property="og:site_name" content="Allen Home">
-<meta property="og:description" content="NIO基本介绍1. NIO与传统IO的区别 传统IO是面向流进行数据传递，NIO是基于通道（channel）与缓冲区（buffer）面向块进行数据传递。 流的方向是单向的，而通道的方向是双向的，即一个通道可同时用于读写（读写操作均为操控缓冲区）。 传统IO是阻塞型IO，而NIO是属于非阻塞型IO。（使得NIO更适用于网络编程，后面会详细讲述）">
+<meta property="og:description" content="NIO 零拷贝与直接内存 本文主要讲述NIO的零拷贝以及其直接内存映射原理，零拷贝与直接内存映射两个技术不是等价的  1. 零拷贝 零拷贝技术出现的目的是为了避免在内核态和用户态之间来回拷贝。零拷贝不是真正的零次拷贝，只是减少了内核空间与用户进程空间的内存复制。NIO在读取数据并进行网络传输的过程中使用了零拷贝技术之一的sendfile()系统调用。      1.1 传统IO的读取数据并进行网络">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-01-17T13:07:41.288Z">
+<meta property="og:image" content="https://ask.qcloudimg.com/http-save/yehe-5086501/2fgxt74486.jpeg?imageView2/2/w/1620">
+<meta property="og:image" content="https://ask.qcloudimg.com/http-save/yehe-5086501/7lmjkz6ahu.jpeg?imageView2/2/w/1620">
+<meta property="og:image" content="https://ask.qcloudimg.com/http-save/yehe-5086501/8wb81khozb.jpeg?imageView2/2/w/1620">
+<meta property="og:updated_time" content="2020-01-17T13:16:53.608Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JAVA——NIO学习(一)">
-<meta name="twitter:description" content="NIO基本介绍1. NIO与传统IO的区别 传统IO是面向流进行数据传递，NIO是基于通道（channel）与缓冲区（buffer）面向块进行数据传递。 流的方向是单向的，而通道的方向是双向的，即一个通道可同时用于读写（读写操作均为操控缓冲区）。 传统IO是阻塞型IO，而NIO是属于非阻塞型IO。（使得NIO更适用于网络编程，后面会详细讲述）">
+<meta name="twitter:title" content="JAVA——NIO学习(二)">
+<meta name="twitter:description" content="NIO 零拷贝与直接内存 本文主要讲述NIO的零拷贝以及其直接内存映射原理，零拷贝与直接内存映射两个技术不是等价的  1. 零拷贝 零拷贝技术出现的目的是为了避免在内核态和用户态之间来回拷贝。零拷贝不是真正的零次拷贝，只是减少了内核空间与用户进程空间的内存复制。NIO在读取数据并进行网络传输的过程中使用了零拷贝技术之一的sendfile()系统调用。      1.1 传统IO的读取数据并进行网络">
+<meta name="twitter:image" content="https://ask.qcloudimg.com/http-save/yehe-5086501/2fgxt74486.jpeg?imageView2/2/w/1620">
 
 
 
@@ -127,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://yuzeduan.github.io/2020/01/15/JAVA-A——NIO学习-一/">
+  <link rel="canonical" href="http://yuzeduan.github.io/2020/01/16/JAVA——NIO学习-二/">
 
 
 
 
 
-  <title>JAVA——NIO学习(一) | Allen Home</title>
+  <title>JAVA——NIO学习(二) | Allen Home</title>
   
 
 
@@ -261,7 +265,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yuzeduan.github.io/2020/01/15/JAVA-A——NIO学习-一/">
+    <link itemprop="mainEntityOfPage" href="http://yuzeduan.github.io/2020/01/16/JAVA——NIO学习-二/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="AllenYu">
@@ -278,7 +282,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">JAVA——NIO学习(一)</h1>
+          <h1 class="post-title" itemprop="name headline">JAVA——NIO学习(二)</h1>
         
 
         <div class="post-meta">
@@ -290,8 +294,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-15T21:03:25+08:00">
-                2020-01-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-16T21:12:20+08:00">
+                2020-01-16
               </time>
             
 
@@ -344,7 +348,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  735
+                  1.8k
                 </span>
               
 
@@ -360,7 +364,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  2
+                  6
                 </span>
               
             </div>
@@ -381,52 +385,79 @@
       
 
       
-        <h1 id="NIO基本介绍"><a href="#NIO基本介绍" class="headerlink" title="NIO基本介绍"></a>NIO基本介绍</h1><h2 id="1-NIO与传统IO的区别"><a href="#1-NIO与传统IO的区别" class="headerlink" title="1. NIO与传统IO的区别"></a>1. NIO与传统IO的区别</h2><ul>
-<li>传统IO是面向流进行数据传递，NIO是基于通道（channel）与缓冲区（buffer）面向块进行数据传递。</li>
-<li>流的方向是单向的，而通道的方向是双向的，即一个通道可同时用于读写（读写操作均为操控缓冲区）。</li>
-<li>传统IO是阻塞型IO，而NIO是属于非阻塞型IO。（使得NIO更适用于网络编程，后面会详细讲述）</li>
+        <h1 id="NIO-零拷贝与直接内存"><a href="#NIO-零拷贝与直接内存" class="headerlink" title="NIO 零拷贝与直接内存"></a>NIO 零拷贝与直接内存</h1><blockquote>
+<p>本文主要讲述NIO的零拷贝以及其直接内存映射原理，零拷贝与直接内存映射两个技术不是等价的</p>
+</blockquote>
+<h2 id="1-零拷贝"><a href="#1-零拷贝" class="headerlink" title="1. 零拷贝"></a>1. 零拷贝</h2><ul>
+<li>零拷贝技术出现的目的是为了避免在内核态和用户态之间来回拷贝。零拷贝不是真正的零次拷贝，只是减少了内核空间与用户进程空间的内存复制。<br>NIO在读取数据并进行网络传输的过程中使用了零拷贝技术之一的sendfile()系统调用。    </li>
 </ul>
-<a id="more"></a>
-<h2 id="2-Channel"><a href="#2-Channel" class="headerlink" title="2. Channel"></a>2. Channel</h2><ol>
-<li>NIO中最重要的角色之一便是通道，通道其实就是传统IO的流的代替者，通道是连接起点与中点，与流最大的区别便是通道是双向的。</li>
-<li>可以形象的将通道比喻成铁轨，而缓冲区便是这条铁轨上的车厢，通过铁轨进行双向移动，实现数据的读写。</li>
-<li>Channel的最大职责就是，读操作时，从缓冲区读取数据进入应用程序，写操作时，从写入数据到缓冲区。</li>
-<li>Channel的分类<ol>
-<li>FileChannel：从文件读取数据</li>
-<li>DatagramChannel：读写UDP网络协议数据</li>
-<li>SocketChannel：读写TCP网络协议数据</li>
-<li>ServerSocketChannel：可以监听TCP连接</li>
+<h3 id="1-1-传统IO的读取数据并进行网络传输"><a href="#1-1-传统IO的读取数据并进行网络传输" class="headerlink" title="1.1 传统IO的读取数据并进行网络传输"></a>1.1 传统IO的读取数据并进行网络传输</h3><ol>
+<li>流程图如下</li>
 </ol>
+<p><img src="https://ask.qcloudimg.com/http-save/yehe-5086501/2fgxt74486.jpeg?imageView2/2/w/1620" alt=""></p>
+<ul>
+<li>我们知道传统的BIO是同步阻塞IO，如我们使用read方法时候，进入内核提供的系统调用，从用户态切换到内核态，并使用DMA引擎执行第一次拷贝，读取数据并存储到内核空间的缓冲区。</li>
+<li>将请求的数据从内核缓冲区拷贝到用户进程空间的缓冲区，read方法返回，读取数据这个过程经历<strong>两次拷贝，两次用户态与内核态转换</strong>。其中从内核空间到用户进程空间的拷贝是CPU参与执行的。</li>
+<li>用户进程调用send()，产生软中断，从用户态进入内核态，将数据从用户进程空间缓冲区拷贝到内核空间缓冲区，send系统调用返回，产生第四次上下文切换，此时进入第四次数据拷贝，将数据从内核缓冲区拷贝到协议引擎缓冲区，待发送至的缓冲区，第四次拷贝由DMA引擎独立执行，不需要CPU参与。</li>
+</ul>
+<ol>
+<li>小结</li>
+</ol>
+<ul>
+<li>从上面的分析，可以得到，如果是BIO进行从文件读取，并进行网络传输的话，整个读取发送的过程需要经历4次数据的拷贝，4次上下文切换，而且两次数据拷贝是CPU直接参与的，这也是效率低的主要原因。</li>
+<li>零拷贝的技术主要目的便是减少上下文的切换，避免CPU参与数据拷贝，也就是解放CPU，让CPU不需要直接参与IO读取，提高IO速度，接下来看下NIO对于这种情况的零拷贝实现思路。</li>
+</ul>
+<h3 id="1-2-NIO实现"><a href="#1-2-NIO实现" class="headerlink" title="1.2 NIO实现"></a>1.2 NIO实现</h3><h4 id="1-sendfile"><a href="#1-sendfile" class="headerlink" title="1. sendfile()"></a>1. sendfile()</h4><ol>
+<li><p>流程图</p>
+<p><img src="https://ask.qcloudimg.com/http-save/yehe-5086501/7lmjkz6ahu.jpeg?imageView2/2/w/1620" alt=""></p>
 </li>
-<li>后面三种通道用于网络编程，也是实现非阻塞IO的基础。</li>
 </ol>
-<h2 id="3-buffer"><a href="#3-buffer" class="headerlink" title="3. buffer"></a>3. buffer</h2><h3 id="3-1-介绍"><a href="#3-1-介绍" class="headerlink" title="3.1 介绍"></a>3.1 介绍</h3><ul>
-<li>buffer是一个可以进行读写数据的内存块，底层数据结构就是数组。</li>
-<li>除boolean外，所有的基本类型数据的包装类都有与之对应的…Buffer</li>
-<li>ByteBuffer 下定义了内存映射缓冲区 MappedByteBuffer，基于零拷贝概念可以直接进行磁盘操作，HeapByteBuffer为间接缓冲区，DirectByteBuffer为直接缓冲区，继承自MappedByteBuffer。 </li>
-</ul>
-<h3 id="3-1-关键属性"><a href="#3-1-关键属性" class="headerlink" title="3.1 关键属性"></a>3.1 关键属性</h3><ul>
-<li>mark：位置标记。    </li>
-<li>position：缓冲区当前操作的位置，即读写位置。</li>
-<li>limit：缓冲区当前操作的最大索引。</li>
-<li>capcity：缓冲区的容量，初始化时设定，不能改变。</li>
-<li>底层数组：如LongBuffer，则为long[] hb。</li>
-</ul>
-<h3 id="3-2-常用API"><a href="#3-2-常用API" class="headerlink" title="3.2 常用API"></a>3.2 常用API</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">mark</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        mark = position;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
-<li>mark初始值为-1，调用mark方法将当前操作的位置进行标记。</li>
+<li>NIO提供transferTo()方法，transferTo方法t将数据从FileChannel对象传送到可写的字节通道（如Socket Channel，或者另一个FileChannel），由native方法transferTo0来实现 ，使用的便是操作系统提供的sendFile系统调用。</li>
+<li>我们可以发现，这个过程需要进行三次数据拷贝，以及两次上下文切换。</li>
+<li>在调用transferTo后，从用户态切换到内核态，以及transferTo返回后，从内核态切换到用户态。</li>
+<li>在调用transferTo后，执行的第一次拷贝是从文件拷贝到内核读缓冲区，该过程由DMA引擎独立异步完成，第二次拷贝由读缓冲区拷贝到目标缓冲区，该图为Socket缓冲区，该过程需要CPU的参与，第三次拷贝是由内核缓冲区拷贝到协议引擎缓冲区，由DMA独立完成。</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">reset</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> m = mark;</span><br><span class="line">        <span class="keyword">if</span> (m &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> InvalidMarkException();</span><br><span class="line">        position = m;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>小结</li>
+</ol>
 <ul>
-<li>reset方法将标记值赋值给当前的操作位置，mark与reset配合使用，可<strong>实现对某一区域的重复读写</strong>。</li>
+<li>这种方式实现对比BIO实现，已经将数据拷贝次数缩小到三次，上下文转换切换到两次，但是其中从读缓冲区到套接字缓冲区的拷贝，仍需要CPU的参与，因此，还有继续优化的方案。</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">clear</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        position = <span class="number">0</span>;</span><br><span class="line">        limit = capacity;</span><br><span class="line">        mark = -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-带有-DMA-收集拷贝功能的-sendfile"><a href="#2-带有-DMA-收集拷贝功能的-sendfile" class="headerlink" title="2. 带有 DMA 收集拷贝功能的 sendfile()"></a>2. 带有 DMA 收集拷贝功能的 sendfile()</h4><ol>
+<li>流程图</li>
+</ol>
+<p><img src="https://ask.qcloudimg.com/http-save/yehe-5086501/8wb81khozb.jpeg?imageView2/2/w/1620" alt=""></p>
 <ul>
-<li>该方法用于清除缓冲区，所有标志位重置，但实际数据并没有进行真正的擦除，该方法用与<strong>缓冲区的数据写入通道后</strong>，调用后，通道就可以读入数据进缓冲区了。</li>
+<li>如果底层NIC（网络接口卡）支持gather操作，可以进一步减少内核中的数据拷贝。 </li>
+<li>在这种情况下，不需要将内容从读缓冲区拷贝到套接字缓冲区，而只需要将缓冲区描述符传到socket缓冲区，再把数据长度传过去，这样DMA控制器直接将读缓冲区中的数据拷贝到协议引擎缓冲区。</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">flip</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        limit = position;</span><br><span class="line">        position = <span class="number">0</span>;</span><br><span class="line">        mark = -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>小结</li>
+</ol>
 <ul>
-<li>该方法用于反转缓冲区，使得缓冲区从写转换到读，当position==limit的时候，说明读取结束，调用了flip后，positon为0，（limit-positon）的距离刚好就是写入的数据长度。</li>
+<li>支持DMA的gather操作的NIC，可以实现减少一次数据拷贝，即读缓冲区到套接字缓冲区的拷贝，彻底解放CPU，整个过程CPU不需要参与数据的拷贝。</li>
+<li>这种方式仅需执行两次数据的拷贝，以及两次的上下文切换。</li>
+</ul>
+<h4 id="3-代码示例"><a href="#3-代码示例" class="headerlink" title="3. 代码示例"></a>3. 代码示例</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">try</span> (<span class="comment">// 得到fileInputStream的文件通道</span></span><br><span class="line">         FileChannel fileChannelInput = <span class="keyword">new</span> FileInputStream(fromFile).getChannel();</span><br><span class="line">         <span class="comment">// 得到fileOutputStream的文件通道</span></span><br><span class="line">         FileChannel fileChannelOutput = <span class="keyword">new</span> FileOutputStream(toFile).getChannel()) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//将fileChannelInput通道的数据，写入到fileChannelOutput通道</span></span><br><span class="line">        fileChannelInput.transferTo(<span class="number">0</span>, fileChannelInput.size(), fileChannelOutput);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line"> &#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<ul>
+<li>代码示例实现了两个文件的复制，采用的NIO提供的零拷贝技术。</li>
+</ul>
+<h2 id="2-直接内存映射"><a href="#2-直接内存映射" class="headerlink" title="2.直接内存映射"></a>2.直接内存映射</h2><blockquote>
+<p>前面所提到的基于sendfile系统调用的零拷贝技术，适用于不需要进行文件操作，NIO为需要进行文件操作，且提高IO速度，提供了直接内存。</p>
+</blockquote>
+<h3 id="2-1-mmap-简述"><a href="#2-1-mmap-简述" class="headerlink" title="2.1 mmap()简述"></a>2.1 mmap()简述</h3><p>​    提到内存映射，相信很多人想到的便是mmap这个系统调用，mmap()原理是将<strong>一段用户空间内存映射到内核空间</strong>，映射成功后, 用户对这段内存区域的修改可以直接反映到内核空间；同样地， 内核空间对这段区域的修改也直接反映用户空间。mmap提供的这种映射技术，使得不需要进行内核空间到用户空间数据的拷贝，以及上下文的切换，其也是零拷贝的技术之一。</p>
+<h3 id="2-2-NIO的直接内存"><a href="#2-2-NIO的直接内存" class="headerlink" title="2.2 NIO的直接内存"></a>2.2 NIO的直接内存</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建直接缓冲区，堆外内存</span></span><br><span class="line">ByteBuffer buf = ByteBuffer.allocateDirect(<span class="number">10</span>);</span><br><span class="line"><span class="comment">//创建非直接缓冲区，堆内存</span></span><br><span class="line">ByteBuffer buf = ByteBuffer.allocate(<span class="number">10</span>);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>ByteBuffer提供两种方式进行创建缓冲区，传入缓冲区大小，allocateDirect()创建直接缓冲区，allocate()创建非直接缓冲区。</li>
+<li>NIO使用Native函数库直接分配<strong>堆外内存</strong>（不在JVM管理内存内），然后通过一个存储在Java堆里面的DirectByteBuffer对象作为这块内存的引用进行操作。本机直接内存的分配不会收到Java堆大小的限制。</li>
+</ul>
+<h3 id="2-3-堆内存与直接内存对比"><a href="#2-3-堆内存与直接内存对比" class="headerlink" title="2.3 堆内存与直接内存对比"></a>2.3 堆内存与直接内存对比</h3><ul>
+<li>使用堆内存时，堆内数据要flush到远程，需要先拷贝到native堆，然后在发送，使用直接内存可以<strong>防止Java堆和Native堆之间数据复制带来的性能损耗</strong>，此后NIO可以使用Native的方式直接在 Native堆分配内存。</li>
+<li>当直接内存不足时，会触发full gc。</li>
+<li>堆外内存对比堆内存，如果出现内存泄漏，更难排查。</li>
+<li>堆外内存只能通过序列化和反序列化来存储，保存对象速度比堆内存慢，不适合存储很复杂的对象。 </li>
+<li>直接内存的<strong>访问速度</strong>（读写方面）会快于堆内存。在<strong>申请内存空间</strong>时，堆内存速度高于直接内存。 </li>
 </ul>
 
       
@@ -454,12 +485,12 @@
   <!-- JS库 sweetalert 可修改路径 -->
   <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <p><span>本文标题:</span><a href="/2020/01/15/JAVA-A——NIO学习-一/">JAVA——NIO学习(一)</a></p>
+  <p><span>本文标题:</span><a href="/2020/01/16/JAVA——NIO学习-二/">JAVA——NIO学习(二)</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 AllenYu 的个人博客">AllenYu</a></p>
-  <p><span>发布时间:</span>2020年01月15日 - 21:01</p>
+  <p><span>发布时间:</span>2020年01月16日 - 21:01</p>
   <p><span>最后更新:</span>2020年01月17日 - 21:01</p>
-  <p><span>原始链接:</span><a href="/2020/01/15/JAVA-A——NIO学习-一/" title="JAVA——NIO学习(一)">http://yuzeduan.github.io/2020/01/15/JAVA-A——NIO学习-一/</a>
-    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yuzeduan.github.io/2020/01/15/JAVA-A——NIO学习-一/" aria-label="复制成功！"></i></span>
+  <p><span>原始链接:</span><a href="/2020/01/16/JAVA——NIO学习-二/" title="JAVA——NIO学习(二)">http://yuzeduan.github.io/2020/01/16/JAVA——NIO学习-二/</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yuzeduan.github.io/2020/01/16/JAVA——NIO学习-二/" aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
 </div>
@@ -503,8 +534,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/16/JVM系列-五/" rel="next" title="JVM系列(五)">
-                <i class="fa fa-chevron-left"></i> JVM系列(五)
+              <a href="/2020/01/15/JAVA——NIO学习-一/" rel="next" title="JAVA——NIO学习(一)">
+                <i class="fa fa-chevron-left"></i> JAVA——NIO学习(一)
               </a>
             
           </div>
@@ -513,8 +544,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/01/17/JAVA——NIO学习-一/" rel="prev" title="JAVA-A——NIO学习(一)">
-                JAVA-A——NIO学习(一) <i class="fa fa-chevron-right"></i>
+              <a href="/2020/01/17/JAVA——NIO学习-三/" rel="prev" title="JAVA——NIO学习(三)">
+                JAVA——NIO学习(三) <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -594,7 +625,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-count">35</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -693,7 +724,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#NIO基本介绍"><span class="nav-number">1.</span> <span class="nav-text">NIO基本介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-NIO与传统IO的区别"><span class="nav-number">1.1.</span> <span class="nav-text">1. NIO与传统IO的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Channel"><span class="nav-number">1.2.</span> <span class="nav-text">2. Channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-buffer"><span class="nav-number">1.3.</span> <span class="nav-text">3. buffer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-介绍"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-关键属性"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.1 关键属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-常用API"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.2 常用API</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#NIO-零拷贝与直接内存"><span class="nav-number">1.</span> <span class="nav-text">NIO 零拷贝与直接内存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-零拷贝"><span class="nav-number">1.1.</span> <span class="nav-text">1. 零拷贝</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-传统IO的读取数据并进行网络传输"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 传统IO的读取数据并进行网络传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-NIO实现"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 NIO实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-sendfile"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">1. sendfile()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-带有-DMA-收集拷贝功能的-sendfile"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">2. 带有 DMA 收集拷贝功能的 sendfile()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-代码示例"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">3. 代码示例</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-直接内存映射"><span class="nav-number">1.2.</span> <span class="nav-text">2.直接内存映射</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-mmap-简述"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 mmap()简述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-NIO的直接内存"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 NIO的直接内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-堆内存与直接内存对比"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 堆内存与直接内存对比</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
