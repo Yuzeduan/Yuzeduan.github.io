@@ -86,21 +86,21 @@
 
 
 
-<meta name="description" content="NIO 零拷贝与直接内存 本文主要讲述NIO的零拷贝以及其直接内存映射原理，零拷贝与直接内存映射两个技术不是等价的  1. 零拷贝 零拷贝技术出现的目的是为了避免在内核态和用户态之间来回拷贝。零拷贝不是真正的零次拷贝，只是减少了内核空间与用户进程空间的内存复制。NIO在读取数据并进行网络传输的过程中使用了零拷贝技术之一的sendfile()系统调用。      1.1 传统IO的读取数据并进行网络">
+<meta name="description" content="NIO 零拷贝与直接内存 本文主要讲述NIO的零拷贝以及其直接内存映射原理，零拷贝与直接内存映射两个技术不是等价的  1. 零拷贝 零拷贝技术出现的目的是为了避免在内核态和用户态之间来回拷贝。零拷贝不是真正的零次拷贝，只是减少了内核空间与用户进程空间的内存复制。NIO在读取数据并进行网络传输的过程中使用了零拷贝技术之一的sendfile()系统调用。">
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JAVA——NIO学习(二)">
 <meta property="og:url" content="http://yuzeduan.github.io/2020/01/16/JAVA——NIO学习-二/index.html">
 <meta property="og:site_name" content="Allen Home">
-<meta property="og:description" content="NIO 零拷贝与直接内存 本文主要讲述NIO的零拷贝以及其直接内存映射原理，零拷贝与直接内存映射两个技术不是等价的  1. 零拷贝 零拷贝技术出现的目的是为了避免在内核态和用户态之间来回拷贝。零拷贝不是真正的零次拷贝，只是减少了内核空间与用户进程空间的内存复制。NIO在读取数据并进行网络传输的过程中使用了零拷贝技术之一的sendfile()系统调用。      1.1 传统IO的读取数据并进行网络">
+<meta property="og:description" content="NIO 零拷贝与直接内存 本文主要讲述NIO的零拷贝以及其直接内存映射原理，零拷贝与直接内存映射两个技术不是等价的  1. 零拷贝 零拷贝技术出现的目的是为了避免在内核态和用户态之间来回拷贝。零拷贝不是真正的零次拷贝，只是减少了内核空间与用户进程空间的内存复制。NIO在读取数据并进行网络传输的过程中使用了零拷贝技术之一的sendfile()系统调用。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ask.qcloudimg.com/http-save/yehe-5086501/2fgxt74486.jpeg?imageView2/2/w/1620">
 <meta property="og:image" content="https://ask.qcloudimg.com/http-save/yehe-5086501/7lmjkz6ahu.jpeg?imageView2/2/w/1620">
 <meta property="og:image" content="https://ask.qcloudimg.com/http-save/yehe-5086501/8wb81khozb.jpeg?imageView2/2/w/1620">
-<meta property="og:updated_time" content="2020-01-17T13:16:53.608Z">
+<meta property="og:updated_time" content="2020-01-17T13:21:22.118Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JAVA——NIO学习(二)">
-<meta name="twitter:description" content="NIO 零拷贝与直接内存 本文主要讲述NIO的零拷贝以及其直接内存映射原理，零拷贝与直接内存映射两个技术不是等价的  1. 零拷贝 零拷贝技术出现的目的是为了避免在内核态和用户态之间来回拷贝。零拷贝不是真正的零次拷贝，只是减少了内核空间与用户进程空间的内存复制。NIO在读取数据并进行网络传输的过程中使用了零拷贝技术之一的sendfile()系统调用。      1.1 传统IO的读取数据并进行网络">
+<meta name="twitter:description" content="NIO 零拷贝与直接内存 本文主要讲述NIO的零拷贝以及其直接内存映射原理，零拷贝与直接内存映射两个技术不是等价的  1. 零拷贝 零拷贝技术出现的目的是为了避免在内核态和用户态之间来回拷贝。零拷贝不是真正的零次拷贝，只是减少了内核空间与用户进程空间的内存复制。NIO在读取数据并进行网络传输的过程中使用了零拷贝技术之一的sendfile()系统调用。">
 <meta name="twitter:image" content="https://ask.qcloudimg.com/http-save/yehe-5086501/2fgxt74486.jpeg?imageView2/2/w/1620">
 
 
@@ -391,6 +391,7 @@
 <h2 id="1-零拷贝"><a href="#1-零拷贝" class="headerlink" title="1. 零拷贝"></a>1. 零拷贝</h2><ul>
 <li>零拷贝技术出现的目的是为了避免在内核态和用户态之间来回拷贝。零拷贝不是真正的零次拷贝，只是减少了内核空间与用户进程空间的内存复制。<br>NIO在读取数据并进行网络传输的过程中使用了零拷贝技术之一的sendfile()系统调用。    </li>
 </ul>
+<a id="more"></a>
 <h3 id="1-1-传统IO的读取数据并进行网络传输"><a href="#1-1-传统IO的读取数据并进行网络传输" class="headerlink" title="1.1 传统IO的读取数据并进行网络传输"></a>1.1 传统IO的读取数据并进行网络传输</h3><ol>
 <li>流程图如下</li>
 </ol>
