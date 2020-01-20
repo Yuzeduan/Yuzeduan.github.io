@@ -86,18 +86,18 @@
 
 
 
-<meta name="description" content="NIO 网络编程 本篇主要就讲述NIO关于网络编程方面的知识，涉及到NIO的另一个重要角色 —— 选择器Selector  1. Selector基本介绍 NIO是非阻塞IO，即其可以使用一个线程，处理多个客户端连接，这种实现便是基于Selector。 它是通道的管理者，多个通道可以以事件的形式注册到同一个Selector，当任一通道的有相应事件发生，便会触发Selector，其可以获取相应事件进">
+<meta name="description" content="NIO 网络编程 本篇主要就讲述NIO关于网络编程方面的知识，涉及到NIO的另一个重要角色 —— 选择器Selector">
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JAVA——NIO学习(三)">
 <meta property="og:url" content="http://yuzeduan.github.io/2020/01/17/JAVA——NIO学习-三/index.html">
 <meta property="og:site_name" content="Allen Home">
-<meta property="og:description" content="NIO 网络编程 本篇主要就讲述NIO关于网络编程方面的知识，涉及到NIO的另一个重要角色 —— 选择器Selector  1. Selector基本介绍 NIO是非阻塞IO，即其可以使用一个线程，处理多个客户端连接，这种实现便是基于Selector。 它是通道的管理者，多个通道可以以事件的形式注册到同一个Selector，当任一通道的有相应事件发生，便会触发Selector，其可以获取相应事件进">
+<meta property="og:description" content="NIO 网络编程 本篇主要就讲述NIO关于网络编程方面的知识，涉及到NIO的另一个重要角色 —— 选择器Selector">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-01-17T13:16:47.461Z">
+<meta property="og:updated_time" content="2020-01-20T04:33:43.109Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JAVA——NIO学习(三)">
-<meta name="twitter:description" content="NIO 网络编程 本篇主要就讲述NIO关于网络编程方面的知识，涉及到NIO的另一个重要角色 —— 选择器Selector  1. Selector基本介绍 NIO是非阻塞IO，即其可以使用一个线程，处理多个客户端连接，这种实现便是基于Selector。 它是通道的管理者，多个通道可以以事件的形式注册到同一个Selector，当任一通道的有相应事件发生，便会触发Selector，其可以获取相应事件进">
+<meta name="twitter:description" content="NIO 网络编程 本篇主要就讲述NIO关于网络编程方面的知识，涉及到NIO的另一个重要角色 —— 选择器Selector">
 
 
 
@@ -384,6 +384,7 @@
         <h1 id="NIO-网络编程"><a href="#NIO-网络编程" class="headerlink" title="NIO 网络编程"></a>NIO 网络编程</h1><blockquote>
 <p>本篇主要就讲述NIO关于网络编程方面的知识，涉及到NIO的另一个重要角色 —— 选择器Selector</p>
 </blockquote>
+<a id="more"></a>
 <h2 id="1-Selector基本介绍"><a href="#1-Selector基本介绍" class="headerlink" title="1. Selector基本介绍"></a>1. Selector基本介绍</h2><ul>
 <li>NIO是非阻塞IO，即其可以使用一个线程，处理多个客户端连接，这种实现便是基于Selector。</li>
 <li>它是通道的管理者，多个通道可以以事件的形式注册到同一个Selector，当任一通道的有相应事件发生，便会触发Selector，其可以获取相应事件进行处理，这也是第一点使用单条线程Selector监听多条连接。</li>
@@ -445,7 +446,7 @@
   <p><span>本文标题:</span><a href="/2020/01/17/JAVA——NIO学习-三/">JAVA——NIO学习(三)</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 AllenYu 的个人博客">AllenYu</a></p>
   <p><span>发布时间:</span>2020年01月17日 - 21:01</p>
-  <p><span>最后更新:</span>2020年01月17日 - 21:01</p>
+  <p><span>最后更新:</span>2020年01月20日 - 12:01</p>
   <p><span>原始链接:</span><a href="/2020/01/17/JAVA——NIO学习-三/" title="JAVA——NIO学习(三)">http://yuzeduan.github.io/2020/01/17/JAVA——NIO学习-三/</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="http://yuzeduan.github.io/2020/01/17/JAVA——NIO学习-三/" aria-label="复制成功！"></i></span>
   </p>
@@ -500,6 +501,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/20/安卓框架之OKIO的学习/" rel="prev" title="安卓框架之OKIO的学习">
+                安卓框架之OKIO的学习 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -578,7 +583,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -600,7 +605,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
